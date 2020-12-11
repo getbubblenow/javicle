@@ -14,17 +14,15 @@ import org.cobbzilla.util.handlebars.HandlebarsUtil;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
 import static jvcl.model.JAsset.json2asset;
-import static org.cobbzilla.util.daemon.ZillaRuntime.big;
+import static jvcl.service.Toolbox.getDuration;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.system.CommandShell.execScript;
-import static org.cobbzilla.util.time.TimeUtil.parseDuration;
 
 @Slf4j
 public class SplitOperation implements JOperator {
@@ -42,6 +40,7 @@ public class SplitOperation implements JOperator {
 
         // if any format settings are missing, use settings from source
         output.mergeFormat(source.getFormat());
+        assetManager.addOperationArrayAsset(output);
 
         // get format type
         final JFileExtension formatType = output.getFormat().getFileExtension();
@@ -50,8 +49,9 @@ public class SplitOperation implements JOperator {
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("source", source);
         final BigDecimal incr = config.getIntervalIncr();
+        final BigDecimal endTime = config.getEndTime(source);
         for (BigDecimal i = config.getStartTime();
-             i.compareTo(config.getEndTime(source)) < 0;
+             i.compareTo(endTime) < 0;
              i = i.add(incr)) {
 
             final File outfile = assetManager.assetPath(op, source, formatType, new Object[]{i, incr});
@@ -66,12 +66,13 @@ public class SplitOperation implements JOperator {
             ctx.put("startSeconds", i);
             ctx.put("endSeconds", i.add(incr));
             final String script = HandlebarsUtil.apply(toolbox.getHandlebars(), SPLIT_TEMPLATE, ctx);
+
             log.debug("operate: running script: "+script);
             final String scriptOutput = execScript(script);
             log.debug("operate: command output: "+scriptOutput);
-            output.addAsset(slice);
+            assetManager.addOperationAssetSlice(output, slice);
         }
-        assetManager.addOperationAsset(output);
+        log.info("operate: completed");
     }
 
     @NoArgsConstructor
@@ -80,13 +81,13 @@ public class SplitOperation implements JOperator {
         @Getter @Setter private String split;
 
         @Getter @Setter private String interval;
-        public BigDecimal getIntervalIncr() { return big(parseDuration(interval)).divide(big(1000), RoundingMode.UNNECESSARY); }
+        public BigDecimal getIntervalIncr() { return getDuration(interval); }
 
         @Getter @Setter private String start;
-        public BigDecimal getStartTime() { return empty(start) ? BigDecimal.ZERO : big(start); }
+        public BigDecimal getStartTime() { return empty(start) ? BigDecimal.ZERO : getDuration(start); }
 
         @Getter @Setter private String end;
-        public BigDecimal getEndTime(JAsset source) { return empty(end) ? source.duration() : big(end); }
+        public BigDecimal getEndTime(JAsset source) { return empty(end) ? source.duration() : getDuration(end); }
     }
 
 }

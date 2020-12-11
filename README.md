@@ -1,18 +1,14 @@
 # Javicle - a JSON Video Composition Language
 
-Javicle is not a replacement for Final Cut Pro or even iMovie.
+Javicle is a JSON DSL for ffmpeg transformations.
 
-Javicle might be right for you if your video composition and manipulation needs are relatively simple
-and you enjoy doing things with the command line and some JSON config instead of a GUI.
+Describe your input assets and transformations in a JSON spec file, then run `jvcl spec-file` to
+perform the transformations and produce output files.
 
-This also give you the ability to track more of your workflow in source control - if you commit all
-the original assets and the .jvcl files that describe how to create the output assets, you don't need
-to save/archive the output assets anywhere.
+If you like GUIs, Javicle is not for you. Javicle is not a replacement for Final Cut Pro or even iMovie.
 
-Note, for those who want truly 100% re-creatable builds, you would also need to record the versions
-of the various tools used (ffmpeg, etc) and reuse those same versions when recreating a build. This is
-generally overkill though, since the options we use on the different tools have been stable for a while
-and I see a low likelihood of a significant change in behavior, or a bug being introduced.
+If you like CLIs, Javicle might be for you. If your video composition needs are relatively simple
+and you enjoy capturing repeatable stuff in source control.
 
 In JVCL there are two main concepts: assets and operations.
 

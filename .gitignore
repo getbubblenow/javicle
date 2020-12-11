@@ -6,4 +6,4 @@ logs
 dependency-reduced-pom.xml
 *~
 *.log
-*.mp4
+AssetManager.output.*

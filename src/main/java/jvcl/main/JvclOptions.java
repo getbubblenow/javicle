@@ -38,6 +38,6 @@ public class JvclOptions extends BaseMainOptions {
     public static final String OPT_SCRATCH_DIR = "-t";
     public static final String LONGOPT_SCRATCH_DIR = "--temp-dir";
     @Option(name=OPT_SCRATCH_DIR, aliases=LONGOPT_SCRATCH_DIR, usage=USAGE_SCRATCH_DIR)
-    @Getter @Setter private File scratchDir;
+    @Getter @Setter private File scratchDir = new File("/tmp");
 
 }

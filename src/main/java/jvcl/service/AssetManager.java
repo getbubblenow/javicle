@@ -68,12 +68,20 @@ public class AssetManager {
 
     public void addOperationAsset(JAsset asset) {
         if (asset == null || asset == NULL_ASSET) return;
-        if (asset.hasList()) {
-            for (JAsset a : asset.getList()) addOperationAsset(a);
-        } else {
-            final String name = checkName(asset);
-            assets.put(name, asset.init(this, toolbox));
-        }
+        final String name = checkName(asset);
+        assets.put(name, asset.init(this, toolbox));
+    }
+
+    public void addOperationArrayAsset(JAsset asset) {
+        if (asset == null || asset == NULL_ASSET) return;
+        final String name = checkName(asset);
+        assets.put(name, asset);
+    }
+
+    public void addOperationAssetSlice(JAsset asset, JAsset slice) {
+        if (!assets.containsKey(asset.getName())) die("asset not found: "+asset.getName());
+        final JAsset found = assets.get(asset.getName());
+        found.addAsset(slice.init(this, toolbox));
     }
 
     public JAsset[] resolve(String[] assets) {

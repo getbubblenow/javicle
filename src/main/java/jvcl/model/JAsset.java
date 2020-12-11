@@ -30,7 +30,9 @@ public class JAsset {
     public static final JAsset NULL_ASSET = new JAsset().setName("~null asset~").setPath("/dev/null");
     public static final String PREFIX_CLASSPATH = "classpath:";
 
-    public JAsset(JAsset other) { copy(this, other); }
+    public static final String[] COPY_EXCLUDE_FIELDS = {"list"};
+
+    public JAsset(JAsset other) { copy(this, other, null, COPY_EXCLUDE_FIELDS); }
 
     @Getter @Setter private String name;
     @Getter @Setter private String path;
