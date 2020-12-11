@@ -1,6 +1,6 @@
 # Javicle - a JSON Video Composition Language
 
-Javicle is a JSON DSL for audio/video transformations.
+JVCL (pronounced "Javicle") is a JSON DSL for audio/video transformations.
 
 Under the hood, it's all shell commands: ffmpeg, mediainfo, sox, and so on.
 JVCL provides higher-level semantics for working with these lower level tools.
@@ -42,15 +42,15 @@ coverage of the full capabilities of ffmpeg. We also plan to introduce "function
 to create reusable compound operations, further increasing reusability and lowering long-term
 maintenance.
 
-# Who is this not for?
-If you like GUIs, Javicle is probably not for you.
+# Who is JVCL not for?
+If you like GUIs, JVCL is probably not for you.
 
-Javicle is not a replacement for Final Cut Pro or even iMovie.
+JVCL is not a replacement for Final Cut Pro or even iMovie.
 
-# Who is this for?
-If you like CLIs, Javicle might be for you.
+# Who is JVCL for?
+If you like CLIs, JVCL might be for you.
 
-You might enjoy Javicle if your video composition needs are relatively simple or
+You might enjoy JVCL if your video composition needs are relatively simple or
 if you enjoy capturing repeatable processes in source control.
 
 # Concepts
