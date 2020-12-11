@@ -1,25 +1,63 @@
 # Javicle - a JSON Video Composition Language
 
-Javicle is a JSON DSL for ffmpeg transformations.
+Javicle is a JSON DSL for audio/video transformations.
 
-Describe your input assets and transformations in a JSON spec file, then run `jvcl spec-file` to
-perform the transformations and produce output files.
+Under the hood, it's all shell commands: ffmpeg, mediainfo, sox, and so on.
+JVCL provides higher-level semantics for working with these lower level tools.
 
-If you like GUIs, Javicle is not for you. Javicle is not a replacement for Final Cut Pro or even iMovie.
+# A Quick Example
+Say you want to split a portion of a video into ten-second chunks. With ffmpeg
+and bash, you might do something like this:
+```shell script
+    START=10
+    END=130
+    INCR=10
+    for ((i=START;i<END;i=(i+INCR))); do
+      ffmpeg -i $i /tmp/my/source.mp4 -ss $((i)) -t $((i+INCR)) /tmp/my/slice_$((i))_$((i+INCR)).mp4
+    done
+```
+With JVCL, you would use write this spec:
+```json
+{
+  "assets": [ {"name": "src", "path": "/tmp/my/source.mp4"} ],
+  "operations": [{
+    "operation": "split",
+    "creates": "src_splits",
+    "perform": {
+      "split": "src",
+      "interval": "10s",
+      "start": "10s",
+      "end": "130s"
+    }
+  }]
+}
+```
+And then run `jvcl spec-file.json` on your spec, and it would run essentially the same ffmepg commands.
 
-If you like CLIs, Javicle might be for you. If your video composition needs are relatively simple
-and you enjoy capturing repeatable stuff in source control.
+# Who is this not for?
+If you like GUIs, Javicle is probably not for you.
 
+Javicle is not a replacement for Final Cut Pro or even iMovie.
+
+# Who is this for?
+If you like CLIs, Javicle might be for you.
+
+You might enjoy Javicle if your video composition needs are relatively simple and/or
+you enjoy capturing repeatable processes in source control.
+
+# Concepts
 In JVCL there are two main concepts: assets and operations.
 
+## Assets
 Assets are the inputs - generally image, audio and video files. Assets have a name and a path.
 The path can be a file or a URL.
 
+## Operations
 Operations are transformations to perform on the inputs.
 An operation can produce a new intermediate asset.
 Intermediate assets have names, and special paths that indicate how to reconstruct them from their assets, such that if you have the path of an intermediate asset, you can recreate its content, assuming you supply the same input assets.
 
-## Operations
+The operations that JVCL either supports or intends to support are:
 
 ### split
 Split an audio/video asset into multiple assets
@@ -42,7 +80,9 @@ Transform a video in one size to another size using black letterboxes on the sid
 ### split-silence
 Split an audio file according to silence
 
-## Example
+# Complex Example
+Here is a complex example using multiple assets and operations:
+
 ```json
 {
   "assets": [
