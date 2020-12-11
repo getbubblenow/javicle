@@ -63,9 +63,8 @@ The path can be a file or a URL.
 ## Operations
 Operations are transformations to perform on the inputs.
 
-An operation can produce a new intermediate asset.
-
-Intermediate assets have names, and special paths that indicate how to reconstruct them from their assets, such that if you have the path of an intermediate asset, you can recreate its content, assuming you supply the same input assets.
+An operation can produce a new intermediate asset, which can then be referenced in
+later operations.
 
 The operations that JVCL either supports or intends to support are:
 
