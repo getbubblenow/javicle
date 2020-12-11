@@ -12,7 +12,7 @@ and bash, you might do something like this:
 ```shell script
     INCR=10
     for ((i=10;i<130;i=(i+INCR))); do
-      ffmpeg -i $i /tmp/my/source.mp4 -ss $((i)) -t $((i+INCR)) /tmp/my/slice_$((i))_$((i+INCR)).mp4
+      ffmpeg -i /tmp/my/source.mp4 -ss ${i} -t $((i+INCR)) /tmp/my/slice_${i}_$((i+INCR)).mp4
     done
 ```
 With JVCL, you'd create this spec:
