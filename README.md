@@ -32,7 +32,14 @@ With JVCL, you would use write this spec:
   }]
 }
 ```
-And then run `jvcl spec-file.json` on your spec, and it would run essentially the same ffmepg commands.
+Yes, the JVCL is longer, but I think many would agree it is easier to read and maintain.
+
+As the number of input assets and transformation operations grows, hand-crafted shell scripts with magical
+ffmpeg incantations become ever more inscrutable with time.
+
+JVCL is designed for readability and maintainability. JVCL will continue to evolve towards greater
+coverage of the full capabilities of ffmpeg. We also plan to introduce "function" concepts
+to create reusable compound operations, further increasing reusability and lower long-term maintenance.
 
 # Who is this not for?
 If you like GUIs, Javicle is probably not for you.
@@ -42,19 +49,22 @@ Javicle is not a replacement for Final Cut Pro or even iMovie.
 # Who is this for?
 If you like CLIs, Javicle might be for you.
 
-You might enjoy Javicle if your video composition needs are relatively simple and/or
-you enjoy capturing repeatable processes in source control.
+You might enjoy Javicle if your video composition needs are relatively simple or
+if you enjoy capturing repeatable processes in source control.
 
 # Concepts
 In JVCL there are two main concepts: assets and operations.
 
 ## Assets
-Assets are the inputs - generally image, audio and video files. Assets have a name and a path.
+Assets are the inputs: generally image, audio and video files. Assets have a name and a path.
+
 The path can be a file or a URL.
 
 ## Operations
 Operations are transformations to perform on the inputs.
+
 An operation can produce a new intermediate asset.
+
 Intermediate assets have names, and special paths that indicate how to reconstruct them from their assets, such that if you have the path of an intermediate asset, you can recreate its content, assuming you supply the same input assets.
 
 The operations that JVCL either supports or intends to support are:
