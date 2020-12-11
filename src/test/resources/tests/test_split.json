@@ -1,0 +1,24 @@
+{
+  "assets": [
+    {
+      "name": "vid1",
+      "path": "https://archive.org/download/gov.archives.arc.1257628/gov.archives.arc.1257628_512kb.mp4",
+      "dest": "src/test/resources/sources/gov.archives.arc.1257628_512kb.mp4"
+    },
+    {
+      "name": "vid2",
+      "path": "https://archive.org/download/gov.archives.arc.49442/gov.archives.arc.49442_512kb.mp4",
+      "dest": "src/test/resources/sources/gov.archives.arc.49442_512kb.mp4"
+    }
+  ],
+  "operations": [
+    {
+      "operation": "split",            // name of the operation
+      "creates": "vid1_split_%",       // assets it creates, the '%' will be replaced with a counter
+      "perform": {
+        "split": "vid1",               // split this source asset
+        "interval": "10s"              // split every ten seconds
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+<!-- Copyright (c) 2020 Bubble, Inc. All rights reserved. For personal (non-commercial) use, see license: https://getbubblenow.com/bubble-license/ -->
+<configuration>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <!-- reset all previous level configurations of all j.u.l. loggers -->
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.err</Target>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%level] [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.cobbzilla" level="WARN" />
+    <logger name="org.cobbzilla.util.security.bcrypt" level="ERROR" />
+    <logger name="org.cobbzilla.util.javascript" level="INFO" />
+    <logger name="org.cobbzilla.util.handlebars" level="INFO" />
+    <logger name="org.cobbzilla.util.yml" level="ERROR" />
+    <logger name="org.cobbzilla.util.daemon.ZillaRuntime" level="WARN" />
+    <logger name="org.cobbzilla.util.io.multi" level="INFO" />
+
+    <root level="INFO">
+        <appender-ref ref="STDERR" />
+    </root>
+
+</configuration>
