@@ -10,10 +10,8 @@ JVCL provides higher-level semantics for working with these lower level tools.
 Say you want to split a portion of a video into ten-second chunks. With ffmpeg
 and bash, you might do something like this:
 ```shell script
-    START=10
-    END=130
     INCR=10
-    for ((i=START;i<END;i=(i+INCR))); do
+    for ((i=10;i<130;i=(i+INCR))); do
       ffmpeg -i $i /tmp/my/source.mp4 -ss $((i)) -t $((i+INCR)) /tmp/my/slice_$((i))_$((i+INCR)).mp4
     done
 ```
