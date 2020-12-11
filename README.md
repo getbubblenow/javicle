@@ -16,7 +16,7 @@ and bash, you might do something like this:
       ffmpeg -i $i /tmp/my/source.mp4 -ss $((i)) -t $((i+INCR)) /tmp/my/slice_$((i))_$((i+INCR)).mp4
     done
 ```
-With JVCL, you would use write this spec:
+With JVCL, you'd create this spec:
 ```json
 {
   "assets": [ {"name": "src", "path": "/tmp/my/source.mp4"} ],
