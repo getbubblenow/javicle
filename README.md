@@ -39,7 +39,8 @@ ffmpeg incantations become ever more inscrutable.
 
 JVCL is designed for readability and maintainability. JVCL will continue to evolve towards greater
 coverage of the full capabilities of ffmpeg. We also plan to introduce "function" concepts
-to create reusable compound operations, further increasing reusability and lower long-term maintenance.
+to create reusable compound operations, further increasing reusability and lowering long-term
+maintenance.
 
 # Who is this not for?
 If you like GUIs, Javicle is probably not for you.
