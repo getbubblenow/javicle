@@ -3,6 +3,7 @@
 JVCL (pronounced "Javicle") is a JSON DSL for audio/video transformations.
 
 Under the hood, it's all shell commands: `ffmpeg`, `mediainfo`, `sox`, and so on.
+
 JVCL provides higher-level semantics for working with these lower level tools.
 
 # A Quick Example
