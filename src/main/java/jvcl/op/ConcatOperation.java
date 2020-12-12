@@ -14,8 +14,10 @@ import org.cobbzilla.util.handlebars.HandlebarsUtil;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static jvcl.model.JAsset.flattenAssetList;
 import static jvcl.model.JAsset.json2asset;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
@@ -26,13 +28,13 @@ import static org.cobbzilla.util.system.CommandShell.execScript;
 @Slf4j
 public class ConcatOperation implements JOperator {
 
-    public static final String CONCAT_RECODE_TEMPLATE_1
-            // list inputs
-            = "{{ffmpeg}} {{#each sources}} -i {{{this.path}}}{{/each}} "
-            // concat them together
-            + "-f concat -safe 0 -c copy {{{output.path}}}";
+    public static final String CONCAT_RECODE_TEMPLATE_OLD
+            // concat inputs
+            = "{{ffmpeg}} -f concat{{#each sources}} -i {{{this.path}}}{{/each}} "
+            // safely with copy codec
+            + "-safe 0 -c copy {{{output.path}}}";
 
-    public static final String CONCAT_RECODE_TEMPLATE_2
+    public static final String CONCAT_RECODE_TEMPLATE_1
             // list inputs
             = "{{ffmpeg}} {{#each sources}} -i {{{this.path}}}{{/each}} "
 
@@ -50,22 +52,30 @@ public class ConcatOperation implements JOperator {
         final ConcatConfig config = json(json(op.getPerform()), ConcatConfig.class);
 
         // validate sources
-        final JAsset[] sources = assetManager.resolve(config.getConcat());
+        final List<JAsset> sources = flattenAssetList(assetManager.resolve(config.getConcat()));
         if (empty(sources)) die("operate: no sources");
 
         // create output object
         final JAsset output = json2asset(op.getCreates());
+        if (output.hasDest() && output.destExists()) {
+            log.info("operate: dest exists, not re-creating: "+output.getDest());
+            return;
+        }
 
         // if any format settings are missing, use settings from first source
-        output.mergeFormat(sources[0].getFormat());
+        output.mergeFormat(sources.get(0).getFormat());
 
         // set the path, check if output asset already exists
         final JFileExtension formatType = output.getFormat().getFileExtension();
-        final File outfile = assetManager.assetPath(op, sources, formatType);
+        final File outfile = output.hasDest()
+                ? new File(output.getDest())
+                : assetManager.assetPath(op, sources, formatType);
         if (outfile.exists()) {
             log.info("operate: outfile exists, not re-creating: "+abs(outfile));
             return;
         }
+        if (!outfile.getParentFile().canWrite()) die("operate: cannot write file (parent directory not writeable): "+abs(outfile));
+
         output.setPath(abs(outfile));
 
         final Map<String, Object> ctx = new HashMap<>();

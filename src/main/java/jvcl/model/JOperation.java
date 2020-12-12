@@ -19,7 +19,7 @@ public class JOperation {
     public String hash(JAsset[] sources) { return hash(sources, null); }
 
     public String hash(JAsset[] sources, Object[] args) {
-        return hashOf(getOperation(), json(creates), json(perform), json(sources), args);
+        return hashOf(getOperation(), json(creates), json(perform), sources, args);
     }
 
 }

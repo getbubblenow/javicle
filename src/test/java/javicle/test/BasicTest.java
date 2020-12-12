@@ -1,21 +1,25 @@
 package javicle.test;
 
 import jvcl.main.Jvcl;
-import jvcl.main.JvclOptions;
 import lombok.Cleanup;
 import org.junit.Test;
 
 import java.io.File;
 
+import static jvcl.main.JvclOptions.LONGOPT_SPEC;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.StreamUtil.loadResourceAsStream;
 import static org.cobbzilla.util.io.StreamUtil.stream2file;
 
 public class BasicTest {
 
-    @Test public void testSplitAndConcat () throws Exception {
-        @Cleanup("delete") final File specFile = stream2file(loadResourceAsStream("tests/test_split.json"));
-        Jvcl.main(new String[]{JvclOptions.LONGOPT_SPEC, abs(specFile)});
+    @Test public void testSplit() { runSpec("tests/test_split.json"); }
+
+    @Test public void testConcat() { runSpec("tests/test_concat.json"); }
+
+    private void runSpec(String specPath) {
+        @Cleanup("delete") final File specFile = stream2file(loadResourceAsStream(specPath));
+        Jvcl.main(new String[]{LONGOPT_SPEC, abs(specFile)});
     }
 
 }

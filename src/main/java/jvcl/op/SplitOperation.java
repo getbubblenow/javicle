@@ -30,7 +30,7 @@ import static org.cobbzilla.util.system.CommandShell.execScript;
 public class SplitOperation implements JOperator {
 
     public static final String SPLIT_TEMPLATE
-            = "{{ffmpeg}} -i {{{source.path}}} -ss {{startSeconds}} -t {{endSeconds}} {{{output.path}}}";
+            = "{{ffmpeg}} -i {{{source.path}}} -ss {{startSeconds}} -t {{interval}} {{{output.path}}}";
 
     @Override public void operate(JOperation op, Toolbox toolbox, AssetManager assetManager) {
         final SplitConfig config = json(json(op.getPerform()), SplitConfig.class);
@@ -83,7 +83,7 @@ public class SplitOperation implements JOperator {
 
             ctx.put("output", slice);
             ctx.put("startSeconds", i);
-            ctx.put("endSeconds", i.add(incr));
+            ctx.put("interval", incr);
             final String script = HandlebarsUtil.apply(toolbox.getHandlebars(), SPLIT_TEMPLATE, ctx);
 
             log.debug("operate: running script: "+script);

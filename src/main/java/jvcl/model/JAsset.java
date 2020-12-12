@@ -1,5 +1,6 @@
 package jvcl.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import jvcl.model.info.JMediaInfo;
 import jvcl.service.AssetManager;
@@ -16,7 +17,11 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparing;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.http.HttpSchemes.isHttpOrHttps;
 import static org.cobbzilla.util.io.FileUtil.abs;
@@ -24,6 +29,7 @@ import static org.cobbzilla.util.io.FileUtil.mkdirOrDie;
 import static org.cobbzilla.util.io.StreamUtil.loadResourceAsStream;
 import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.reflect.ReflectionUtil.copy;
+import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @NoArgsConstructor @AllArgsConstructor @Accessors(chain=true) @Slf4j
 public class JAsset {
@@ -41,6 +47,25 @@ public class JAsset {
     // an asset can specify where its file should live
     // if the file already exists, it is used and not overwritten
     @Getter @Setter private String dest;
+
+    public static List<JAsset> flattenAssetList(JAsset[] assets) {
+        final List<JAsset> list = new ArrayList<>();
+        return _flatten(assets, list);
+    }
+
+    private static List<JAsset> _flatten(JAsset[] assets, final List<JAsset> list) {
+        if (assets != null) {
+            for (final JAsset a : assets) {
+                if (a.hasList()) {
+                    _flatten(a.getList(), list);
+                } else {
+                    list.add(a);
+                }
+            }
+        }
+        return list;
+    }
+
     public boolean hasDest() { return !empty(dest); }
     public boolean destExists() { return new File(dest).exists(); }
     public boolean destIsDirectory() { return new File(dest).isDirectory(); }
@@ -54,7 +79,9 @@ public class JAsset {
 
     @Getter @Setter private JAsset[] list;
     public boolean hasList () { return list != null; }
+    public boolean hasListAssets () { return !empty(getList()); }
     public void addAsset(JAsset slice) { list = ArrayUtil.append(list, slice); }
+    @JsonIgnore public Integer getLength () { return hasList() ? list.length : null; }
 
     @Getter @Setter private JFormat format;
     public boolean hasFormat() { return format != null; }
@@ -66,6 +93,19 @@ public class JAsset {
         return this;
     }
     public boolean hasInfo() { return info != null; }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final JAsset a = (JAsset) o;
+        return Objects.equals(path, a.path) && Arrays.equals(list, a.list);
+    }
+
+    @Override public int hashCode() {
+        int result = Objects.hash(path);
+        result = 31 * result + Arrays.hashCode(list);
+        return result;
+    }
 
     public static JAsset json2asset(JsonNode node) {
         if (node.isObject()) return json(node, JAsset.class);
@@ -88,8 +128,13 @@ public class JAsset {
     public BigDecimal duration() { return getInfo().duration(); }
 
     public JAsset init(AssetManager assetManager, Toolbox toolbox) {
-        initPath(assetManager);
-        setInfo(toolbox.getInfo(this));
+        final JAsset asset = initPath(assetManager);
+        if (!asset.hasListAssets()) {
+            setInfo(toolbox.getInfo(this));
+        } else {
+            setInfo(toolbox.getInfo(list[0]));
+            for (JAsset a : asset.getList()) a.setInfo(getInfo());
+        }
         return this;
     }
 
@@ -132,9 +177,32 @@ public class JAsset {
 
         } else {
             // must be a file
-            final File f = new File(path);
-            if (!f.exists()) return die("initPath: file path does not exist: "+path);
-            if (!f.canRead()) return die("initPath: file path is not readable: "+path);
+            // does it contain a wildcard?
+            if (path.contains("*")) {
+                // find matching files
+                final int starPos = path.indexOf("*");
+                final int lastSlash = path.substring(0, starPos).lastIndexOf("/");
+                final String[] parts = path.split("\\*");
+                final StringBuilder b = new StringBuilder();
+                Arrays.stream(parts).forEach(p -> {
+                    if (b.length() > 0) b.append(".+");
+                    b.append(Pattern.quote(p));
+                });
+                final Pattern regex = Pattern.compile(b.toString());
+                final File dir = new File(path.substring(0, lastSlash));
+                final String filesInDir = execScript("find " + dir + " -type f");
+                final Set<String> matches = Arrays.stream(filesInDir.split("\n"))
+                        .filter(f -> regex.matcher(f).matches())
+                        .collect(Collectors.toCollection(() -> new TreeSet<>(comparing(String::toString))));
+                for (String f : matches) {
+                    addAsset(new JAsset(this).setPath(f));
+                }
+
+            } else {
+                final File f = new File(path);
+                if (!f.exists()) return die("initPath: file path does not exist: "+path);
+                if (!f.canRead()) return die("initPath: file path is not readable: "+path);
+            }
         }
         return this;
     }

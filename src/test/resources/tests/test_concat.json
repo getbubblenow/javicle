@@ -1,13 +1,16 @@
 {
   "assets": [
-    { "name": "vid1_splits" }
+    { "name": "vid1_splits", "path": "src/test/resources/outputs/vid1_splits_*.mp4" }
   ],
   "operations": [
     {
       "operation": "concat",
-      "creates": "combined_vid",
+      "creates": {
+        "name": "combined_vid",
+        "dest": "src/test/resources/outputs/combined.mp4"
+      },
       "perform": {
-        "concat": ["vid1_splits[1..{{vid1_splits.length}}"]
+        "concat": ["vid1_splits[1..]"]
       }
     }
   ]

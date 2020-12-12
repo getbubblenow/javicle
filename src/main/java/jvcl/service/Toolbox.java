@@ -70,7 +70,12 @@ public class Toolbox {
         if (!infoFile.exists() || infoFile.length() == 0) {
             return die("getInfo: info file was not created or was empty: "+infoPath);
         }
-        return infoCache.computeIfAbsent(infoPath, p -> json(FileUtil.toStringOrDie(infoFile), JMediaInfo.class, FULL_MAPPER_ALLOW_UNKNOWN_FIELDS));
+        return infoCache.computeIfAbsent(infoPath, p -> {
+            try {
+                return json(FileUtil.toStringOrDie(infoFile), JMediaInfo.class, FULL_MAPPER_ALLOW_UNKNOWN_FIELDS);
+            } catch (Exception e) {
+                return die("getInfo: "+shortError(e), e);
+            }
+        });
     }
-
 }
