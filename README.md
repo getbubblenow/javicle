@@ -78,7 +78,7 @@ Concatenate audio/video assets together into one asset
 Trim audio/video; crop a section of an asset, becomes a new asset
 
 ### overlay
-Overlay one video file onto another
+Overlay one audio or video file onto another
 
 ### ken-burns
 For transforming still images into video via a fade-pan (aka Ken Burns) effect
