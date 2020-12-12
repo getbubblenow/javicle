@@ -133,20 +133,20 @@ Here is a complex example using multiple assets and operations:
       "creates": "overlay1",           // asset it creates
       "perform": {
         "source": "combined_vid1",     // main video asset
-        "overlay": "vid1",             // overlay this video on the main video
+        "overlay": "vid2",             // overlay this video on the main video
 
-        "start": "vid1.end_ts",        // when (on the main video timeline) to start the overlay. default is 0 (beginning)
-        "duration": "vid1.duration",   // how long to play the overlay. default is to play the entire overlay asset
+        "offset": "30",                // when (on the main video timeline) to begin showing the overlay. default is 0 (beginning)
+        "overlayStart": "0",           // when (on the overlay video timeline) to begin playback on the overlay. default is 0 (beginning)
+        "overlayEnd": "0",             // when (on the overlay video timeline) to end playback on the overlay. default is to play the whole overlay
 
-        "width": 400,                  // how wide the overlay will be, in pixels. default is "overlay.width"
-        "height": 300,                 // how tall the overlay will be, in pixels. default is "overlay.height"
+        "width": "overlay.width / 2",  // how wide the overlay will be, in pixels. default is the full overlay width, or maintain aspect ratio if height was set
+        "height": "",                  // how tall the overlay will be, in pixels. default is the full overlay height, or maintain aspect ratio if width was set
 
-        "x": "source.width / 2",       // horizontal overlay position. default is 0
-        "y": "source.height / 2",      // vertical overlay position. default is 0
- 
-        "out": "1080p",                // this is a shortcut to the two lines below, and is the preferred way of specifying the output resolution
-        "out_width": 1920,             // output width in pixels. default is source width
-        "out_height": 1024            // output height in pixes. default is source height
+        "x": "source.width/2",         // horizontal overlay position on main video. default is 0
+        "y": "source.height/2",        // vertical overlay position on main video. default is 0
+
+        "outputWidth": "1920",         // output width in pixels. default is source width
+        "outputHeight": "1024"         // output height in pixes. default is source height
       }
     }
   ]

@@ -143,6 +143,7 @@ public class JAsset {
     }
 
     public BigDecimal duration() { return getInfo().duration(); }
+    @JsonIgnore public BigDecimal getDuration () { return duration(); }
 
     public JAsset init(AssetManager assetManager, Toolbox toolbox) {
         final JAsset asset = initPath(assetManager);

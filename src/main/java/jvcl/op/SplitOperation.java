@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.handlebars.HandlebarsUtil;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -23,7 +22,6 @@ import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.mkdirOrDie;
-import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
@@ -33,7 +31,7 @@ public class SplitOperation implements JOperator {
             = "{{ffmpeg}} -i {{{source.path}}} -ss {{startSeconds}} -t {{interval}} {{{output.path}}}";
 
     @Override public void operate(JOperation op, Toolbox toolbox, AssetManager assetManager) {
-        final SplitConfig config = json(json(op.getPerform()), SplitConfig.class);
+        final SplitConfig config = loadConfig(op, SplitConfig.class);
 
         final JAsset source = assetManager.resolve(config.getSplit());
 
@@ -85,7 +83,7 @@ public class SplitOperation implements JOperator {
             ctx.put("output", slice);
             ctx.put("startSeconds", i);
             ctx.put("interval", incr);
-            final String script = HandlebarsUtil.apply(toolbox.getHandlebars(), SPLIT_TEMPLATE, ctx);
+            final String script = renderScript(toolbox, ctx, SPLIT_TEMPLATE);
 
             log.debug("operate: running script: "+script);
             final String scriptOutput = execScript(script);

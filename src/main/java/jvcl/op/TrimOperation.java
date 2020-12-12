@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.handlebars.HandlebarsUtil;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -23,7 +22,6 @@ import static jvcl.service.Toolbox.getDuration;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.io.FileUtil.*;
-import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
@@ -34,7 +32,7 @@ public class TrimOperation implements JOperator {
 
     @Override public void operate(JOperation op, Toolbox toolbox, AssetManager assetManager) {
 
-        final TrimConfig config = json(json(op.getPerform()), TrimConfig.class);
+        final TrimConfig config = loadConfig(op, TrimConfig.class);
         final JAsset source = assetManager.resolve(config.getTrim());
 
         final JAsset output = json2asset(op.getCreates());
@@ -85,7 +83,7 @@ public class TrimOperation implements JOperator {
         final BigDecimal startTime = config.getStartTime();
         ctx.put("startSeconds", startTime);
         if (config.hasEnd()) ctx.put("interval", config.getEndTime().subtract(startTime));
-        final String script = HandlebarsUtil.apply(toolbox.getHandlebars(), TRIM_TEMPLATE, ctx);
+        final String script = renderScript(toolbox, ctx, TRIM_TEMPLATE);
 
         log.debug("operate: running script: "+script);
         final String scriptOutput = execScript(script);

@@ -3,12 +3,12 @@
     {
       "name": "vid1",
       "path": "https://archive.org/download/gov.archives.arc.1257628/gov.archives.arc.1257628_512kb.mp4",
-      "dest": "src/test/resources/sources/gov.archives.arc.1257628_512kb.mp4"
+      "dest": "src/test/resources/sources/"
     },
     {
       "name": "vid2",
       "path": "https://archive.org/download/gov.archives.arc.49442/gov.archives.arc.49442_512kb.mp4",
-      "dest": "src/test/resources/sources/gov.archives.arc.49442_512kb.mp4"
+      "dest": "src/test/resources/sources/"
     }
   ],
   "operations": [

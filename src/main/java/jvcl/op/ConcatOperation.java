@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.handlebars.HandlebarsUtil;
 
 import java.io.File;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import static jvcl.model.JAsset.json2asset;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.io.FileUtil.abs;
-import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
@@ -49,7 +47,7 @@ public class ConcatOperation implements JOperator {
 
     @Override public void operate(JOperation op, Toolbox toolbox, AssetManager assetManager) {
 
-        final ConcatConfig config = json(json(op.getPerform()), ConcatConfig.class);
+        final ConcatConfig config = loadConfig(op, ConcatConfig.class);
 
         // validate sources
         final List<JAsset> sources = flattenAssetList(assetManager.resolve(config.getConcat()));
@@ -82,7 +80,7 @@ public class ConcatOperation implements JOperator {
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("sources", sources);
         ctx.put("output", output);
-        final String script = HandlebarsUtil.apply(toolbox.getHandlebars(), CONCAT_RECODE_TEMPLATE_1, ctx);
+        final String script = renderScript(toolbox, ctx, CONCAT_RECODE_TEMPLATE_1);
 
         log.debug("operate: running script: "+script);
         final String scriptOutput = execScript(script);
