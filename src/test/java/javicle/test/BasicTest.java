@@ -13,9 +13,9 @@ import static org.cobbzilla.util.io.StreamUtil.stream2file;
 
 public class BasicTest {
 
-    @Test public void testSplit() { runSpec("tests/test_split.json"); }
-
-    @Test public void testConcat() { runSpec("tests/test_concat.json"); }
+    @Test public void testSplit  () { runSpec("tests/test_split.json"); }
+    @Test public void testConcat () { runSpec("tests/test_concat.json"); }
+    @Test public void testTrim   () { runSpec("tests/test_trim.json"); }
 
     private void runSpec(String specPath) {
         @Cleanup("delete") final File specFile = stream2file(loadResourceAsStream(specPath));

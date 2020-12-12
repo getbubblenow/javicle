@@ -82,7 +82,9 @@ public class JAsset {
 
     }
 
-    public boolean destIsDirectory() { return new File(dest).isDirectory(); }
+    public boolean destIsDirectory() {
+        return hasDest() && (dest.endsWith("/") || new File(dest).isDirectory());
+    }
     public File destDirectory() {
         return mkdirOrDie(new File(dest.endsWith("/") ? dest.substring(0, dest.length()-1) : dest));
     }
