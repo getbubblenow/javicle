@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.http.HttpSchemes.isHttpOrHttps;
 import static org.cobbzilla.util.io.FileUtil.abs;
+import static org.cobbzilla.util.io.FileUtil.mkdirOrDie;
 import static org.cobbzilla.util.io.StreamUtil.loadResourceAsStream;
 import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.reflect.ReflectionUtil.copy;
@@ -42,6 +43,10 @@ public class JAsset {
     @Getter @Setter private String dest;
     public boolean hasDest() { return !empty(dest); }
     public boolean destExists() { return new File(dest).exists(); }
+    public boolean destIsDirectory() { return new File(dest).isDirectory(); }
+    public File destDirectory() {
+        return mkdirOrDie(new File(dest.endsWith("/") ? dest.substring(0, dest.length()-1) : dest));
+    }
 
     // if path was not a file, it got resolved to a file
     // the original value of 'path' is stored here

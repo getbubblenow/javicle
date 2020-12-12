@@ -152,3 +152,6 @@ Here is a complex example using multiple assets and operations:
   ]
 }
 ```
+
+## What's up with the name?
+I dunno, a cross between a javelin and an icicle? does that have any positive connotations? ok then...

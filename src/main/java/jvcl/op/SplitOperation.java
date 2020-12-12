@@ -19,8 +19,10 @@ import java.util.Map;
 
 import static jvcl.model.JAsset.json2asset;
 import static jvcl.service.Toolbox.getDuration;
+import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.io.FileUtil.abs;
+import static org.cobbzilla.util.io.FileUtil.mkdirOrDie;
 import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
@@ -54,10 +56,27 @@ public class SplitOperation implements JOperator {
              i.compareTo(endTime) < 0;
              i = i.add(incr)) {
 
-            final File outfile = assetManager.assetPath(op, source, formatType, new Object[]{i, incr});
+            final File outfile;
+            if (output.hasDest()) {
+                if (!output.destExists()) {
+                    outfile = sliceFile(output, formatType, i, incr);
+                } else {
+                    if (output.destIsDirectory()) {
+                        outfile = sliceFile(output, formatType, i, incr);
+                    } else {
+                        die("dest exists and is not a directory: "+output.getDest());
+                        return;
+                    }
+                }
+            } else {
+                outfile = assetManager.assetPath(op, source, formatType, new Object[]{i, incr});
+            }
+
             if (outfile.exists()) {
                 log.info("operate: outfile exists, not re-creating: "+abs(outfile));
                 return;
+            } else {
+                mkdirOrDie(outfile.getParentFile());
             }
             final JAsset slice = new JAsset(output);
             slice.setPath(abs(outfile));
@@ -73,6 +92,10 @@ public class SplitOperation implements JOperator {
             assetManager.addOperationAssetSlice(output, slice);
         }
         log.info("operate: completed");
+    }
+
+    private File sliceFile(JAsset output, JFileExtension formatType, BigDecimal i, BigDecimal incr) {
+        return new File(output.destDirectory(), output.getName() + "_" + i + "_" + i.add(incr) + formatType.ext());
     }
 
     @NoArgsConstructor

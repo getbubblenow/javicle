@@ -14,7 +14,10 @@
   "operations": [
     {
       "operation": "split",            // name of the operation
-      "creates": "vid1_splits",        // assets it creates, will be an array asset
+      "creates": {
+        "name": "vid1_splits",
+        "dest": "src/test/resources/outputs/"
+      },
       "perform": {
         "split": "vid1",               // split this source asset
         "interval": "10s",             // split every ten seconds

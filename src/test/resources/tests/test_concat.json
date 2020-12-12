@@ -1,0 +1,14 @@
+{
+  "assets": [
+    { "name": "vid1_splits" }
+  ],
+  "operations": [
+    {
+      "operation": "concat",
+      "creates": "combined_vid",
+      "perform": {
+        "concat": ["vid1_splits[1..{{vid1_splits.length}}"]
+      }
+    }
+  ]
+}
