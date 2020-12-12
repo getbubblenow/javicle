@@ -24,8 +24,7 @@ import java.util.stream.Collectors;
 import static java.util.Comparator.comparing;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.http.HttpSchemes.isHttpOrHttps;
-import static org.cobbzilla.util.io.FileUtil.abs;
-import static org.cobbzilla.util.io.FileUtil.mkdirOrDie;
+import static org.cobbzilla.util.io.FileUtil.*;
 import static org.cobbzilla.util.io.StreamUtil.loadResourceAsStream;
 import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.reflect.ReflectionUtil.copy;
@@ -43,6 +42,7 @@ public class JAsset {
 
     @Getter @Setter private String name;
     @Getter @Setter private String path;
+    public boolean hasPath() { return !empty(path); }
 
     // an asset can specify where its file should live
     // if the file already exists, it is used and not overwritten
@@ -67,7 +67,21 @@ public class JAsset {
     }
 
     public boolean hasDest() { return !empty(dest); }
-    public boolean destExists() { return new File(dest).exists(); }
+    public boolean destExists() { return new File(destPath()).exists(); }
+
+    public String destPath() {
+        if (destIsDirectory()) {
+            if (hasPath()) {
+                return abs(new File(destDirectory(), basename(getPath())));
+            } else {
+                return abs(destDirectory());
+            }
+        } else {
+            return abs(new File(dest));
+        }
+
+    }
+
     public boolean destIsDirectory() { return new File(dest).isDirectory(); }
     public File destDirectory() {
         return mkdirOrDie(new File(dest.endsWith("/") ? dest.substring(0, dest.length()-1) : dest));
@@ -76,6 +90,7 @@ public class JAsset {
     // if path was not a file, it got resolved to a file
     // the original value of 'path' is stored here
     @Getter @Setter private String originalPath;
+    public boolean hasOriginalPath () { return !empty(originalPath); }
 
     @Getter @Setter private JAsset[] list;
     public boolean hasList () { return list != null; }
@@ -143,10 +158,12 @@ public class JAsset {
         if (empty(path)) return die("initPath: no path!");
 
         // if dest already exists, use that
-        if (hasDest() && destExists()) {
-            setOriginalPath(path);
-            setPath(getDest());
-            return this;
+        if (hasDest()) {
+            if (destExists()) {
+                setOriginalPath(path);
+                setPath(destPath());
+                return this;
+            }
         }
 
         final File sourcePath = hasDest() ? new File(getDest()) : assetManager.sourcePath(getName());

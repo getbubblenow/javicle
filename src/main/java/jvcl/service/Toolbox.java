@@ -62,7 +62,9 @@ public class Toolbox {
     private final Map<String, JMediaInfo> infoCache = new ConcurrentHashMap<>();
 
     public JMediaInfo getInfo(JAsset asset) {
-        final File infoFile = new File(replaceExt(asset.getPath(), ".json"));
+        if (!asset.hasPath()) return die("getInfo: no path for asset: "+asset);
+        final String infoName = replaceExt(asset.getPath(), ".json");
+        final File infoFile = new File(infoName);
         final String infoPath = abs(infoFile);
         if (!infoFile.exists() || infoFile.length() == 0) {
             execScript(getMediainfo() + " --Output=JSON " + abs(asset.getPath())+" > "+infoPath);

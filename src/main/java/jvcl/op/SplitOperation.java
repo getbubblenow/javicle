@@ -80,6 +80,7 @@ public class SplitOperation implements JOperator {
             }
             final JAsset slice = new JAsset(output);
             slice.setPath(abs(outfile));
+            slice.setName(source.getName()+"_"+i+"_"+incr);
 
             ctx.put("output", slice);
             ctx.put("startSeconds", i);
@@ -95,7 +96,7 @@ public class SplitOperation implements JOperator {
     }
 
     private File sliceFile(JAsset output, JFileExtension formatType, BigDecimal i, BigDecimal incr) {
-        return new File(output.destDirectory(), output.getName() + "_" + i + "_" + i.add(incr) + formatType.ext());
+        return new File(output.destDirectory(), output.getName() + "_" + i + "_" + incr + formatType.ext());
     }
 
     @NoArgsConstructor

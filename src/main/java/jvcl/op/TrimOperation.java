@@ -8,6 +8,7 @@ import jvcl.service.Toolbox;
 public class TrimOperation implements JOperator {
 
     @Override public void operate(JOperation op, Toolbox toolbox, AssetManager assetManager) {
+
     }
 
 }

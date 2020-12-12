@@ -58,7 +58,7 @@ public class ConcatOperation implements JOperator {
         // create output object
         final JAsset output = json2asset(op.getCreates());
         if (output.hasDest() && output.destExists()) {
-            log.info("operate: dest exists, not re-creating: "+output.getDest());
+            log.info("operate: dest exists, not re-creating: "+output.destPath());
             return;
         }
 
@@ -68,7 +68,7 @@ public class ConcatOperation implements JOperator {
         // set the path, check if output asset already exists
         final JFileExtension formatType = output.getFormat().getFileExtension();
         final File outfile = output.hasDest()
-                ? new File(output.getDest())
+                ? new File(output.destPath())
                 : assetManager.assetPath(op, sources, formatType);
         if (outfile.exists()) {
             log.info("operate: outfile exists, not re-creating: "+abs(outfile));

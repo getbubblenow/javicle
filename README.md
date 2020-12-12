@@ -75,7 +75,7 @@ Split an audio/video asset into multiple assets
 Concatenate audio/video assets together into one asset
 
 ### trim
-Trim audio/video - crop from beginning, end, or both
+Trim audio/video; crop a section of an asset, becomes a new asset
 
 ### overlay
 Overlay one video file onto another
