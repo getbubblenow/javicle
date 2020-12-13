@@ -35,5 +35,6 @@
         "outputWidth": "1920",         // output width in pixels. default is source width
         "outputHeight": "1024"         // output height in pixes. default is source height
       }
+    }
   ]
 }

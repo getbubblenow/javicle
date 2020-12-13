@@ -42,9 +42,11 @@ public class JTrack {
 
     @JsonProperty("Width") @Getter @Setter private String width;
     public Integer width () { return parseInt(width); }
+    public boolean hasWidth () { return !empty(width); }
 
     @JsonProperty("Height") @Getter @Setter private String height;
     public Integer height () { return parseInt(height); }
+    public boolean hasHeight () { return !empty(height); }
 
     @JsonProperty("Sampled_Width") @Getter @Setter private String sampledWidth;
     @JsonProperty("Sampled_Height") @Getter @Setter private String sampledHeight;

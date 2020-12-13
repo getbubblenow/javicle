@@ -2,6 +2,7 @@ package jvcl.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import jvcl.op.ConcatOperation;
+import jvcl.op.OverlayOperation;
 import jvcl.op.SplitOperation;
 import jvcl.op.TrimOperation;
 import jvcl.service.AssetManager;
@@ -15,7 +16,7 @@ public enum JOperationType {
     concat (new ConcatOperation()),
     split (new SplitOperation()),
     trim (new TrimOperation()),
-    overlay (null),
+    overlay (new OverlayOperation()),
     ken_burns (null),
     letterbox (null),
     split_silence (null);

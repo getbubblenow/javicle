@@ -51,34 +51,44 @@ public class TrimOperation implements JOperator {
                 final File outfile;
                 if (output.hasDest()) {
                     outfile = new File(output.destDirectory(), basename(appendToFileNameBeforeExt(asset.getPath(), "_"+config.shortString())));
+                    if (outfile.exists()) {
+                        log.info("operate: dest exists: "+abs(outfile));
+                        return;
+                    }
                 } else {
                     outfile = defaultOutfile;
                 }
                 subOutput.setPath(abs(outfile));
-                trim(config, asset, subOutput, toolbox, assetManager);
+                trim(config, asset, output, subOutput, toolbox, assetManager);
             }
         } else {
-            if (output.hasDest() && output.destExists()) {
-                log.info("operate: dest exists, not trimming: "+output.getDest());
+            final File defaultOutfile = assetManager.assetPath(op, source, formatType, new Object[]{config});
+            if (output.hasDest()) {
+                if (output.destExists() && !output.destIsDirectory()) {
+                    log.info("operate: dest exists, not trimming: " + output.getDest());
+                    return;
+                } else if (output.destIsDirectory()) {
+                    output.setPath(abs(new File(output.destDirectory(), basename(abs(defaultOutfile)))));
+                } else {
+                    output.setPath(output.destPath());
+                }
             } else {
-                trim(config, source, output, toolbox, assetManager);
+                output.setPath(abs(defaultOutfile));
             }
+            trim(config, source, output, output, toolbox, assetManager);
         }
     }
 
     private void trim(TrimConfig config,
                       JAsset source,
                       JAsset output,
+                      JAsset subOutput,
                       Toolbox toolbox,
                       AssetManager assetManager) {
-        if (output.destExists()) {
-            log.info("trim: dest exists: "+output.getDest());
-            return;
-        }
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("source", source);
-        ctx.put("output", output);
+        ctx.put("output", subOutput);
 
         final BigDecimal startTime = config.getStartTime();
         ctx.put("startSeconds", startTime);
@@ -88,7 +98,11 @@ public class TrimOperation implements JOperator {
         log.debug("operate: running script: "+script);
         final String scriptOutput = execScript(script);
         log.debug("operate: command output: "+scriptOutput);
-        assetManager.addOperationAssetSlice(output, output);
+        if (output == subOutput) {
+            assetManager.addOperationAsset(output);
+        } else {
+            assetManager.addOperationAssetSlice(output, subOutput);
+        }
     }
 
     @NoArgsConstructor @EqualsAndHashCode

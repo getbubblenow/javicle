@@ -66,4 +66,26 @@ public class JMediaInfo {
         return longest;
     }
 
+    public BigDecimal width() {
+        if (media == null || empty(media.getTrack())) return BigDecimal.ZERO;
+        // find the first video track
+        for (JTrack t : media.getTrack()) {
+            if (!t.video()) continue;
+            if (!t.hasWidth()) continue;
+            return big(t.getWidth());
+        }
+        return null;
+    }
+
+    public BigDecimal height() {
+        if (media == null || empty(media.getTrack())) return BigDecimal.ZERO;
+        // find the first video track
+        for (JTrack t : media.getTrack()) {
+            if (!t.video()) continue;
+            if (!t.hasHeight()) continue;
+            return big(t.getHeight());
+        }
+        return null;
+    }
+
 }

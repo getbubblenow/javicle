@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.Comparator.comparing;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.http.HttpSchemes.isHttpOrHttps;
@@ -31,7 +32,7 @@ import static org.cobbzilla.util.reflect.ReflectionUtil.copy;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @NoArgsConstructor @AllArgsConstructor @Accessors(chain=true) @Slf4j
-public class JAsset {
+public class JAsset implements JsObjectView {
 
     public static final JAsset NULL_ASSET = new JAsset().setName("~null asset~").setPath("/dev/null");
     public static final String PREFIX_CLASSPATH = "classpath:";
@@ -86,7 +87,8 @@ public class JAsset {
         return hasDest() && (dest.endsWith("/") || new File(dest).isDirectory());
     }
     public File destDirectory() {
-        return mkdirOrDie(new File(dest.endsWith("/") ? dest.substring(0, dest.length()-1) : dest));
+        final String dir = destIsDirectory() ? dest : dirname(dest);
+        return mkdirOrDie(new File(dir.endsWith("/") ? dir.substring(0, dir.length()-1) : dir));
     }
 
     // if path was not a file, it got resolved to a file
@@ -142,8 +144,20 @@ public class JAsset {
         }
     }
 
-    public BigDecimal duration() { return getInfo().duration(); }
+    public BigDecimal duration() { return hasInfo() ? getInfo().duration() : null; }
     @JsonIgnore public BigDecimal getDuration () { return duration(); }
+
+    public BigDecimal width() { return hasInfo() ? getInfo().width() : null; }
+    @JsonIgnore public BigDecimal getWidth () { return width(); }
+
+    public BigDecimal height() { return hasInfo() ? getInfo().height() : null; }
+    @JsonIgnore public BigDecimal getHeight () { return height(); }
+
+    public BigDecimal aspectRatio() {
+        final BigDecimal width = width();
+        final BigDecimal height = height();
+        return width == null || height == null ? null : width.divide(height, HALF_EVEN);
+    }
 
     public JAsset init(AssetManager assetManager, Toolbox toolbox) {
         final JAsset asset = initPath(assetManager);
@@ -210,12 +224,16 @@ public class JAsset {
                 });
                 final Pattern regex = Pattern.compile(b.toString());
                 final File dir = new File(path.substring(0, lastSlash));
-                final String filesInDir = execScript("find " + dir + " -type f");
-                final Set<String> matches = Arrays.stream(filesInDir.split("\n"))
-                        .filter(f -> regex.matcher(f).matches())
-                        .collect(Collectors.toCollection(() -> new TreeSet<>(comparing(String::toString))));
-                for (String f : matches) {
-                    addAsset(new JAsset(this).setPath(f));
+                if (dir.exists()) {
+                    final String filesInDir = execScript("find " + dir + " -type f");
+                    final Set<String> matches = Arrays.stream(filesInDir.split("\n"))
+                            .filter(f -> regex.matcher(f).matches())
+                            .collect(Collectors.toCollection(() -> new TreeSet<>(comparing(String::toString))));
+                    for (String f : matches) {
+                        addAsset(new JAsset(this).setPath(f));
+                    }
+                } else {
+                    return die("initPath: no files matched: "+path);
                 }
 
             } else {
@@ -227,4 +245,21 @@ public class JAsset {
         return this;
     }
 
+    @Override public Object toJs() { return new JAssetJs(this); }
+
+    public static class JAssetJs {
+        public Integer duration;
+        public Integer width;
+        public Integer height;
+        public JAssetJs (JAsset asset) {
+            final BigDecimal d = asset.duration();
+            this.duration = d == null ? null : d.intValue();
+
+            final BigDecimal w = asset.width();
+            this.width = w == null ? null : w.intValue();
+
+            final BigDecimal h = asset.height();
+            this.height = h == null ? null : h.intValue();
+        }
+    }
 }

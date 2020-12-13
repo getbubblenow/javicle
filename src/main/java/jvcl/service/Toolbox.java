@@ -2,6 +2,7 @@ package jvcl.service;
 
 import com.github.jknack.handlebars.Handlebars;
 import jvcl.model.JAsset;
+import jvcl.model.JsObjectView;
 import jvcl.model.info.JMediaInfo;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +12,12 @@ import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.math.RoundingMode.HALF_EVEN;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
-import static org.cobbzilla.util.daemon.ZillaRuntime.big;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.replaceExt;
 import static org.cobbzilla.util.json.JsonUtil.FULL_MAPPER_ALLOW_UNKNOWN_FIELDS;
@@ -31,8 +32,23 @@ public class Toolbox {
 
     @Getter(lazy=true) private final Handlebars handlebars = initHandlebars();
 
+    @Getter(lazy=true) private final StandardJsEngine js = new StandardJsEngine();
+
     public static BigDecimal getDuration(String t) {
-        return big(parseDuration(t)).divide(big(1000), RoundingMode.UNNECESSARY);
+        return big(parseDuration(t)).divide(big(1000), HALF_EVEN);
+    }
+
+    public static Map<String, Object> jsContext(Map<String, Object> ctx) {
+        final Map<String, Object> jsCtx = new HashMap<>();
+        for (Map.Entry<String, Object> entry : ctx.entrySet()) {
+            final Object value = entry.getValue();
+            if (value instanceof JsObjectView) {
+                jsCtx.put(entry.getKey(), ((JsObjectView) value).toJs());
+            } else {
+                jsCtx.put(entry.getKey(), value);
+            }
+        }
+        return jsCtx;
     }
 
     private Handlebars initHandlebars() {
