@@ -53,7 +53,7 @@ javicle is available under the Apache License, version 2: http://www.apache.org/
                         <artifactId>maven-shade-plugin</artifactId>
                         <version>2.1</version>
                         <configuration>
-                            <finalName>zilla-utils</finalName>
+                            <finalName>jvcl-${project.version}-prod</finalName>
                         </configuration>
                         <executions>
                             <execution>
