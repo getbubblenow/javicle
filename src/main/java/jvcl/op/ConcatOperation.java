@@ -55,26 +55,16 @@ public class ConcatOperation implements JOperator {
 
         // create output object
         final JAsset output = json2asset(op.getCreates());
-        if (output.hasDest() && output.destExists()) {
-            log.info("operate: dest exists, not re-creating: "+output.destPath());
-            return;
-        }
 
         // if any format settings are missing, use settings from first source
         output.mergeFormat(sources.get(0).getFormat());
 
         // set the path, check if output asset already exists
         final JFileExtension formatType = output.getFormat().getFileExtension();
-        final File outfile = output.hasDest()
-                ? new File(output.destPath())
-                : assetManager.assetPath(op, sources, formatType);
-        if (outfile.exists()) {
-            log.info("operate: outfile exists, not re-creating: "+abs(outfile));
-            return;
-        }
-        if (!outfile.getParentFile().canWrite()) die("operate: cannot write file (parent directory not writeable): "+abs(outfile));
-
-        output.setPath(abs(outfile));
+        final File defaultOutfile = assetManager.assetPath(op, sources, formatType);
+        final File path = resolveOutputPath(output, defaultOutfile);
+        if (path == null) return;
+        output.setPath(abs(path));
 
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());

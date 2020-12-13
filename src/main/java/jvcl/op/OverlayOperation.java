@@ -22,7 +22,6 @@ import static jvcl.service.Toolbox.getDuration;
 import static org.cobbzilla.util.daemon.ZillaRuntime.big;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.io.FileUtil.abs;
-import static org.cobbzilla.util.io.FileUtil.basename;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
@@ -45,17 +44,11 @@ public class OverlayOperation implements JOperator {
         output.mergeFormat(source.getFormat());
 
         final JFileExtension formatType = output.getFormat().getFileExtension();
-        if (output.hasDest()) {
-            if (output.destExists() && !output.destIsDirectory()) {
-                log.info("operate: dest exists, not trimming: " + output.getDest());
-                return;
-            } else if (output.destIsDirectory()) {
-                final File defaultFile = assetManager.assetPath(op, source, formatType, new Object[]{config});
-                output.setPath(abs(new File(output.destDirectory(), basename(abs(defaultFile)))));
-            } else {
-                output.setPath(output.destPath());
-            }
-        }
+
+        final File defaultOutfile = assetManager.assetPath(op, source, formatType, new Object[]{config});
+        final File path = resolveOutputPath(output, defaultOutfile);
+        if (path == null) return;
+        output.setPath(abs(path));
 
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());

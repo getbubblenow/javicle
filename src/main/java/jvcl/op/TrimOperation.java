@@ -63,18 +63,9 @@ public class TrimOperation implements JOperator {
             }
         } else {
             final File defaultOutfile = assetManager.assetPath(op, source, formatType, new Object[]{config});
-            if (output.hasDest()) {
-                if (output.destExists() && !output.destIsDirectory()) {
-                    log.info("operate: dest exists, not trimming: " + output.getDest());
-                    return;
-                } else if (output.destIsDirectory()) {
-                    output.setPath(abs(new File(output.destDirectory(), basename(abs(defaultOutfile)))));
-                } else {
-                    output.setPath(output.destPath());
-                }
-            } else {
-                output.setPath(abs(defaultOutfile));
-            }
+            final File path = resolveOutputPath(output, defaultOutfile);
+            if (path == null) return;
+            output.setPath(abs(path));
             trim(config, source, output, output, toolbox, assetManager);
         }
     }
