@@ -19,4 +19,9 @@ SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
 . "${SCRIPT_DIR}"/jvcl_common
 
-java -cp "${JVCL_JAR}" -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005 jvcl.main.Jvcl "${@}"
+DEBUG=""
+if [[ -n "${JVCL_DEBUG}" ]] ; then
+  DEBUG="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"
+fi
+
+java -cp "${JVCL_JAR}" ${DEBUG} jvcl.main.Jvcl "${@}"
