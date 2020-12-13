@@ -15,19 +15,8 @@
 # Note: this command will build the jvcl jar file if needed. The first time you run it, it might
 # take a long time to start up.
 #
-function die () {
-  echo 1>&2 "${1}"
-  exit 1
-}
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
 
-JVCL_DIR="$(cd "$(dirname "${0}")"/.. && pwd)"
-JVCL_JAR="$(find "${JVCL_DIR}"/target -type f -name "jvcl-*.jar" | head -1)"
-if [[ -z "${JVCL_JAR}" ]] ; then
-  mvn -DskipTests=true clean package || die "Error building JVCL jar"
-  JVCL_JAR="$(find "${JVCL_DIR}"/target -type f -name "jvcl-*.jar" | head -1)"
-  if [[ -z "${JVCL_JAR}" ]] ; then
-    die "No JVCL jar file found after successful build"
-  fi
-fi
-
-java -cp "${JVCL_JAR}" jvcl.main.Jvcl "${@}"
+java -cp "${JVCL_JAR}" -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005 jvcl.main.Jvcl "${@}"

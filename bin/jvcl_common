@@ -1,0 +1,36 @@
+#!/bin/bash
+function die () {
+  echo 1>&2 "${1}"
+  exit 1
+}
+
+function handle_help_request() {
+  if [[ -z "${2}" ]]; then
+    return
+  fi
+
+  if [[ ${2} == "-h" || ${2} == "--help" ]]; then
+    while IFS='' read -r line || [[ -n "$line" ]]; do
+      if [[ ${line} =~ ^#.* ]]; then
+        if [[ ! ${line} =~ ^#!/bin/bash.* ]]; then
+          echo "${line}"
+        fi
+      else
+        break
+      fi
+    done <"${1}"
+    exit 1
+  fi
+}
+
+JVCL_DIR="$(cd "$(dirname "${0}")"/.. && pwd)"
+JVCL_JAR="$(find "${JVCL_DIR}"/target -type f -name "jvcl-*-prod.jar" | head -1)"
+if [[ -z "${JVCL_JAR}" ]] ; then
+  mvn -DskipTests=true -Puberjar clean package || die "Error building JVCL jar"
+  JVCL_JAR="$(find "${JVCL_DIR}"/target -type f -name "jvcl-*-prod.jar" | head -1)"
+  if [[ -z "${JVCL_JAR}" ]] ; then
+    die "No JVCL jar file found after successful build"
+  fi
+fi
+
+handle_help_request "${0}" "${1}"

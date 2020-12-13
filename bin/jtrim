@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Trim a media file
+#
+# Usage:
+#
+#    jtrim in-file out-file [start] [end]
+#
+# in-file  : file to trim
+# out-file : write trimmed file here
+# start    : seconds to trim from the beginning. if omitted, default value is start of the file
+# end      : retain the file until this number of seconds. if omitted, default is to end of file
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
+
+IN_FILE="${1?no in-file provided}"
+OUT_FILE="${2?no out-file provided}"
+T_START="${3}"
+T_END="${4}"
+echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"trim\",
+      \"creates\": {
+        \"name\": \"trimmed\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"perform\": {
+        \"trim\": \"input\",
+        \"start\": \"${T_START}\",
+        \"end\": \"${T_END}\"
+      }
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl
