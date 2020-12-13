@@ -37,7 +37,8 @@ public class Jvcl extends BaseMain<JvclOptions> {
         final OperationEngine opEngine = new OperationEngine(toolbox, assetManager);
         Arrays.stream(spec.getOperations()).forEach(opEngine::perform);
 
-        err(">>> jvcl: completed " + spec.getOperations().length + " operations");
+        final int opCount = spec.getOperations().length;
+        err(">>> jvcl: completed " + opCount + " operation"+(opCount>1?"s":""));
         out(json(assetManager.getAssets()));
     }
 
