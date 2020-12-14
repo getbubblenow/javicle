@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.javascript.JsEngine;
+import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -50,16 +51,17 @@ public class OverlayOperation implements JOperator {
         if (path == null) return;
         output.setPath(abs(path));
 
+        final StandardJsEngine js = toolbox.getJs();
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("source", source);
         ctx.put("overlay", overlay);
         ctx.put("output", output);
-        ctx.put("offset", config.getOffsetSeconds(ctx, toolbox.getJs()));
-        ctx.put("overlayStart", config.getOverlayStartSeconds(ctx, toolbox.getJs()));
-        if (config.hasOverlayEnd()) ctx.put("overlayEnd", config.getOverlayEndSeconds(ctx, toolbox.getJs()));
+        ctx.put("offset", config.getOffsetSeconds(ctx, js));
+        ctx.put("overlayStart", config.getOverlayStartSeconds(ctx, js));
+        if (config.hasOverlayEnd()) ctx.put("overlayEnd", config.getOverlayEndSeconds(ctx, js));
         if (config.hasWidth()) {
-            final String width = config.getWidth(ctx, toolbox.getJs());
+            final String width = config.getWidth(ctx, js);
             ctx.put("width", width);
             if (!config.hasHeight()) {
                 final int height = big(width).divide(overlay.aspectRatio(), HALF_EVEN).intValue();
@@ -67,15 +69,15 @@ public class OverlayOperation implements JOperator {
             }
         }
         if (config.hasHeight()) {
-            final String height = config.getHeight(ctx, toolbox.getJs());
+            final String height = config.getHeight(ctx, js);
             ctx.put("height", height);
             if (!config.hasWidth()) {
                 final int width = big(height).multiply(overlay.aspectRatio()).intValue();
                 ctx.put("width", width);
             }
         }
-        if (config.hasX()) ctx.put("x", config.getX(ctx, toolbox.getJs()));
-        if (config.hasY()) ctx.put("y", config.getY(ctx, toolbox.getJs()));
+        if (config.hasX()) ctx.put("x", config.getX(ctx, js));
+        if (config.hasY()) ctx.put("y", config.getY(ctx, js));
 
         final String script = renderScript(toolbox, ctx, OVERLAY_TEMPLATE);
 
