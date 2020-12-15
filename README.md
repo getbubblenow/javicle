@@ -61,7 +61,7 @@ In JVCL there are a few main concepts: spec files, assets and operations.
 A JVCL spec file is just a regular JSON file that happens to contain a single JSON object,
 whose properties are `assets` and `operations`.
 
-When you run `jvcl` on a spec file, JVCL will read the `assets`, then perform the `operations` in order.
+When you run `jvcl` on a spec file, it will read the `assets`, then perform the `operations` in order.
 
 Unlike most JSON, comments *are* allowed in JVCL spec files:
 * A line comment starts with `//` and continue to the end of the line (`// comment`)
