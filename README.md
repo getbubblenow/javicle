@@ -80,7 +80,7 @@ Most of the operation settings can be JavaScript expressions, for example:
 
     "startTime": "someAsset.duration - 10"
 
-The above would set the `startTime` value to ten seconds less than the duration of `someAsset`.
+The above would set the `startTime` value to ten seconds before the end of `someAsset`.
 
 ### Supported Operations
 Today, JVCL supports these operations:
