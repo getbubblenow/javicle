@@ -9,6 +9,7 @@ import jvcl.service.json.JOperationModule;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.handlebars.HandlebarsUtil;
+import org.cobbzilla.util.javascript.JsEngine;
 import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.io.File;
@@ -35,6 +36,12 @@ public class Toolbox {
     @Getter(lazy=true) private final Handlebars handlebars = initHandlebars();
 
     @Getter(lazy=true) private final StandardJsEngine js = new StandardJsEngine();
+
+    public static String eval(String val, Map<String, Object> ctx, JsEngine js) {
+        final Map<String, Object> jsCtx = Toolbox.jsContext(ctx);
+        final Object result = js.evaluate(val, jsCtx);
+        return result == null ? null : result.toString();
+    }
 
     public static BigDecimal getDuration(String t) {
         return big(parseDuration(t)).divide(big(1000), HALF_EVEN);

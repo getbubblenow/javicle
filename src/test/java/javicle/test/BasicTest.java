@@ -21,7 +21,7 @@ public class BasicTest {
         runSpec("tests/test_trim.jvcl");
     }
 
-    // @Test public void test4Overlay() { runSpec("tests/test_overlay.jvcl"); }
+    @Test public void testOverlay() { runSpec("tests/test_overlay.jvcl"); }
 
     private void runSpec(String specPath) {
         try {

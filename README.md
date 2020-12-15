@@ -116,9 +116,9 @@ later operations.
 
 Most of the operation settings can be JavaScript expressions, for example:
 
-    "startTime": "someAsset.duration - 10"
+    "start": "someAsset.duration - 10"
 
-The above would set the `startTime` value to ten seconds before the end of `someAsset`.
+The above would set the `start` value to ten seconds before the end of `someAsset`.
 
 ### Supported Operations
 Today, JVCL supports these operations:
@@ -199,12 +199,12 @@ Here is a complex example using multiple assets and operations.
         "height": "1024"               // output height in pixes. default is source height
       },
       "main": "combined_vid1",         // main video asset
-      "startTime": "30",               // when (on the main video timeline) to begin showing the overlay. default is 0 (beginning)
-      "endTime": "60",                 // when (on the main video timeline) to stop showing the overlay. default is to play the entire overlay
+      "start": "30",                   // when (on the main video timeline) to begin showing the overlay. default is 0 (beginning)
+      "end": "60",                     // when (on the main video timeline) to stop showing the overlay. default is to play the entire overlay
       "overlay": {
         "source": "vid2",              // overlay this video on the main video
-        "startTime": "0",              // when (on the overlay video timeline) to begin playback on the overlay. default is 0 (beginning)
-        "endTime": "overlay.duration", // when (on the overlay video timeline) to end playback on the overlay. default is to play the entire overlay
+        "start": "0",                  // when (on the overlay video timeline) to begin playback on the overlay. default is 0 (beginning)
+        "end": "overlay.duration",     // when (on the overlay video timeline) to end playback on the overlay. default is to play the entire overlay
         "width": "overlay.width / 2",  // how wide the overlay will be, in pixels. default is the full overlay width, or maintain aspect ratio if height was set
         "height": "source.height",     // how tall the overlay will be, in pixels. default is the full overlay height, or maintain aspect ratio if width was set
         "x": "source.width / 2",       // horizontal overlay position on main video. default is 0

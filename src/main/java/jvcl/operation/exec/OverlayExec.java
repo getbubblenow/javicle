@@ -22,16 +22,16 @@ import static org.cobbzilla.util.system.CommandShell.execScript;
 public class OverlayExec extends ExecBase<OverlayOperation> {
 
     public static final String OVERLAY_TEMPLATE
-            = "{{ffmpeg}} -i {{{source.path}}} -filter_complex \"" +
-            "movie={{{overlay.path}}}{{#exists overlayStart}}:seek_point={{overlayStart}}{{/exists}} [ovl]; " +
-            "[v:0] setpts=PTS-(STARTPTS+{{#exists offset}}{{offset}}{{else}}0{{/exists}}) [main]; " +
-            "[ovl] setpts=PTS-STARTPTS{{#exists width}}, scale={{width}}x{{height}}{{/exists}} ; " +
-            "[main][ovl] overlay=shortest=1{{#exists x}}:x={{x}}{{/exists}}{{#exists y}}:y={{y}}{{/exists}} " +
-            "\" {{{output.path}}}";
+            = "ffmpeg -i {{{source.path}}} -vf \""
+            + "        movie={{{overlay.path}}}:seek_point=0 [ovl]; "
+            + "        [ovl] setpts=PTS-STARTPTS, scale=160x160 [ovl2] ; "
+            + "        [main][ovl2] overlay=enable=between(t\\,15\\,20):x=160:y=120\" "
+            + "{{{output.path}}}";
 
     @Override public void operate(OverlayOperation op, Toolbox toolbox, AssetManager assetManager) {
         final JAsset source = assetManager.resolve(op.getSource());
-        final JAsset overlay = assetManager.resolve(op.getOverlay());
+        final OverlayOperation.OverlayConfig overlay = op.getOverlay();
+        final JAsset overlaySource = assetManager.resolve(overlay.getSource());
 
         final JAsset output = json2asset(op.getCreates());
         output.mergeFormat(source.getFormat());
@@ -47,29 +47,29 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("source", source);
-        ctx.put("overlay", overlay);
+        ctx.put("overlay", overlaySource);
         ctx.put("output", output);
-        ctx.put("offset", op.getOffsetSeconds(ctx, js));
-        ctx.put("overlayStart", op.getOverlayStartSeconds(ctx, js));
-        if (op.hasOverlayEnd()) ctx.put("overlayEnd", op.getOverlayEndSeconds(ctx, js));
-        if (op.hasWidth()) {
-            final String width = op.getWidth(ctx, js);
+        ctx.put("offset", op.getStartSeconds(ctx, js));
+        ctx.put("overlayStart", overlay.getStartTime(ctx, js));
+        if (overlay.hasEndTime()) ctx.put("overlayEnd", overlay.getEndTime(ctx, js));
+        if (overlay.hasWidth()) {
+            final String width = overlay.getWidth(ctx, js);
             ctx.put("width", width);
-            if (!op.hasHeight()) {
+            if (!overlay.hasHeight()) {
                 final int height = big(width).divide(overlay.aspectRatio(), HALF_EVEN).intValue();
                 ctx.put("height", height);
             }
         }
-        if (op.hasHeight()) {
-            final String height = op.getHeight(ctx, js);
+        if (overlay.hasHeight()) {
+            final String height = overlay.getHeight(ctx, js);
             ctx.put("height", height);
-            if (!op.hasWidth()) {
+            if (!overlay.hasWidth()) {
                 final int width = big(height).multiply(overlay.aspectRatio()).intValue();
                 ctx.put("width", width);
             }
         }
-        if (op.hasX()) ctx.put("x", op.getX(ctx, js));
-        if (op.hasY()) ctx.put("y", op.getY(ctx, js));
+        if (overlay.hasX()) ctx.put("x", overlay.getX(ctx, js));
+        if (overlay.hasY()) ctx.put("y", overlay.getY(ctx, js));
 
         final String script = renderScript(toolbox, ctx, OVERLAY_TEMPLATE);
 
