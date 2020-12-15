@@ -37,11 +37,7 @@ public abstract class JOperation {
 
     private static final Map<Class<? extends JOperation>, ExecBase<?>> execMap = new HashMap<>();
     public <OP extends JOperation> ExecBase<OP> getExec() {
-        return (ExecBase<OP>) execMap.computeIfAbsent(getClass(), c -> instantiate(getExecClass()));
-    }
-
-    protected <OP extends JOperation> Class<? extends ExecBase<OP>> getExecClass() {
-        return getOperationExecClass(getClass());
+        return (ExecBase<OP>) execMap.computeIfAbsent(getClass(), c -> instantiate(getOperationExecClass(getClass())));
     }
 
 }
