@@ -76,7 +76,7 @@ an operation JSON object.
 ### Asset Properties
 Assets expose properties that can be referenced in operations. The properties currently exposed are:
 
-  * `duration`: duration of the audio/video in seconds
+  * `duration`: duration of the audio/video in seconds (audio and video assets only)
   * `width`: width of the video in pixels (video and image assets only)
   * `height`: width of the video in pixels (video and image assets only)
 
