@@ -58,6 +58,18 @@ Assets are the inputs: generally image, audio and video files. Assets have a nam
 
 The path can be a file or a URL.
 
+Input assets are defined using the `assets` array of a JVCL JSON file.
+
+Operations produce one or more assets, as specified in the `creates` property of
+an operation JSON object.
+
+### Asset Properties
+Assets expose properties that can be referenced in operations. The properties currently exposed are:
+
+  * `duration`: duration of the audio/video in seconds
+  * `width`: width of the video in pixels (video and image assets only)
+  * `height`: width of the video in pixels (video and image assets only)
+
 ## Operations
 Operations are transformations to perform on the inputs.
 
@@ -131,7 +143,7 @@ Here is a complex example using multiple assets and operations:
       "overlay": {
         "source": "vid2",              // overlay this video on the main video
         "startTime": "0",              // when (on the overlay video timeline) to begin playback on the overlay. default is 0 (beginning)
-        "endTime": "0",                // when (on the overlay video timeline) to end playback on the overlay. default is to play the entire overlay
+        "endTime": "overlay.duration", // when (on the overlay video timeline) to end playback on the overlay. default is to play the entire overlay
         "width": "overlay.width / 2",  // how wide the overlay will be, in pixels. default is the full overlay width, or maintain aspect ratio if height was set
         "height": "source.height",     // how tall the overlay will be, in pixels. default is the full overlay height, or maintain aspect ratio if width was set
         "x": "source.width / 2",       // horizontal overlay position on main video. default is 0
