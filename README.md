@@ -51,7 +51,7 @@ JVCL is not a replacement for Final Cut Pro or even iMovie.
 # Who is JVCL for?
 JVCL is for people who like CLIs and automation.
 
-JVCL is for people whose your video composition needs are relatively simple (for now),
+JVCL is for people with relatively simple video composition needs (for now),
 since the range of operations supported is limited.
 
 # Concepts
