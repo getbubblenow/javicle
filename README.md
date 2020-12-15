@@ -72,6 +72,10 @@ To execute a spec stored in the file `my-spec.json`, you would run:
 ```shell script
 jvcl my-spec.jvcl
 ```
+or to supply a spec using stdin and pipeline:
+```shell script
+cat my-spec.jvcl | jvcl
+```
 
 #### Scratch Directory
 Output assets will be placed in the scratch directory, unless otherwise specified

@@ -21,13 +21,13 @@ import static org.cobbzilla.util.json.JsonUtil.json;
 @Slf4j
 public class JvclOptions extends BaseMainOptions {
 
-    public static final String USAGE_SPEC = "Spec file to run. Set to '-' to read from stdin.";
-    @Argument(usage=USAGE_SPEC, required=true)
+    public static final String USAGE_SPEC = "Spec file to run. If omitted, read spec from stdin.";
+    @Argument(usage=USAGE_SPEC)
     @Getter @Setter private File specFile;
 
     public JSpec getSpec() {
         final String json;
-        if (specFile != null && !specFile.getName().equals("-")) {
+        if (specFile != null) {
             if (!specFile.exists() || !specFile.canRead()) return die("File not found or unreadable: "+abs(specFile));
             json = toStringOrDie(specFile);
         } else {

@@ -31,11 +31,9 @@ echo "
         \"name\": \"trimmed\",
         \"dest\": \"${OUT_FILE}\"
       },
-      \"perform\": {
-        \"trim\": \"input\",
-        \"start\": \"${T_START}s\",
-        \"end\": \"${T_END}s\"
-      }
+      \"trim\": \"input\",
+      \"start\": \"${T_START}\",
+      \"end\": \"${T_END}\"
     }
   ]
 }

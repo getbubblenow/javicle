@@ -4,10 +4,9 @@
 #
 # Usage:
 #
-#    jvcl [-f spec-file] [-t temp-dir]
+#    jvcl [-t temp-dir] spec-file
 #
-# If the `-f` option is omitted and no spec-file is provided, then jvcl will try to read
-# a spec from stdin.
+# If `spec-file` is omitted, then jvcl will try to read a spec from stdin.
 #
 # Every run of JVCL will create a temp directory. You can either specify the name of the directory
 # with `-t` (it will be created if it does not exist), or let jvcl create a temp directory for you.
