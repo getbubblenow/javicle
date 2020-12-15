@@ -45,10 +45,10 @@ If you like GUIs, JVCL is probably not for you.
 JVCL is not a replacement for Final Cut Pro or even iMovie.
 
 # Who is JVCL for?
-If you like CLIs, JVCL might be for you.
+JVCL is for people who like CLIs and automation.
 
-You might enjoy JVCL if your video composition needs are relatively simple or
-if you enjoy capturing repeatable processes in source control.
+JVCL is for people whose your video composition needs are relatively simple (for now),
+since the range of operations supported is limited.
 
 # Concepts
 In JVCL there are two main concepts: assets and operations.
