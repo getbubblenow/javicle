@@ -12,11 +12,20 @@
     }
   ],
   "operations": [
+    // trim videos so test runs faster
     {
       "operation": "trim",
       "creates": "v1",
       "trim": "vid1",
-      "start": "0"
+      "start": "0",
+      "end": "60"
+    },
+    {
+      "operation": "trim",
+      "creates": "v2",
+      "trim": "vid2",
+      "start": "10",
+      "end": "20"
     },
     {
       "operation": "overlay",          // name of the operation
@@ -26,11 +35,11 @@
         "height": "1024",              // output height in pixes. default is source height
         "dest": "src/test/resources/outputs/overlay/"
       },
-      "source": "vid1",                // main video asset
+      "source": "v1",                  // main video asset
       "start": "30",                   // when (on the main video timeline) to begin showing the overlay. default is 0 (beginning)
       "end": "30 + overlay.duration",  // when (on the main video timeline) to stop showing the overlay. default is to play the entire overlay
       "overlay": {
-        "source": "vid2",              // overlay this video on the main video
+        "source": "v2",                // overlay this video on the main video
         "start": "0",                  // when (on the overlay video timeline) to begin playback on the overlay. default is 0 (beginning)
         "end": "overlay.duration",     // when (on the overlay video timeline) to end playback on the overlay. default is to play the entire overlay
         "width": "overlay.width / 2",  // how wide the overlay will be, in pixels. default is the full overlay width, or maintain aspect ratio if height was set

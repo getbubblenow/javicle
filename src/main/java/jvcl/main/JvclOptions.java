@@ -4,6 +4,7 @@ import jvcl.model.JSpec;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.cobbzilla.util.io.TempDir;
 import org.cobbzilla.util.main.BaseMainOptions;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
@@ -44,6 +45,7 @@ public class JvclOptions extends BaseMainOptions {
     public static final String OPT_SCRATCH_DIR = "-t";
     public static final String LONGOPT_SCRATCH_DIR = "--temp-dir";
     @Option(name=OPT_SCRATCH_DIR, aliases=LONGOPT_SCRATCH_DIR, usage=USAGE_SCRATCH_DIR)
-    @Getter @Setter private File scratchDir = new File("/tmp");
+    @Getter @Setter private File scratchDir = null;
+    public File scratchDir() { return scratchDir == null ? new TempDir() : scratchDir; }
 
 }

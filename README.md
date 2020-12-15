@@ -174,7 +174,7 @@ Here is a complex example using multiple assets and operations.
       "operation": "split",            // name of the operation,
       "creates": "vid1_split_%",       // assets it creates, the '%' will be replaced with a counter
       "split": "vid1",                 // split this source asset
-      "interval": "10s"                // split every ten seconds
+      "interval": "10"                 // split every ten seconds
     },
     {
       "operation": "concat",           // name of the operation,

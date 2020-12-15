@@ -31,7 +31,7 @@ public class Jvcl extends BaseMain<JvclOptions> {
 
         final Toolbox toolbox = Toolbox.DEFAULT_TOOLBOX;
 
-        final AssetManager assetManager = new AssetManager(toolbox, getOptions().getScratchDir());
+        final AssetManager assetManager = new AssetManager(toolbox, getOptions().scratchDir());
         Arrays.stream(spec.getAssets()).forEach(assetManager::defineAsset);
 
         final OperationEngine opEngine = new OperationEngine(toolbox, assetManager);

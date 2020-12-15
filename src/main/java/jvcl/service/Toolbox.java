@@ -18,12 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.math.RoundingMode.HALF_EVEN;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.io.FileUtil.*;
 import static org.cobbzilla.util.json.JsonUtil.*;
 import static org.cobbzilla.util.system.CommandShell.execScript;
-import static org.cobbzilla.util.time.TimeUtil.parseDuration;
 
 @Slf4j
 public class Toolbox {
@@ -44,7 +42,9 @@ public class Toolbox {
     }
 
     public static BigDecimal getDuration(String t) {
-        return big(parseDuration(t)).divide(big(1000), HALF_EVEN);
+        // we may want to support other time formats.
+        // for now everything is in seconds
+        return big(t);
     }
 
     public static Map<String, Object> jsContext(Map<String, Object> ctx) {
