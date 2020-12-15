@@ -18,7 +18,6 @@
         "name": "overlay1",
         "dest": "src/test/resources/outputs/overlay/"
       },
-      "perform": {
         "source": "vid1",              // main video asset
         "overlay": "vid2",             // overlay this video on the main video
 

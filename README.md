@@ -15,7 +15,7 @@ and bash, you might do something like this:
       ffmpeg -i /tmp/my/source.mp4 -ss ${i} -t $((i+INCR)) /tmp/my/slice_${i}_$((i+INCR)).mp4
     done
 ```
-With JVCL, you'd write this spec file:
+With JVCL, you'd write this spec file and save it to a file (for example `my-spec.jvcl`):
 ```json
 {
   "assets": [ {"name": "src", "path": "/tmp/my/source.mp4"} ],
@@ -31,7 +31,7 @@ With JVCL, you'd write this spec file:
 ```
 and then run it like this:
 ```shell script
-jvcl my-spec.json
+jvcl my-spec.jvcl
 ```
 Yes, the JVCL is longer, but I think many would agree it is easier to read and maintain.
 
@@ -67,15 +67,39 @@ Unlike most JSON, comments *are* allowed in JVCL spec files:
 * A line comment starts with `//` and continue to the end of the line
 * A multi-line block syntax starts with `/*` and ends with `*/`
 
-## Assets
-Assets are the inputs: generally image, audio and video files. Assets have a name and a path.
+### Executing a JVCL Spec
+To execute a spec stored in the file `my-spec.json`, you would run:
+```shell script
+jvcl my-spec.jvcl
+```
 
-The path can be a file or a URL.
+#### Scratch Directory
+Output assets will be placed in the scratch directory, unless otherwise specified
+in the spec file. By default, JVCL will create a new temporary directory to use as the scratch
+directory. You can set the scratch directory explicitly using the `-t` or `--temp-dir` option:
+
+```shell script
+jvcl -t /some/tempdir my-spec.json
+```
+
+#### Command Help
+To view a list of all `jvcl` command-line options, run `jvcl -h` or `jvcl --help`
+
+## Assets
+Assets are your media files: generally image, audio and video files.
+
+All assets have a name and a path.
 
 Input assets are defined using the `assets` array of a JVCL spec.
 
-Operations produce one or more assets, as specified in the `creates` property of
+For input assets, the path can be a file or a URL. URL-based assets will be downloaded
+to the scratch directory. This can be overridden using the `dest` property on the asset.
+
+Operations produce one or more output assets, as specified in the `creates` property of
 an operation JSON object.
+
+For output assets, the path will be within the scratch directory.
+You can override this using the `dest` property on the `creates` object associated with the operation.
 
 ### Asset Properties
 Assets expose properties that can be referenced in operations. The properties currently exposed are:

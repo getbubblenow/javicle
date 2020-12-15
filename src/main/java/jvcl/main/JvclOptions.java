@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.main.BaseMainOptions;
+import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
 
 import java.io.File;
@@ -19,10 +20,8 @@ import static org.cobbzilla.util.json.JsonUtil.json;
 @Slf4j
 public class JvclOptions extends BaseMainOptions {
 
-    public static final String USAGE_SPEC = "Spec file to run. Default is to read from stdin.";
-    public static final String OPT_SPEC = "-f";
-    public static final String LONGOPT_SPEC = "--file";
-    @Option(name=OPT_SPEC, aliases=LONGOPT_SPEC, usage=USAGE_SPEC)
+    public static final String USAGE_SPEC = "Spec file to run. Set to '-' to read from stdin.";
+    @Argument(usage=USAGE_SPEC, required=true)
     @Getter @Setter private File specFile;
 
     public JSpec getSpec() {
