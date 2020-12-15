@@ -64,8 +64,8 @@ whose properties are `assets` and `operations`.
 When you run `jvcl` on a spec file, it will load the `assets`, then perform the `operations` in order.
 
 Unlike most JSON, comments *are* allowed in JVCL spec files:
-* A line comment starts with `//` and continue to the end of the line (`// comment`)
-* A multi-line block syntax starts with `/*` and ends with `*/` (`/* comment that may span multiple lines */`)
+* A line comment starts with `//` and continue to the end of the line
+* A multi-line block syntax starts with `/*` and ends with `*/`
 
 ## Assets
 Assets are the inputs: generally image, audio and video files. Assets have a name and a path.
