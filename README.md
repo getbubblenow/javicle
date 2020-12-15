@@ -119,8 +119,9 @@ Split an audio file according to silence
 # Complex Example
 Here is a complex example using multiple assets and operations.
 
-Note that in JVCL json files, comments are allowed using either line syntax (`// comment`)
-or multi-line block syntax (`/* comment that may span multiple lines */`).
+Note that in JVCL json files, comments are allowed:
+ * A line comment starts with `//` and continue to the end of the line (`// comment`)
+ * A multi-line block syntax starts with `/*` and ends with `*/` (`/* comment that may span multiple lines */`)
 
 ```json
 {
