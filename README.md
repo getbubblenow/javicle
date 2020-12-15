@@ -31,8 +31,8 @@ With JVCL, you'd create this spec:
 ```
 Yes, the JVCL is longer, but I think many would agree it is easier to read and maintain.
 
-As the number of input assets and operations grows, hand-crafted shell scripts with magical
-ffmpeg incantations become ever more inscrutable.
+**As the number of input assets and operations grows, hand-crafted shell scripts with magical
+ffmpeg incantations become ever more inscrutable.**
 
 JVCL is designed for readability and maintainability. JVCL will continue to evolve towards greater
 coverage of the full capabilities of ffmpeg. We also plan to introduce "function" concepts
