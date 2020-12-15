@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,9 +25,9 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
     public static final String OVERLAY_TEMPLATE
             = "ffmpeg -i {{{source.path}}} -vf \""
             + "        movie={{{overlay.path}}}:seek_point=0 [ovl]; "
-            + "        [ovl] setpts=PTS-STARTPTS, scale=160x160 [ovl2] ; "
-            + "        [main][ovl2] overlay=enable=between(t\\,15\\,20):x=160:y=120\" "
-            + "{{{output.path}}}";
+            + "        [ovl] setpts=PTS-STARTPTS{{#exists width}}, scale={{width}}x{{height}}{{/exists}} [ovl2] ; "
+            + "        [main][ovl2] overlay={{{overlayFilterConfig}}}"
+            + "\" {{{output.path}}}";
 
     @Override public void operate(OverlayOperation op, Toolbox toolbox, AssetManager assetManager) {
         final JAsset source = assetManager.resolve(op.getSource());
@@ -48,10 +49,14 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("source", source);
         ctx.put("overlay", overlaySource);
+
+        ctx.put("mainStart", op.getStartTime(ctx, js));
+        ctx.put("mainEnd", op.getEndTime(ctx, js));
+
+        final String overlayFilter = buildOverlayFilter(op, source, overlay, ctx, js);
+        ctx.put("overlayFilterConfig", overlayFilter);
         ctx.put("output", output);
-        ctx.put("offset", op.getStartSeconds(ctx, js));
-        ctx.put("overlayStart", overlay.getStartTime(ctx, js));
-        if (overlay.hasEndTime()) ctx.put("overlayEnd", overlay.getEndTime(ctx, js));
+
         if (overlay.hasWidth()) {
             final String width = overlay.getWidth(ctx, js);
             ctx.put("width", width);
@@ -68,8 +73,6 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
                 ctx.put("width", width);
             }
         }
-        if (overlay.hasX()) ctx.put("x", overlay.getX(ctx, js));
-        if (overlay.hasY()) ctx.put("y", overlay.getY(ctx, js));
 
         final String script = renderScript(toolbox, ctx, OVERLAY_TEMPLATE);
 
@@ -77,6 +80,25 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         final String scriptOutput = execScript(script);
         log.debug("operate: command output: "+scriptOutput);
         assetManager.addOperationAsset(output);
+    }
+
+    private String buildOverlayFilter(OverlayOperation op, JAsset source, OverlayOperation.OverlayConfig overlay, Map<String, Object> ctx, StandardJsEngine js) {
+        // enable=between(t\,15\,20):x=160:y=120
+        final StringBuilder b = new StringBuilder();
+        final BigDecimal startTime = overlay.getStartTime(ctx, js);
+        if (overlay.hasEndTime()) {
+            final BigDecimal endTime = overlay.getEndTime(ctx, js);
+            b.append("enable=between(t\\,").append(startTime).append("\\,").append(endTime).append(")");
+        } else if (startTime.intValue() > 0) {
+            b.append("enable=gte(t\\,").append(startTime).append(")");
+        }
+
+        if (overlay.hasX() && overlay.hasY()) {
+            if (b.length() > 0) b.append(":");
+            b.append("x=").append(overlay.getX(ctx, js)).append(":y=").append(overlay.getY(ctx, js));
+        }
+
+        return b.toString();
     }
 
 }

@@ -22,12 +22,12 @@ public class OverlayOperation extends JOperation {
     @Getter @Setter private OverlayConfig overlay;
 
     @Getter @Setter private String start;
-    public BigDecimal getStartSeconds(Map<String, Object> ctx, JsEngine js) {
+    public BigDecimal getStartTime(Map<String, Object> ctx, JsEngine js) {
         return empty(start) ? BigDecimal.ZERO : getDuration(eval(start, ctx, js));
     }
 
     @Getter @Setter private String end;
-    public BigDecimal getEndSeconds(Map<String, Object> ctx, JsEngine js) {
+    public BigDecimal getEndTime(Map<String, Object> ctx, JsEngine js) {
         return empty(end) ? BigDecimal.ZERO : getDuration(eval(end, ctx, js));
     }
 

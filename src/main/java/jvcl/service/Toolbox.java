@@ -37,8 +37,12 @@ public class Toolbox {
 
     public static String eval(String val, Map<String, Object> ctx, JsEngine js) {
         final Map<String, Object> jsCtx = Toolbox.jsContext(ctx);
-        final Object result = js.evaluate(val, jsCtx);
-        return result == null ? null : result.toString();
+        try {
+            final Object result = js.evaluate(val, jsCtx);
+            return result == null ? null : result.toString();
+        } catch (Exception e) {
+            return die("eval: error evaluating: '"+val+"': "+shortError(e));
+        }
     }
 
     public static BigDecimal getDuration(String t) {
