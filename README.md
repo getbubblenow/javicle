@@ -15,7 +15,7 @@ and bash, you might do something like this:
       ffmpeg -i /tmp/my/source.mp4 -ss ${i} -t $((i+INCR)) /tmp/my/slice_${i}_$((i+INCR)).mp4
     done
 ```
-With JVCL, you'd create this spec:
+With JVCL, you'd write this spec file:
 ```json
 {
   "assets": [ {"name": "src", "path": "/tmp/my/source.mp4"} ],
@@ -28,6 +28,10 @@ With JVCL, you'd create this spec:
       "end": "130s"
   }]
 }
+```
+and then run it like this:
+```shell script
+jvcl my-spec.json
 ```
 Yes, the JVCL is longer, but I think many would agree it is easier to read and maintain.
 
@@ -51,14 +55,20 @@ JVCL is for people whose your video composition needs are relatively simple (for
 since the range of operations supported is limited.
 
 # Concepts
-In JVCL there are two main concepts: assets and operations.
+In JVCL there are a few main concepts: spec files, assets and operations.
+
+## JVCL Spec Files
+A JVCL spec file is just a regular JSON file that happens to contain a single JSON object,
+whose properties are `assets` and `operations`.
+
+When you run `jvcl` on a spec file, JVCL will read the `assets`, then perform the `operations` in order.
 
 ## Assets
 Assets are the inputs: generally image, audio and video files. Assets have a name and a path.
 
 The path can be a file or a URL.
 
-Input assets are defined using the `assets` array of a JVCL JSON file.
+Input assets are defined using the `assets` array of a JVCL spec.
 
 Operations produce one or more assets, as specified in the `creates` property of
 an operation JSON object.
