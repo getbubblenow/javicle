@@ -8,6 +8,7 @@ import jvcl.model.JOperation;
 import jvcl.operation.exec.ExecBase;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import static com.fasterxml.jackson.databind.type.TypeBindings.emptyBindings;
 import static org.apache.commons.lang3.StringUtils.capitalize;
@@ -37,9 +38,19 @@ public class JOperationFactory extends DeserializationProblemHandler {
         if (id.contains(".")) {
             className = id;
         } else {
-            className = OPERATION_DEFAULT_PACKAGE + "." + capitalize(id) + OPERATION_CLASSNAME_SUFFIX;
+            className = OPERATION_DEFAULT_PACKAGE
+                    + "."
+                    + (id.contains("-") ? replaceHyphens(id) : capitalize(id))
+                    + OPERATION_CLASSNAME_SUFFIX;
         }
         return forName(className);
+    }
+
+    private static String replaceHyphens(String id) {
+        final StringBuilder b = new StringBuilder();
+        final StringTokenizer st = new StringTokenizer(id, "-");
+        while (st.hasMoreTokens()) b.append(capitalize(st.nextToken()));
+        return b.toString();
     }
 
     public static <OP extends JOperation> Class<? extends ExecBase<OP>> getOperationExecClass(Class<? extends JOperation> opClass) {
