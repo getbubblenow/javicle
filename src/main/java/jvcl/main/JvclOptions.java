@@ -9,11 +9,11 @@ import org.kohsuke.args4j.Option;
 
 import java.io.File;
 
+import static jvcl.service.Toolbox.JSON_MAPPER;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.daemon.ZillaRuntime.readStdin;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.toStringOrDie;
-import static org.cobbzilla.util.json.JsonUtil.FULL_MAPPER_ALLOW_COMMENTS;
 import static org.cobbzilla.util.json.JsonUtil.json;
 
 @Slf4j
@@ -26,12 +26,19 @@ public class JvclOptions extends BaseMainOptions {
     @Getter @Setter private File specFile;
 
     public JSpec getSpec() {
+        final String json;
         if (specFile != null && !specFile.getName().equals("-")) {
-            if (!specFile.exists()) return die("File not found: "+abs(specFile));
-            return json(toStringOrDie(specFile), JSpec.class, FULL_MAPPER_ALLOW_COMMENTS);
+            if (!specFile.exists() || !specFile.canRead()) return die("File not found or unreadable: "+abs(specFile));
+            json = toStringOrDie(specFile);
+        } else {
+            log.info("reading JVCL spec from stdin...");
+            json = readStdin();
         }
-        log.info("reading JVCL spec from stdin...");
-        return json(readStdin(), JSpec.class);
+        try {
+            return json(json, JSpec.class, JSON_MAPPER);
+        } catch (Exception e) {
+            return die("getSpec: invalid spec: "+specFile);
+        }
     }
 
     public static final String USAGE_SCRATCH_DIR = "Scratch directory. Default is to create a temp directory under /tmp";

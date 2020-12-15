@@ -1,25 +1,47 @@
 package jvcl.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
+import jvcl.operation.exec.ExecBase;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static jvcl.service.json.JOperationFactory.getOperationExecClass;
 import static org.cobbzilla.util.daemon.ZillaRuntime.hashOf;
 import static org.cobbzilla.util.json.JsonUtil.json;
+import static org.cobbzilla.util.reflect.ReflectionUtil.instantiate;
 
-@NoArgsConstructor @Accessors(chain=true)
-public class JOperation {
+@NoArgsConstructor @Accessors(chain=true) @Slf4j
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "operation",
+        visible = true
+)
+public abstract class JOperation {
 
-    @Getter @Setter private JOperationType operation;
+    @Getter @Setter private String operation;
     @Getter @Setter private JsonNode creates;
-    @Getter @Setter private JsonNode perform;
 
     public String hash(JAsset[] sources) { return hash(sources, null); }
 
     public String hash(JAsset[] sources, Object[] args) {
-        return hashOf(getOperation(), json(creates), json(perform), sources, args);
+        return hashOf(operation, json(this), sources, args);
+    }
+
+    private static final Map<Class<? extends JOperation>, ExecBase<?>> execMap = new HashMap<>();
+    public <OP extends JOperation> ExecBase<OP> getExec() {
+        return (ExecBase<OP>) execMap.computeIfAbsent(getClass(), c -> instantiate(getExecClass()));
+    }
+
+    protected <OP extends JOperation> Class<? extends ExecBase<OP>> getExecClass() {
+        return getOperationExecClass(getClass());
     }
 
 }

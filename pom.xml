@@ -41,6 +41,7 @@ javicle is available under the Apache License, version 2: http://www.apache.org/
         <logback.version>1.2.3</logback.version>
         <handlebars.version>4.2.0</handlebars.version>
         <junit.version>4.13.1</junit.version>
+        <cglib.version>3.3.0</cglib.version>
     </properties>
 
     <profiles>
@@ -144,6 +145,12 @@ javicle is available under the Apache License, version 2: http://www.apache.org/
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${cglib.version}</version>
         </dependency>
 
         <dependency>

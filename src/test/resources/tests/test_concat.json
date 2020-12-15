@@ -9,9 +9,7 @@
         "name": "combined_vid",
         "dest": "src/test/resources/outputs/combined.mp4"
       },
-      "perform": {
-        "concat": ["vid1_splits[1..]"]
-      }
+      "concat": ["vid1_splits[1..]"]
     }
   ]
 }

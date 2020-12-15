@@ -13,6 +13,6 @@ public class OperationEngine {
     }
 
     public void perform(JOperation op) {
-        op.getOperation().perform(op, toolbox, assetManager);
+        op.getExec().operate(op, toolbox, assetManager);
     }
 }

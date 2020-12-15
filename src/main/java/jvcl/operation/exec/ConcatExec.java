@@ -1,14 +1,10 @@
-package jvcl.op;
+package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
 import jvcl.model.JFileExtension;
-import jvcl.model.JOperation;
+import jvcl.operation.ConcatOperation;
 import jvcl.service.AssetManager;
-import jvcl.service.JOperator;
 import jvcl.service.Toolbox;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -24,7 +20,7 @@ import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
-public class ConcatOperation implements JOperator {
+public class ConcatExec extends ExecBase<ConcatOperation> {
 
     public static final String CONCAT_RECODE_TEMPLATE_OLD
             // concat inputs
@@ -45,12 +41,10 @@ public class ConcatOperation implements JOperator {
             // output combined result
             + "-map \"[v]\" -map \"[a]\" {{{output.path}}}";
 
-    @Override public void operate(JOperation op, Toolbox toolbox, AssetManager assetManager) {
-
-        final ConcatConfig config = loadConfig(op, ConcatConfig.class);
+    @Override public void operate(ConcatOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         // validate sources
-        final List<JAsset> sources = flattenAssetList(assetManager.resolve(config.getConcat()));
+        final List<JAsset> sources = flattenAssetList(assetManager.resolve(op.getConcat()));
         if (empty(sources)) die("operate: no sources");
 
         // create output object
@@ -76,11 +70,6 @@ public class ConcatOperation implements JOperator {
         final String scriptOutput = execScript(script);
         log.debug("operate: command output: "+scriptOutput);
         assetManager.addOperationAsset(output);
-    }
-
-    @NoArgsConstructor
-    private static class ConcatConfig {
-        @Getter @Setter private String[] concat;
     }
 
 }

@@ -1,33 +1,28 @@
-package jvcl.service;
+package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
 import jvcl.model.JOperation;
+import jvcl.service.AssetManager;
+import jvcl.service.Toolbox;
+import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.handlebars.HandlebarsUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Map;
 
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.basename;
-import static org.cobbzilla.util.json.JsonUtil.json;
 
-public interface JOperator {
+@Slf4j
+public abstract class ExecBase<OP extends JOperation> {
 
-    Logger log = LoggerFactory.getLogger(JOperator.class);
+    public abstract void operate(OP operation, Toolbox toolbox, AssetManager assetManager);
 
-    void operate(JOperation op, Toolbox toolbox, AssetManager assetManager);
-
-    default <T> T loadConfig(JOperation op, Class<T> configClass) {
-        return json(json(op.getPerform()), configClass);
-    }
-
-    default String renderScript(Toolbox toolbox, Map<String, Object> ctx, String template) {
+    protected String renderScript(Toolbox toolbox, Map<String, Object> ctx, String template) {
         return HandlebarsUtil.apply(toolbox.getHandlebars(), template, ctx);
     }
 
-    default File resolveOutputPath(JAsset output, File defaultOutfile) {
+    protected File resolveOutputPath(JAsset output, File defaultOutfile) {
         if (output.hasDest()) {
             if (output.destExists() && !output.destIsDirectory()) {
                 log.info("resolveOutputPath: dest exists: " + output.getDest());
@@ -41,6 +36,4 @@ public interface JOperator {
             return defaultOutfile;
         }
     }
-
-
 }

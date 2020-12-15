@@ -4,16 +4,14 @@
   ],
   "operations": [
     {
-      "operation": "trim",            // name of the operation
+      "operation": "trim",          // name of the operation
       "creates": {
         "name": "vid1_trims",
         "dest": "src/test/resources/outputs/trims/"
       },
-      "perform": {
-        "trim": "vid1_splits",         // trim these source assets
-        "start": "1s",                 // cropped region starts here, default is zero
-        "end": "6s"                    // cropped region ends here, default is end of video
-      }
+      "trim": "vid1_splits",         // trim these source assets
+      "start": "1s",                 // cropped region starts here, default is zero
+      "end": "6s"                    // cropped region ends here, default is end of video
     }
   ]
 }

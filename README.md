@@ -20,14 +20,12 @@ With JVCL, you'd create this spec:
 {
   "assets": [ {"name": "src", "path": "/tmp/my/source.mp4"} ],
   "operations": [{
-    "operation": "split",
-    "creates": "src_splits",
-    "perform": {
+      "operation": "split",
+      "creates": "src_split_files",
       "split": "src",
       "interval": "10s",
       "start": "10s",
       "end": "130s"
-    }
   }]
 }
 ```
@@ -100,53 +98,44 @@ Here is a complex example using multiple assets and operations:
   ],
   "operations": [
     {
-      "operation": "split",            // name of the operation
+      "operation": "split",            // name of the operation,
       "creates": "vid1_split_%",       // assets it creates, the '%' will be replaced with a counter
-      "perform": {
-        "split": "vid1",               // split this source asset
-        "interval": "10s"              // split every ten seconds
-      }
+      "split": "vid1",                 // split this source asset
+      "interval": "10s"                // split every ten seconds
     },
     {
-      "operation": "concat",           // name of the operation
+      "operation": "concat",           // name of the operation,
       "creates": "recombined_vid1",    // assets it creates, the '%' will be replaced with a counter
-      "perform": {
-        "concat": ["vid1_split"]       // recombine all split assets
-      }
+      "concat": ["vid1_split"]         // recombine all split assets
     },
     {
-      "operation": "concat",           // name of the operation
+      "operation": "concat",           // name of the operation,
       "creates": "combined_vid",       // asset it creates, can be referenced later
-      "perform": {
-        "concat": ["vid1", "vid2"]     // operation-specific: this says, concatenate these named assets
-      }
+      "concat": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
     },
     {
-      "operation": "concat",           // name of the operation
+      "operation": "concat",           // name of the operation,
       "creates": "combined_vid",       // the asset it creates, can be referenced later
-      "perform": {
-        "concat": ["vid1", "vid2"]     // operation-specific: this says, concatenate these named assets
-      }
+      "concat": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
     },
     {
-      "operation": "overlay",          // name of the operation
-      "creates": "overlay1",           // asset it creates
-      "perform": {
-        "source": "combined_vid1",     // main video asset
-        "overlay": "vid2",             // overlay this video on the main video
-
-        "offset": "30",                // when (on the main video timeline) to begin showing the overlay. default is 0 (beginning)
-        "overlayStart": "0",           // when (on the overlay video timeline) to begin playback on the overlay. default is 0 (beginning)
-        "overlayEnd": "0",             // when (on the overlay video timeline) to end playback on the overlay. default is to play the whole overlay
-
+      "operation": "overlay",          // name of the operation,
+      "creates": {
+        "name": "overlay1",            // asset it creates
+        "width": "1920",               // output width in pixels. default is source width
+        "height": "1024"               // output height in pixes. default is source height
+      },
+      "main": "combined_vid1",         // main video asset
+      "startTime": "30",               // when (on the main video timeline) to begin showing the overlay. default is 0 (beginning)
+      "endTime": "60",                 // when (on the main video timeline) to stop showing the overlay. default is to play the entire overlay
+      "overlay": {
+        "source": "vid2",              // overlay this video on the main video
+        "startTime": "0",              // when (on the overlay video timeline) to begin playback on the overlay. default is 0 (beginning)
+        "endTime": "0",                // when (on the overlay video timeline) to end playback on the overlay. default is to play the entire overlay
         "width": "overlay.width / 2",  // how wide the overlay will be, in pixels. default is the full overlay width, or maintain aspect ratio if height was set
-        "height": "",                  // how tall the overlay will be, in pixels. default is the full overlay height, or maintain aspect ratio if width was set
-
-        "x": "source.width/2",         // horizontal overlay position on main video. default is 0
-        "y": "source.height/2",        // vertical overlay position on main video. default is 0
-
-        "outputWidth": "1920",         // output width in pixels. default is source width
-        "outputHeight": "1024"         // output height in pixes. default is source height
+        "height": "source.height",     // how tall the overlay will be, in pixels. default is the full overlay height, or maintain aspect ratio if width was set
+        "x": "source.width / 2",       // horizontal overlay position on main video. default is 0
+        "y": "source.height / 2"       // vertical overlay position on main video. default is 0
       }
     }
   ]

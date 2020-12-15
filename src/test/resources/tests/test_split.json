@@ -13,17 +13,15 @@
   ],
   "operations": [
     {
-      "operation": "split",            // name of the operation
+      "operation": "split",          // name of the operation
       "creates": {
         "name": "vid1_splits",
         "dest": "src/test/resources/outputs/"
       },
-      "perform": {
-        "split": "vid1",               // split this source asset
-        "interval": "10s",             // split every ten seconds
-        "start": "65s",                // start one minute and five seconds into the video
-        "end": "100s"                  // end 100 seconds into the video
-      }
+      "split": "vid1",               // split this source asset
+      "interval": "10s",             // split every ten seconds
+      "start": "65s",                // start one minute and five seconds into the video
+      "end": "100s"                  // end 100 seconds into the video
     }
   ]
 }
