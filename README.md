@@ -122,8 +122,24 @@ Here is a complex example using multiple assets and operations:
 ```json
 {
   "assets": [
-    {"name": "vid1", "path": "/tmp/path/to/video1.mp4"},
-    {"name": "vid2", "path": "/tmp/path/to/video2.mp4"}
+    // file -- will be referenced directory
+    {
+      "name": "vid1",
+      "path": "/tmp/path/to/video1.mp4"
+    },
+
+    // URL -- will be downloaded to scratch directory and referenced from there
+    {
+      "name": "vid2",
+      "path": "https://archive.org/download/gov.archives.arc.1257628/gov.archives.arc.1257628_512kb.mp4"
+    },
+
+    // URL -- will be downloaded to `dest` directory and referenced from there
+    {
+      "name": "vid3",
+      "path": "https://archive.org/download/gov.archives.arc.49442/gov.archives.arc.49442_512kb.mp4",
+      "dest": "src/test/resources/sources/"
+    }
   ],
   "operations": [
     {
