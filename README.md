@@ -117,7 +117,10 @@ Transform a video in one size to another size using black letterboxes on the sid
 Split an audio file according to silence
 
 # Complex Example
-Here is a complex example using multiple assets and operations:
+Here is a complex example using multiple assets and operations.
+
+Note that in JVCL json files, comments are allowed using either line syntax (`// comment`)
+or multi-line block syntax (`/* comment that may span multiple lines */`).
 
 ```json
 {
