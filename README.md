@@ -63,6 +63,10 @@ whose properties are `assets` and `operations`.
 
 When you run `jvcl` on a spec file, JVCL will read the `assets`, then perform the `operations` in order.
 
+Unlike most JSON, comments *are* allowed in JVCL spec files:
+* A line comment starts with `//` and continue to the end of the line (`// comment`)
+* A multi-line block syntax starts with `/*` and ends with `*/` (`/* comment that may span multiple lines */`)
+
 ## Assets
 Assets are the inputs: generally image, audio and video files. Assets have a name and a path.
 
@@ -118,10 +122,6 @@ Split an audio file according to silence
 
 # Complex Example
 Here is a complex example using multiple assets and operations.
-
-Note that in JVCL json files, comments are allowed:
- * A line comment starts with `//` and continue to the end of the line (`// comment`)
- * A multi-line block syntax starts with `/*` and ends with `*/` (`/* comment that may span multiple lines */`)
 
 ```json
 {
