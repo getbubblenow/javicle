@@ -28,7 +28,7 @@ public class OverlayOperation extends JSingleSourceOperation {
         return evalBig(end, ctx, js);
     }
 
-    public static class OverlayConfig {
+    public static class OverlayConfig implements HasWidthAndHeight {
         @Getter @Setter private String source;
 
         @Getter @Setter private String start;
@@ -43,12 +43,7 @@ public class OverlayOperation extends JSingleSourceOperation {
         }
 
         @Getter @Setter private String width;
-        public boolean hasWidth () { return !empty(width); }
-        public BigDecimal getWidth(Map<String, Object> ctx, JsEngine js) { return evalBig(width, ctx, js); }
-
         @Getter @Setter private String height;
-        public boolean hasHeight () { return !empty(height); }
-        public BigDecimal getHeight(Map<String, Object> ctx, JsEngine js) { return evalBig(height, ctx, js); }
 
         @Getter @Setter private String x;
         public boolean hasX () { return !empty(x); }

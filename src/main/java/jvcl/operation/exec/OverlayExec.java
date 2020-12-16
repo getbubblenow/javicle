@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jvcl.service.Toolbox.divideBig;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
@@ -55,24 +54,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         ctx.put("overlayFilterConfig", overlayFilter);
         ctx.put("output", output);
 
-        if (overlay.hasWidth()) {
-            final BigDecimal width = overlay.getWidth(ctx, js);
-            ctx.put("width", width.intValue());
-            if (!overlay.hasHeight()) {
-                final BigDecimal aspectRatio = overlaySource.aspectRatio();
-                final int height = divideBig(width, aspectRatio).intValue();
-                ctx.put("height", height);
-            }
-        }
-        if (overlay.hasHeight()) {
-            final BigDecimal height = overlay.getHeight(ctx, js);
-            ctx.put("height", height.intValue());
-            if (!overlay.hasWidth()) {
-                final BigDecimal aspectRatio = overlaySource.aspectRatio();
-                final int width = height.multiply(aspectRatio).intValue();
-                ctx.put("width", width);
-            }
-        }
+        overlay.setProportionalWidthAndHeight(ctx, js, overlaySource);
 
         final String script = renderScript(toolbox, ctx, OVERLAY_TEMPLATE);
 

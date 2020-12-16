@@ -186,13 +186,20 @@ public class JAsset implements JsObjectView {
         final File sourcePath;
         if (hasDest()) {
             if (destIsDirectory()) {
-                sourcePath = new File(getDest(), basename(getName()));
+                sourcePath = new File(getDest(), basename(getPath()));
             } else {
                 sourcePath = new File(getDest());
             }
         } else {
             sourcePath = assetManager.sourcePath(getName());
         }
+
+        if (sourcePath.exists()) {
+            setOriginalPath(path);
+            setPath(abs(sourcePath));
+            return this;
+        }
+
         if (path.startsWith(PREFIX_CLASSPATH)) {
             // it's a classpath resource
             final String resource = path.substring(PREFIX_CLASSPATH.length());

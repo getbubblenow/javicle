@@ -127,17 +127,17 @@ The above would set the `start` value to ten seconds before the end of `someAsse
 ### Supported Operations
 Today, JVCL supports these operations:
 
+### scale
+Scale a video asset from one size to another
+
 ### split
-Split an audio/video asset into multiple assets
+Split an audio/video asset into multiple assets of equal time lengths
 
 ### concat
 Concatenate audio/video assets together into one asset
 
 ### trim
 Trim audio/video; crop a section of an asset, becomes a new asset
-
-### scale
-Scale a video asset from one size to another
 
 ### overlay
 Overlay one asset onto another
@@ -147,9 +147,6 @@ For transforming still images into video via a fade-pan (aka Ken Burns) effect
 
 ### letterbox
 Transform a video in one size to another size using black letterboxes on the sides or top/bottom. Handy for embedding mobile videos into other screen formats
-
-### split-silence
-Split an audio file according to silence
 
 # Complex Example
 Here is a complex example using multiple assets and operations.
@@ -185,6 +182,19 @@ Here is a complex example using multiple assets and operations.
   ],
   "operations": [
     {
+      "operation": "scale",            // name of the operation
+      "creates": "vid2_scaled",        // asset it creates
+      "source": "vid2",                // source asset
+      "width": "1024",                 // width of scaled asset. if omitted and height is present, width will be proportional
+      "height": "768"                  // height of scaled asset. if omitted and width is present, height will be proportional
+    },
+    {
+      "operation": "scale",            // name of the operation
+      "creates": "vid2_big",           // asset it creates
+      "source": "vid2",                // source asset
+      "factor": "2.2"                 // scale factor. if factor is set, width and height are ignored.
+    },
+    {
       "operation": "split",            // name of the operation
       "creates": "vid1_split_%",       // assets it creates, the '%' will be replaced with a counter
       "source": "vid1",                // split this source asset
@@ -204,6 +214,16 @@ Here is a complex example using multiple assets and operations.
       "operation": "concat",           // name of the operation
       "creates": "combined_vid",       // the asset it creates, can be referenced later
       "source": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
+    },
+    {
+      "operation": "trim",          // name of the operation
+      "creates": {                  // create multiple files, will be prefixed with `name`, store them in `dest`
+        "name": "vid1_trims",
+        "dest": "src/test/resources/outputs/trims/"
+      },
+      "source": "vid1_split",        // trim these source assets
+      "start": "1",                  // cropped region starts here, default is zero
+      "end": "6"                     // cropped region ends here, default is end of video
     },
     {
       "operation": "overlay",          // name of the operation

@@ -18,10 +18,11 @@ import static org.junit.Assert.fail;
 @Slf4j
 public class BasicTest {
 
-    @Test public void testSplitConcatAndTrim  () {
+    @Test public void testSplitConcatTrimScale  () {
         runSpec("tests/test_split.jvcl");
         runSpec("tests/test_concat.jvcl");
         runSpec("tests/test_trim.jvcl");
+        runSpec("tests/test_scale.jvcl");
     }
 
     @Test public void testOverlay() { runSpec("tests/test_overlay.jvcl"); }

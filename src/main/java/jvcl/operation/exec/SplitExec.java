@@ -37,6 +37,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("source", source);
 
+        assetManager.addOperationArrayAsset(output);
         final BigDecimal incr = op.getIntervalIncr(ctx, js);
         final BigDecimal endTime = op.getEndTime(source, ctx, js);
         for (BigDecimal i = op.getStartTime(ctx, js);
@@ -61,7 +62,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
 
             if (outfile.exists()) {
                 log.info("operate: outfile exists, not re-creating: "+abs(outfile));
-                return;
+                continue;
             } else {
                 mkdirOrDie(outfile.getParentFile());
             }
