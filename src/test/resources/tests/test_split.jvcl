@@ -18,8 +18,8 @@
         "name": "vid1_splits",
         "dest": "src/test/resources/outputs/"
       },
-      "split": "vid1",               // split this source asset
-      "interval": "10",             // split every ten seconds
+      "source": "vid1",              // split this source asset
+      "interval": "10",              // split every ten seconds
       "start": "65",                 // start one minute and five seconds into the video
       "end": "100"                   // end 100 seconds into the video
     }

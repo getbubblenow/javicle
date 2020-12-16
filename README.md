@@ -136,8 +136,11 @@ Concatenate audio/video assets together into one asset
 ### trim
 Trim audio/video; crop a section of an asset, becomes a new asset
 
+### scale
+Scale a video asset from one size to another
+
 ### overlay
-Overlay one audio or video file onto another
+Overlay one asset onto another
 
 ### ken-burns
 For transforming still images into video via a fade-pan (aka Ken Burns) effect
@@ -171,38 +174,41 @@ Here is a complex example using multiple assets and operations.
       "name": "vid3",
       "path": "https://archive.org/download/gov.archives.arc.49442/gov.archives.arc.49442_512kb.mp4",
       "dest": "src/test/resources/sources/"
+    },
+
+    // Image URL
+    {
+      "name": "img1",
+      "path": "https://live.staticflickr.com/65535/48159911972_01efa0e5ea_b.jpg",
+      "dest": "src/test/resources/sources/"
     }
   ],
   "operations": [
     {
-      "operation": "split",            // name of the operation,
+      "operation": "split",            // name of the operation
       "creates": "vid1_split_%",       // assets it creates, the '%' will be replaced with a counter
-      "split": "vid1",                 // split this source asset
+      "source": "vid1",                // split this source asset
       "interval": "10"                 // split every ten seconds
     },
     {
-      "operation": "concat",           // name of the operation,
+      "operation": "concat",           // name of the operation
       "creates": "recombined_vid1",    // assets it creates, the '%' will be replaced with a counter
-      "concat": ["vid1_split"]         // recombine all split assets
+      "source": ["vid1_split"]         // recombine all split assets
     },
     {
-      "operation": "concat",           // name of the operation,
+      "operation": "concat",           // name of the operation
       "creates": "combined_vid",       // asset it creates, can be referenced later
-      "concat": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
+      "source": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
     },
     {
-      "operation": "concat",           // name of the operation,
+      "operation": "concat",           // name of the operation
       "creates": "combined_vid",       // the asset it creates, can be referenced later
-      "concat": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
+      "source": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
     },
     {
-      "operation": "overlay",          // name of the operation,
-      "creates": {
-        "name": "overlay1",            // asset it creates
-        "width": "1920",               // output width in pixels. default is source width
-        "height": "1024"               // output height in pixes. default is source height
-      },
-      "main": "combined_vid1",         // main video asset
+      "operation": "overlay",          // name of the operation
+      "creates": "overlay1",           // asset it creates
+      "source": "combined_vid1",       // main video asset
       "start": "30",                   // when (on the main video timeline) to begin showing the overlay. default is 0 (beginning)
       "end": "60",                     // when (on the main video timeline) to stop showing the overlay. default is to play the entire overlay
       "overlay": {
@@ -214,6 +220,19 @@ Here is a complex example using multiple assets and operations.
         "x": "source.width / 2",       // horizontal overlay position on main video. default is 0
         "y": "source.height / 2"       // vertical overlay position on main video. default is 0
       }
+    },
+    {
+      "operation": "ken-burns",        // name of the operation
+      "creates": "ken1",               // asset it creates
+      "source": "img1",                // source image
+      "zoom": "1.3",                   // zoom level, from 1 to 10
+      "duration": "5",                 // how long the resulting video will be
+      "start": "0",                    // when to start zooming, default is 0
+      "end": "duration",               // when to end zooming, default is duration
+      "x": "source.width * 0.6",       // pan to this x-position
+      "y": "source.height * 0.4",      // pan to this y-position
+      "width": "1024",                 // width of output video
+      "height": "768"                  // height of output video
     }
   ]
 }

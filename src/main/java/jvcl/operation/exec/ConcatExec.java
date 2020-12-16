@@ -2,6 +2,7 @@ package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
 import jvcl.model.JFileExtension;
+import jvcl.model.operation.JMultiOperationContext;
 import jvcl.operation.ConcatOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
@@ -12,21 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static jvcl.model.JAsset.flattenAssetList;
-import static jvcl.model.JAsset.json2asset;
-import static org.cobbzilla.util.daemon.ZillaRuntime.die;
-import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
 public class ConcatExec extends ExecBase<ConcatOperation> {
-
-    public static final String CONCAT_RECODE_TEMPLATE_OLD
-            // concat inputs
-            = "{{ffmpeg}} -f concat{{#each sources}} -i {{{this.path}}}{{/each}} "
-            // safely with copy codec
-            + "-safe 0 -c copy {{{output.path}}}";
 
     public static final String CONCAT_RECODE_TEMPLATE_1
             // list inputs
@@ -39,22 +30,15 @@ public class ConcatExec extends ExecBase<ConcatOperation> {
             + "concat=n={{sources.length}}:v=1:a=1 [v] [a]\" "
 
             // output combined result
-            + "-map \"[v]\" -map \"[a]\" {{{output.path}}}";
+            + "-map \"[v]\" -map \"[a]\" -y {{{output.path}}}";
 
     @Override public void operate(ConcatOperation op, Toolbox toolbox, AssetManager assetManager) {
 
-        // validate sources
-        final List<JAsset> sources = flattenAssetList(assetManager.resolve(op.getConcat()));
-        if (empty(sources)) die("operate: no sources");
+        final JMultiOperationContext opCtx = op.getMultiInputContext(assetManager);
+        final List<JAsset> sources = opCtx.sources;
+        final JAsset output = opCtx.output;
+        final JFileExtension formatType = opCtx.formatType;
 
-        // create output object
-        final JAsset output = json2asset(op.getCreates());
-
-        // if any format settings are missing, use settings from first source
-        output.mergeFormat(sources.get(0).getFormat());
-
-        // set the path, check if output asset already exists
-        final JFileExtension formatType = output.getFormat().getFileExtension();
         final File defaultOutfile = assetManager.assetPath(op, sources, formatType);
         final File path = resolveOutputPath(output, defaultOutfile);
         if (path == null) return;

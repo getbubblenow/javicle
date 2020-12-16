@@ -1,0 +1,24 @@
+{
+  "assets": [
+    {
+      "name": "img1",
+      "path": "https://live.staticflickr.com/65535/48159911972_01efa0e5ea_b.jpg",
+      "dest": "src/test/resources/sources/"
+    }
+  ],
+  "operations": [
+    {
+      "operation": "ken-burns",        // name of the operation
+      "creates": "ken1",               // asset it creates
+      "source": "img1",                // source image
+      "zoom": "1.3",                   // zoom level, from 1 to 10
+      "duration": "5",                 // how long the resulting video will be
+      "start": "0",                    // when to start zooming, default is 0
+      "end": "duration",               // when to end zooming, default is duration
+      "x": "source.width * 0.6",       // pan to this x-position
+      "y": "source.height * 0.4",      // pan to this y-position
+      "width": "1024",                 // width of output video
+      "height": "768"                  // height of output video
+    }
+  ]
+}

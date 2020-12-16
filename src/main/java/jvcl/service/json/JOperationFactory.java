@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
-import jvcl.model.JOperation;
+import jvcl.model.operation.JOperation;
 import jvcl.operation.exec.ExecBase;
 
 import java.io.IOException;

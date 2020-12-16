@@ -1,6 +1,6 @@
 package jvcl.model;
 
-import lombok.AllArgsConstructor;
+import jvcl.model.operation.JOperation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

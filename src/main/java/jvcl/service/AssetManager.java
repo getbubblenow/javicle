@@ -2,7 +2,7 @@ package jvcl.service;
 
 import jvcl.model.JAsset;
 import jvcl.model.JFileExtension;
-import jvcl.model.JOperation;
+import jvcl.model.operation.JOperation;
 import org.cobbzilla.util.handlebars.HandlebarsUtil;
 
 import java.io.File;

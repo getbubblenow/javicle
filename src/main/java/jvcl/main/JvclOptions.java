@@ -48,4 +48,10 @@ public class JvclOptions extends BaseMainOptions {
     @Getter @Setter private File scratchDir = null;
     public File scratchDir() { return scratchDir == null ? new TempDir() : scratchDir; }
 
+    public static final String USAGE_NO_EXEC = "Don't run anything, instead print out commands that would have been run";
+    public static final String OPT_NO_EXEC = "-n";
+    public static final String LONGOPT_NO_EXEC = "--no-exec";
+    @Option(name=OPT_NO_EXEC, aliases=LONGOPT_NO_EXEC, usage=USAGE_NO_EXEC)
+    @Getter @Setter private boolean noExec = false;
+
 }

@@ -9,7 +9,7 @@
         "name": "combined_vid",
         "dest": "src/test/resources/outputs/combined.mp4"
       },
-      "concat": ["vid1_splits[1..]"]
+      "sources": ["vid1_splits[1..]"]
     }
   ]
 }

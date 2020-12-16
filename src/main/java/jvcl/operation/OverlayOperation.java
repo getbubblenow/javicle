@@ -1,6 +1,6 @@
 package jvcl.operation;
 
-import jvcl.model.JOperation;
+import jvcl.model.operation.JSingleSourceOperation;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +16,8 @@ import static org.cobbzilla.util.daemon.ZillaRuntime.big;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 
 @Slf4j
-public class OverlayOperation extends JOperation {
+public class OverlayOperation extends JSingleSourceOperation {
 
-    @Getter @Setter private String source;
     @Getter @Setter private OverlayConfig overlay;
 
     @Getter @Setter private String start;

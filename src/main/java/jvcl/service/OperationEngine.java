@@ -1,6 +1,6 @@
 package jvcl.service;
 
-import jvcl.model.JOperation;
+import jvcl.model.operation.JOperation;
 
 public class OperationEngine {
 

@@ -2,6 +2,7 @@ package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
 import jvcl.model.JFileExtension;
+import jvcl.model.operation.JSingleOperationContext;
 import jvcl.operation.SplitOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
@@ -12,7 +13,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jvcl.model.JAsset.json2asset;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.mkdirOrDie;
@@ -22,21 +22,14 @@ import static org.cobbzilla.util.system.CommandShell.execScript;
 public class SplitExec extends ExecBase<SplitOperation> {
 
     public static final String SPLIT_TEMPLATE
-            = "{{ffmpeg}} -i {{{source.path}}} -ss {{startSeconds}} -t {{interval}} {{{output.path}}}";
+            = "{{ffmpeg}} -i {{{source.path}}} -ss {{startSeconds}} -t {{interval}} -y {{{output.path}}}";
 
     @Override public void operate(SplitOperation op, Toolbox toolbox, AssetManager assetManager) {
 
-        final JAsset source = assetManager.resolve(op.getSplit());
-
-        // create output object
-        final JAsset output = json2asset(op.getCreates());
-
-        // if any format settings are missing, use settings from source
-        output.mergeFormat(source.getFormat());
-        assetManager.addOperationArrayAsset(output);
-
-        // get format type
-        final JFileExtension formatType = output.getFormat().getFileExtension();
+        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
+        final JAsset source = opCtx.source;
+        final JAsset output = opCtx.output;
+        final JFileExtension formatType = opCtx.formatType;
 
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());

@@ -9,7 +9,7 @@
         "name": "vid1_trims",
         "dest": "src/test/resources/outputs/trims/"
       },
-      "trim": "vid1_splits",         // trim these source assets
+      "source": "vid1_splits",       // trim these source assets
       "start": "1",                  // cropped region starts here, default is zero
       "end": "6"                     // cropped region ends here, default is end of video
     }

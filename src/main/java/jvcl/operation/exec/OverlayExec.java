@@ -2,6 +2,7 @@ package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
 import jvcl.model.JFileExtension;
+import jvcl.model.operation.JSingleOperationContext;
 import jvcl.operation.OverlayOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
@@ -14,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.math.RoundingMode.HALF_EVEN;
-import static jvcl.model.JAsset.json2asset;
 import static org.cobbzilla.util.daemon.ZillaRuntime.big;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.system.CommandShell.execScript;
@@ -26,17 +26,17 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
             = "ffmpeg -i {{{source.path}}} -i {{{overlay.path}}} -filter_complex \""
             + "[1:v] setpts=PTS-STARTPTS+(1/TB){{#exists width}}, scale={{width}}x{{height}}{{/exists}} [1v]; "
             + "[0:v][1v] overlay={{{overlayFilterConfig}}} "
-            + "\" {{{output.path}}}";
+            + "\" -y {{{output.path}}}";
 
     @Override public void operate(OverlayOperation op, Toolbox toolbox, AssetManager assetManager) {
-        final JAsset source = assetManager.resolve(op.getSource());
+
+        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
+        final JAsset source = opCtx.source;
+        final JAsset output = opCtx.output;
+        final JFileExtension formatType = opCtx.formatType;
+
         final OverlayOperation.OverlayConfig overlay = op.getOverlay();
         final JAsset overlaySource = assetManager.resolve(overlay.getSource());
-
-        final JAsset output = json2asset(op.getCreates());
-        output.mergeFormat(source.getFormat());
-
-        final JFileExtension formatType = output.getFormat().getFileExtension();
 
         final File defaultOutfile = assetManager.assetPath(op, source, formatType);
         final File path = resolveOutputPath(output, defaultOutfile);

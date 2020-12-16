@@ -1,7 +1,7 @@
 package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
-import jvcl.model.JOperation;
+import jvcl.model.operation.JOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;

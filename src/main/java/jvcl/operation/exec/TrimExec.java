@@ -2,6 +2,7 @@ package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
 import jvcl.model.JFileExtension;
+import jvcl.model.operation.JSingleOperationContext;
 import jvcl.operation.TrimOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
@@ -12,7 +13,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jvcl.model.JAsset.json2asset;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.io.FileUtil.*;
 import static org.cobbzilla.util.system.CommandShell.execScript;
@@ -21,16 +21,17 @@ import static org.cobbzilla.util.system.CommandShell.execScript;
 public class TrimExec extends ExecBase<TrimOperation> {
 
     public static final String TRIM_TEMPLATE
-            = "{{ffmpeg}} -i {{{source.path}}} -ss {{startSeconds}} {{#exists interval}}-t {{interval}} {{/exists}}{{{output.path}}}";
+            = "{{ffmpeg}} -i {{{source.path}}} " +
+            "-ss {{startSeconds}} " +
+            "{{#exists interval}}-t {{interval}} {{/exists}}" +
+            "-y {{{output.path}}}";
 
     @Override public void operate(TrimOperation op, Toolbox toolbox, AssetManager assetManager) {
 
-        final JAsset source = assetManager.resolve(op.getTrim());
-
-        final JAsset output = json2asset(op.getCreates());
-        output.mergeFormat(source.getFormat());
-
-        final JFileExtension formatType = output.getFormat().getFileExtension();
+        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
+        final JAsset source = opCtx.source;
+        final JAsset output = opCtx.output;
+        final JFileExtension formatType = opCtx.formatType;
 
         if (source.hasList()) {
             if (output.hasDest()) {

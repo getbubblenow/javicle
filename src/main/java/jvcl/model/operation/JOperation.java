@@ -1,7 +1,8 @@
-package jvcl.model;
+package jvcl.model.operation;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
+import jvcl.model.JAsset;
 import jvcl.operation.exec.ExecBase;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
