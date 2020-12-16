@@ -39,9 +39,7 @@ Yes, the JVCL is longer, but I think many would agree it is easier to read and m
 ffmpeg incantations become ever more inscrutable.**
 
 JVCL is designed for readability and maintainability. JVCL will continue to evolve towards greater
-coverage of the full capabilities of ffmpeg. We also plan to introduce "function" concepts
-to create reusable compound operations, further increasing reusability and lowering long-term
-maintenance.
+coverage of the full capabilities of ffmpeg.
 
 # Who is JVCL not for?
 If you like GUIs, JVCL is probably not for you.
