@@ -15,8 +15,8 @@
     {
       "operation": "split",          // name of the operation
       "creates": {
-        "name": "vid1_splits",
-        "dest": "src/test/resources/outputs/"
+        "name": "vid1_splits",       // output assets will have this prefix
+        "dest": "src/test/resources/outputs/" // and be written to this directory
       },
       "source": "vid1",              // split this source asset
       "interval": "10",              // split every ten seconds

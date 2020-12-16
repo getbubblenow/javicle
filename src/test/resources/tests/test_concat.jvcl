@@ -4,12 +4,12 @@
   ],
   "operations": [
     {
-      "operation": "concat",
+      "operation": "concat",              // name of the operation
+      "sources": ["vid1_splits[1..]"],    // concatentate these sources (everything but the first video in vid1_splits)
       "creates": {
-        "name": "combined_vid",
-        "dest": "src/test/resources/outputs/combined.mp4"
+        "name": "combined_vid",           // name of the output asset
+        "dest": "src/test/resources/outputs/combined.mp4" // asset will be written to this file
       },
-      "sources": ["vid1_splits[1..]"]
     }
   ]
 }

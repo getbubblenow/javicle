@@ -6,8 +6,8 @@
     {
       "operation": "trim",          // name of the operation
       "creates": {
-        "name": "vid1_trims",
-        "dest": "src/test/resources/outputs/trims/"
+        "name": "vid1_trims",       // output assets will have this prefix
+        "dest": "src/test/resources/outputs/trims/"  // and be written to this directory
       },
       "source": "vid1_splits",       // trim these source assets
       "start": "1",                  // cropped region starts here, default is zero

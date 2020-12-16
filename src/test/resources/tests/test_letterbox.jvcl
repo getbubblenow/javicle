@@ -5,19 +5,19 @@
   "operations": [
     {
       "operation": "letterbox",        // name of the operation
-      "creates": "boxed_wide",
+      "creates": "boxed_wide",         // name of the output asset
       "source": "vid1_splits[2]",      // box this source asset
       "width": "source.width * 2",     // width of output asset. if omitted and height is present, width will be proportional
       "height": "source.height",       // height of output asset. if omitted and width is present, height will be proportional
-      "color": "AliceBlue"
+      "color": "AliceBlue"             // letterbox padding color
     },
     {
       "operation": "letterbox",        // name of the operation
-      "creates": "boxed_tall",
+      "creates": "boxed_tall",         // name of the output asset
       "source": "vid1_splits[2]",      // box this source assets
       "width": "source.width",         // width of output asset. if omitted and height is present, width will be proportional
       "height": "source.height * 2",   // height of output asset. if omitted and width is present, height will be proportional
-      "color": "DarkCyan"
+      "color": "DarkCyan"              // letterbox padding color
     }
   ]
 }
