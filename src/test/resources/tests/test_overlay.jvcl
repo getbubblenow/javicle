@@ -15,6 +15,7 @@
   "operations": [
     // trim videos first, so test runs faster
     {
+      // main video is 60 seconds long
       "operation": "trim",
       "creates": "v1",
       "source": "vid1",
@@ -22,6 +23,7 @@
       "end": "60"
     },
     {
+      // overlay video is 10 seconds long
       "operation": "trim",
       "creates": "v2",
       "source": "vid2",
