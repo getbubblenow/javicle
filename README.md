@@ -125,25 +125,25 @@ The above would set the `start` value to ten seconds before the end of `someAsse
 ### Supported Operations
 Today, JVCL supports these operations:
 
-### scale
+### [scale](src/test/resources/tests/test_scale.jvcl)
 Scale a video asset from one size to another. Scaling can be proportional or anamorphic
 
-### split
+### [split](src/test/resources/tests/test_split.jvcl)
 Split an audio/video asset into multiple assets of equal time lengths
 
-### concat
+### [concat](src/test/resources/tests/test_concat.jvcl)
 Concatenate audio/video assets together into one asset
 
-### trim
+### [trim](src/test/resources/tests/test_trim.jvcl)
 Trim audio/video; crop a section of an asset, becomes a new asset
 
-### overlay
+### [overlay](src/test/resources/tests/test_overlay.jvcl)
 Overlay one asset onto another
 
-### ken-burns
+### [ken-burns](src/test/resources/tests/test_ken_burns.jvcl)
 For transforming still images into video via a fade-pan (aka Ken Burns) effect
 
-### letterbox
+### [letterbox](src/test/resources/tests/test_letterbox.jvcl)
 Transform a video in one size to another size using black letterboxes on the sides or top/bottom. Handy for embedding mobile videos into other screen formats
 
 # Complex Example
