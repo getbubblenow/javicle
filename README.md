@@ -231,6 +231,7 @@ Here is a complex example using multiple assets and operations.
       "end": "duration",               // when to end zooming, default is duration
       "x": "source.width * 0.6",       // pan to this x-position
       "y": "source.height * 0.4",      // pan to this y-position
+      "upscale": "8",                  // upscale factor. upscaling the image results in a smoother pan, but a longer encode, default is 8
       "width": "1024",                 // width of output video
       "height": "768"                  // height of output video
     }

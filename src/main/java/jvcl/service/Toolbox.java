@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.math.RoundingMode.HALF_EVEN;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.io.FileUtil.*;
 import static org.cobbzilla.util.json.JsonUtil.*;
@@ -28,7 +29,11 @@ public class Toolbox {
 
     public static final Toolbox DEFAULT_TOOLBOX = new Toolbox();
 
+    public static final BigDecimal TWO = big(2);
+    public static final int DIVISION_SCALE = 12;
+
     public static final ObjectMapper JSON_MAPPER = FULL_MAPPER_ALLOW_COMMENTS;
+
     static { JSON_MAPPER.registerModule(new JOperationModule()); }
 
     @Getter(lazy=true) private final Handlebars handlebars = initHandlebars();
@@ -45,10 +50,12 @@ public class Toolbox {
         }
     }
 
-    public static BigDecimal getDuration(String t) {
-        // we may want to support other time formats.
-        // for now everything is in seconds
-        return big(t);
+    public static BigDecimal evalBig(String val, Map<String, Object> ctx, JsEngine js) {
+        return big(eval(val, ctx, js));
+    }
+
+    public static BigDecimal evalBig(String val, Map<String, Object> ctx, JsEngine js, BigDecimal defaultValue) {
+        return empty(val) ? defaultValue : evalBig(val, ctx, js);
     }
 
     public static Map<String, Object> jsContext(Map<String, Object> ctx) {
@@ -62,6 +69,10 @@ public class Toolbox {
             }
         }
         return jsCtx;
+    }
+
+    public static BigDecimal divideBig(BigDecimal numerator, BigDecimal denominator) {
+        return numerator.divide(denominator, DIVISION_SCALE, HALF_EVEN);
     }
 
     private Handlebars initHandlebars() {

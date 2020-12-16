@@ -25,6 +25,7 @@ public class BasicTest {
     }
 
     @Test public void testOverlay() { runSpec("tests/test_overlay.jvcl"); }
+    @Test public void testKenBurns() { runSpec("tests/test_ken_burns.jvcl"); }
 
     private void runSpec(String specPath) {
         try {

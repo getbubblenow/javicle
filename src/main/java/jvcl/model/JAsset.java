@@ -21,8 +21,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.Comparator.comparing;
+import static jvcl.service.Toolbox.divideBig;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.http.HttpSchemes.isHttpOrHttps;
 import static org.cobbzilla.util.io.FileUtil.*;
@@ -156,7 +156,7 @@ public class JAsset implements JsObjectView {
     public BigDecimal aspectRatio() {
         final BigDecimal width = width();
         final BigDecimal height = height();
-        return width == null || height == null ? null : width.divide(height, HALF_EVEN);
+        return width == null || height == null ? null : divideBig(width, height);
     }
 
     public JAsset init(AssetManager assetManager, Toolbox toolbox) {
@@ -176,14 +176,23 @@ public class JAsset implements JsObjectView {
 
         // if dest already exists, use that
         if (hasDest()) {
-            if (destExists()) {
+            if (destExists() && !destIsDirectory()) {
                 setOriginalPath(path);
                 setPath(destPath());
                 return this;
             }
         }
 
-        final File sourcePath = hasDest() ? new File(getDest()) : assetManager.sourcePath(getName());
+        final File sourcePath;
+        if (hasDest()) {
+            if (destIsDirectory()) {
+                sourcePath = new File(getDest(), basename(getName()));
+            } else {
+                sourcePath = new File(getDest());
+            }
+        } else {
+            sourcePath = assetManager.sourcePath(getName());
+        }
         if (path.startsWith(PREFIX_CLASSPATH)) {
             // it's a classpath resource
             final String resource = path.substring(PREFIX_CLASSPATH.length());

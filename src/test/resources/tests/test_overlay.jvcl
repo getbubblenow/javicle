@@ -16,14 +16,14 @@
     {
       "operation": "trim",
       "creates": "v1",
-      "trim": "vid1",
+      "source": "vid1",
       "start": "0",
       "end": "60"
     },
     {
       "operation": "trim",
       "creates": "v2",
-      "trim": "vid2",
+      "source": "vid2",
       "start": "10",
       "end": "20"
     },

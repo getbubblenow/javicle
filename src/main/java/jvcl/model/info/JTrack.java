@@ -20,13 +20,18 @@ public class JTrack {
     }
     public boolean audio() { return type() == JTrackType.audio; }
     public boolean video() { return type() == JTrackType.video; }
-    public boolean media() { return audio() || video(); }
+    public boolean image() { return type() == JTrackType.image; }
+    public boolean audioOrVideo() { return audio() || video(); }
+    public boolean imageOrVideo() { return image() || video(); }
 
     @JsonProperty("ID") @Getter @Setter private String id;
     @JsonProperty("StreamOrder") @Getter @Setter private String streamOrder;
     @JsonProperty("VideoCount") @Getter @Setter private String videoCount;
     @JsonProperty("AudioCount") @Getter @Setter private String audioCount;
+
     @JsonProperty("FileExtension") @Getter @Setter private String fileExtension;
+    public boolean hasFileExtension () { return !empty(fileExtension); }
+
     @JsonProperty("Format") @Getter @Setter private String format;
     @JsonProperty("Format_AdditionalFeatures") @Getter @Setter private String formatAdditionalFeatures;
     @JsonProperty("Format_Profile") @Getter @Setter private String formatProfile;

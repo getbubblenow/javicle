@@ -14,8 +14,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.math.RoundingMode.HALF_EVEN;
-import static org.cobbzilla.util.daemon.ZillaRuntime.big;
+import static jvcl.service.Toolbox.divideBig;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
@@ -57,18 +56,20 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         ctx.put("output", output);
 
         if (overlay.hasWidth()) {
-            final String width = overlay.getWidth(ctx, js);
-            ctx.put("width", width);
+            final BigDecimal width = overlay.getWidth(ctx, js);
+            ctx.put("width", width.intValue());
             if (!overlay.hasHeight()) {
-                final int height = big(width).divide(overlay.aspectRatio(), HALF_EVEN).intValue();
+                final BigDecimal aspectRatio = overlaySource.aspectRatio();
+                final int height = divideBig(width, aspectRatio).intValue();
                 ctx.put("height", height);
             }
         }
         if (overlay.hasHeight()) {
-            final String height = overlay.getHeight(ctx, js);
-            ctx.put("height", height);
+            final BigDecimal height = overlay.getHeight(ctx, js);
+            ctx.put("height", height.intValue());
             if (!overlay.hasWidth()) {
-                final int width = big(height).multiply(overlay.aspectRatio()).intValue();
+                final BigDecimal aspectRatio = overlaySource.aspectRatio();
+                final int width = height.multiply(aspectRatio).intValue();
                 ctx.put("width", width);
             }
         }

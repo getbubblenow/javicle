@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.type.SimpleType;
 import com.fasterxml.jackson.databind.type.TypeBase;
 import com.fasterxml.jackson.databind.type.TypeBindings;
 
+import static com.fasterxml.jackson.databind.type.TypeBindings.emptyBindings;
+
 public class JOperationType extends SimpleType {
 
     protected JOperationType(Class<?> cls) { super(cls); }
@@ -23,4 +25,7 @@ public class JOperationType extends SimpleType {
         super(cls, bindings, superClass, superInts, extraHash, valueHandler, typeHandler, asStatic);
     }
 
+    public static JavaType create(Class c, JavaType baseType) {
+        return new JOperationType(c, emptyBindings(), baseType, null);
+    }
 }

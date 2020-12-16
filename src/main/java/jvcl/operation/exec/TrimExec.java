@@ -7,6 +7,7 @@ import jvcl.operation.TrimOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
+import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -69,14 +70,16 @@ public class TrimExec extends ExecBase<TrimOperation> {
                       JAsset subOutput,
                       Toolbox toolbox,
                       AssetManager assetManager) {
+
+        final StandardJsEngine js = toolbox.getJs();
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("source", source);
         ctx.put("output", subOutput);
 
-        final BigDecimal startTime = op.getStartTime();
+        final BigDecimal startTime = op.getStartTime(ctx, js);
         ctx.put("startSeconds", startTime);
-        if (op.hasEnd()) ctx.put("interval", op.getEndTime().subtract(startTime));
+        if (op.hasEnd()) ctx.put("interval", op.getEndTime(ctx, js).subtract(startTime));
         final String script = renderScript(toolbox, ctx, TRIM_TEMPLATE);
 
         log.debug("operate: running script: "+script);

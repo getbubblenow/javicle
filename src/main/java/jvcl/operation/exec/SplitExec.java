@@ -7,6 +7,7 @@ import jvcl.operation.SplitOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
+import org.cobbzilla.util.javascript.JsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -31,12 +32,14 @@ public class SplitExec extends ExecBase<SplitOperation> {
         final JAsset output = opCtx.output;
         final JFileExtension formatType = opCtx.formatType;
 
+        final JsEngine js = toolbox.getJs();
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());
         ctx.put("source", source);
-        final BigDecimal incr = op.getIntervalIncr();
-        final BigDecimal endTime = op.getEndTime(source);
-        for (BigDecimal i = op.getStartTime();
+
+        final BigDecimal incr = op.getIntervalIncr(ctx, js);
+        final BigDecimal endTime = op.getEndTime(source, ctx, js);
+        for (BigDecimal i = op.getStartTime(ctx, js);
              i.compareTo(endTime) < 0;
              i = i.add(incr)) {
 
