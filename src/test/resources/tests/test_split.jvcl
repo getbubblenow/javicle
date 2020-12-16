@@ -1,5 +1,6 @@
 {
   "assets": [
+    // these are US government videos not covered by copyright
     {
       "name": "vid1",
       "path": "https://archive.org/download/gov.archives.arc.1257628/gov.archives.arc.1257628_512kb.mp4",
