@@ -1,5 +1,6 @@
 {
   "assets": [
+    // wildcard matches multiple files, vid1_splits becomes a "list" asset
     { "name": "vid1_splits", "path": "src/test/resources/outputs/vid1_splits_*.mp4" }
   ],
   "operations": [
