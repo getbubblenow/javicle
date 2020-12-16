@@ -23,10 +23,9 @@ import static org.cobbzilla.util.system.CommandShell.execScript;
 public class OverlayExec extends ExecBase<OverlayOperation> {
 
     public static final String OVERLAY_TEMPLATE
-            = "ffmpeg -i {{{source.path}}} -vf \""
-            + "        movie={{{overlay.path}}}:seek_point=0 [ovl]; "
-            + "        [ovl] setpts=PTS-STARTPTS{{#exists width}}, scale={{width}}x{{height}}{{/exists}} [ovl2] ; "
-            + "        [main][ovl2] overlay={{{overlayFilterConfig}}}"
+            = "ffmpeg -i {{{source.path}}} -i {{{overlay.path}}} -filter_complex \""
+            + "[1:v] setpts=PTS-STARTPTS+(1/TB){{#exists width}}, scale={{width}}x{{height}}{{/exists}} [1v]; "
+            + "[0:v][1v] overlay={{{overlayFilterConfig}}} "
             + "\" {{{output.path}}}";
 
     @Override public void operate(OverlayOperation op, Toolbox toolbox, AssetManager assetManager) {
@@ -53,7 +52,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         ctx.put("mainStart", op.getStartTime(ctx, js));
         ctx.put("mainEnd", op.getEndTime(ctx, js));
 
-        final String overlayFilter = buildOverlayFilter(op, source, overlay, ctx, js);
+        final String overlayFilter = buildOverlayFilter(op, source, overlaySource, overlay, ctx, js);
         ctx.put("overlayFilterConfig", overlayFilter);
         ctx.put("output", output);
 
@@ -82,20 +81,19 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         assetManager.addOperationAsset(output);
     }
 
-    private String buildOverlayFilter(OverlayOperation op, JAsset source, OverlayOperation.OverlayConfig overlay, Map<String, Object> ctx, StandardJsEngine js) {
-        // enable=between(t\,15\,20):x=160:y=120
+    private String buildOverlayFilter(OverlayOperation op,
+                                      JAsset source,
+                                      JAsset overlaySource,
+                                      OverlayOperation.OverlayConfig overlay,
+                                      Map<String, Object> ctx,
+                                      StandardJsEngine js) {
         final StringBuilder b = new StringBuilder();
         final BigDecimal startTime = overlay.getStartTime(ctx, js);
-        if (overlay.hasEndTime()) {
-            final BigDecimal endTime = overlay.getEndTime(ctx, js);
-            b.append("enable=between(t\\,").append(startTime).append("\\,").append(endTime).append(")");
-        } else if (startTime.intValue() > 0) {
-            b.append("enable=gte(t\\,").append(startTime).append(")");
-        }
+        final BigDecimal endTime = overlay.hasEndTime() ? overlay.getEndTime(ctx, js) : overlaySource.duration();
+        b.append("enable=between(t\\,").append(startTime).append("\\,").append(endTime).append(")");
 
         if (overlay.hasX() && overlay.hasY()) {
-            if (b.length() > 0) b.append(":");
-            b.append("x=").append(overlay.getX(ctx, js)).append(":y=").append(overlay.getY(ctx, js));
+            b.append(":x=").append(overlay.getX(ctx, js)).append(":y=").append(overlay.getY(ctx, js));
         }
 
         return b.toString();
