@@ -128,7 +128,7 @@ The above would set the `start` value to ten seconds before the end of `someAsse
 Today, JVCL supports these operations:
 
 ### scale
-Scale a video asset from one size to another
+Scale a video asset from one size to another. Scaling can be proportional or anamorphic
 
 ### split
 Split an audio/video asset into multiple assets of equal time lengths
@@ -254,6 +254,14 @@ Here is a complex example using multiple assets and operations.
       "upscale": "8",                  // upscale factor. upscaling the image results in a smoother pan, but a longer encode, default is 8
       "width": "1024",                 // width of output video
       "height": "768"                  // height of output video
+    },
+    {
+      "operation": "letterbox",        // name of the operation
+      "creates": "boxed1",             // asset it creates
+      "source": "ken1",                // source asset
+      "width": "source.width * 1.5",   // make it wider
+      "height": "source.height * 0.9", // and shorter
+      "color": "AliceBlue"             // default is black. can be a hex value (0xff0000 for red) or a color name from here: https://ffmpeg.org/ffmpeg-utils.html#color-syntax
     }
   ]
 }

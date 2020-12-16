@@ -1,0 +1,23 @@
+{
+  "assets": [
+    { "name": "vid1_splits", "path": "src/test/resources/outputs/vid1_splits_*.mp4" }
+  ],
+  "operations": [
+    {
+      "operation": "letterbox",        // name of the operation
+      "creates": "boxed_wide",
+      "source": "vid1_splits[2]",      // box this source asset
+      "width": "source.width * 2",     // width of output asset. if omitted and height is present, width will be proportional
+      "height": "source.height",       // height of output asset. if omitted and width is present, height will be proportional
+      "color": "AliceBlue"
+    },
+    {
+      "operation": "letterbox",        // name of the operation
+      "creates": "boxed_tall",
+      "source": "vid1_splits[2]",      // box this source assets
+      "width": "source.width",         // width of output asset. if omitted and height is present, width will be proportional
+      "height": "source.height * 2",   // height of output asset. if omitted and width is present, height will be proportional
+      "color": "DarkCyan"
+    }
+  ]
+}

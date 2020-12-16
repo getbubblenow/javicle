@@ -17,6 +17,8 @@ import static jvcl.service.json.JOperationFactory.getOperationExecClass;
 import static org.cobbzilla.util.daemon.ZillaRuntime.hashOf;
 import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.reflect.ReflectionUtil.instantiate;
+import static org.cobbzilla.util.security.ShaUtil.sha256_hex;
+import static org.cobbzilla.util.string.StringUtil.safeShellArg;
 
 @NoArgsConstructor @Accessors(chain=true) @Slf4j
 @JsonTypeInfo(
@@ -40,5 +42,7 @@ public abstract class JOperation {
     public <OP extends JOperation> ExecBase<OP> getExec() {
         return (ExecBase<OP>) execMap.computeIfAbsent(getClass(), c -> instantiate(getOperationExecClass(getClass())));
     }
+
+    public String shortString() { return safeShellArg(operation+"_"+sha256_hex(json(this))); }
 
 }

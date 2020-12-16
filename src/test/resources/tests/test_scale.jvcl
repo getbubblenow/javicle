@@ -4,16 +4,16 @@
   ],
   "operations": [
     {
-      "operation": "scale",          // name of the operation
+      "operation": "scale",            // name of the operation
       "creates": "scaled_test1",
-      "source": "vid1_splits[3]",    // trim these source assets
+      "source": "vid1_splits[3]",      // scale this source asset
       "width": "1024",                 // width of scaled asset. if omitted and height is present, width will be proportional
       "height": "768"                  // height of scaled asset. if omitted and width is present, height will be proportional
     },
     {
       "operation": "scale",            // name of the operation
       "creates": "scaled_small",       // asset it creates
-      "source": "vid1_splits[3]",      // source asset
+      "source": "vid1_splits[3]",      // scale this source asset
       "factor": "0.5"                  // scale factor. if factor is set, width and height are ignored.
     }
   ]

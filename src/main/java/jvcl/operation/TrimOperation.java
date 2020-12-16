@@ -12,6 +12,7 @@ import java.util.Map;
 import static java.math.BigDecimal.ZERO;
 import static jvcl.service.Toolbox.evalBig;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
+import static org.cobbzilla.util.string.StringUtil.safeShellArg;
 
 @Slf4j
 public class TrimOperation extends JSingleSourceOperation {
@@ -23,7 +24,7 @@ public class TrimOperation extends JSingleSourceOperation {
     public boolean hasEnd() { return !empty(end); }
     public BigDecimal getEndTime(Map<String, Object> ctx, JsEngine js) { return evalBig(end, ctx, js); }
 
-    public String shortString() { return "trim_"+getStart()+(hasEnd() ? "_"+getEnd() : ""); }
+    @Override public String shortString() { return safeShellArg("trim_" + getStart() + (hasEnd() ? "_" + getEnd() : "")); }
     public String toString() { return getSource()+"_"+getStart()+(hasEnd() ? "_"+getEnd() : ""); }
 
 }

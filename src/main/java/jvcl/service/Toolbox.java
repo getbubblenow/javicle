@@ -22,6 +22,7 @@ import static java.math.RoundingMode.HALF_EVEN;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.io.FileUtil.*;
 import static org.cobbzilla.util.json.JsonUtil.*;
+import static org.cobbzilla.util.string.StringUtil.safeShellArg;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
@@ -84,10 +85,10 @@ public class Toolbox {
     }
 
     @Getter(lazy=true) private final String ffmpeg = initFfmpeg();
-    private String initFfmpeg() { return loadPath("ffmpeg"); }
+    private String initFfmpeg() { return safeShellArg(loadPath("ffmpeg")); }
 
     @Getter(lazy=true) private final String mediainfo = initMediainfo();
-    private String initMediainfo() { return loadPath("mediainfo"); }
+    private String initMediainfo() { return safeShellArg(loadPath("mediainfo")); }
 
     private static String loadPath(String p) {
         try {

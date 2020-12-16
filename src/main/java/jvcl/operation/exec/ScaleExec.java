@@ -9,17 +9,14 @@ import jvcl.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.javascript.StandardJsEngine;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.cobbzilla.util.daemon.ZillaRuntime.die;
-import static org.cobbzilla.util.io.FileUtil.*;
 import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
-public class ScaleExec extends ExecBase<ScaleOperation> {
+public class ScaleExec extends SingleOrMultiSourceExecBase<ScaleOperation> {
 
     public static final String SCALE_TEMPLATE
             = "{{ffmpeg}} -i {{{source.path}}} -filter_complex \""
@@ -45,42 +42,16 @@ public class ScaleExec extends ExecBase<ScaleOperation> {
             op.setProportionalWidthAndHeight(ctx, js, source);
         }
 
-        if (source.hasList()) {
-            if (output.hasDest()) {
-                if (!output.destIsDirectory()) die("operate: dest is not a directory: "+output.getDest());
-            }
-            assetManager.addOperationArrayAsset(output);
-            for (JAsset asset : source.getList()) {
-                final JAsset subOutput = new JAsset(output);
-                final File defaultOutfile = assetManager.assetPath(op, asset, formatType);
-                final File outfile;
-                if (output.hasDest()) {
-                    outfile = new File(output.destDirectory(), basename(appendToFileNameBeforeExt(asset.getPath(), "_"+op.shortString(ctx, js))));
-                    if (outfile.exists()) {
-                        log.info("operate: dest exists: "+abs(outfile));
-                        return;
-                    }
-                } else {
-                    outfile = defaultOutfile;
-                }
-                subOutput.setPath(abs(outfile));
-                scale(ctx, asset, output, subOutput, toolbox, assetManager);
-            }
-        } else {
-            final File defaultOutfile = assetManager.assetPath(op, source, formatType);
-            final File path = resolveOutputPath(output, defaultOutfile);
-            if (path == null) return;
-            output.setPath(abs(path));
-            scale(ctx, source, output, output, toolbox, assetManager);
-        }
+        operate(op, toolbox, assetManager, source, output, formatType, ctx);
     }
 
-    private void scale(Map<String, Object> ctx,
-                       JAsset source,
-                       JAsset output,
-                       JAsset subOutput,
-                       Toolbox toolbox,
-                       AssetManager assetManager) {
+    @Override protected void process(Map<String, Object> ctx,
+                                     ScaleOperation op,
+                                     JAsset source,
+                                     JAsset output,
+                                     JAsset subOutput,
+                                     Toolbox toolbox,
+                                     AssetManager assetManager) {
 
         ctx.put("source", source);
         ctx.put("output", subOutput);
