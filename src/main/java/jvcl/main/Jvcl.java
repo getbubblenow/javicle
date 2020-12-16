@@ -19,6 +19,7 @@ public class Jvcl extends BaseMain<JvclOptions> {
     @Override protected void run() throws Exception {
         final JvclOptions options = getOptions();
         final JSpec spec = options.getSpec();
+        final boolean noExec = options.isNoExec();
 
         if (empty(spec.getAssets())) {
             err(">>> jvcl: no assets defined in spec");
@@ -34,7 +35,7 @@ public class Jvcl extends BaseMain<JvclOptions> {
         final AssetManager assetManager = new AssetManager(toolbox, getOptions().scratchDir());
         Arrays.stream(spec.getAssets()).forEach(assetManager::defineAsset);
 
-        final OperationEngine opEngine = new OperationEngine(toolbox, assetManager);
+        final OperationEngine opEngine = new OperationEngine(toolbox, assetManager, noExec);
         Arrays.stream(spec.getOperations()).forEach(opEngine::perform);
 
         final int opCount = spec.getOperations().length;

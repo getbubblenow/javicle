@@ -17,7 +17,6 @@ import java.util.Map;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.mkdirOrDie;
-import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
 public class SplitExec extends ExecBase<SplitOperation> {
@@ -76,7 +75,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
             final String script = renderScript(toolbox, ctx, SPLIT_TEMPLATE);
 
             log.debug("operate: running script: "+script);
-            final String scriptOutput = execScript(script);
+            final String scriptOutput = exec(script, op.isNoExec());
             log.debug("operate: command output: "+scriptOutput);
             assetManager.addOperationAssetSlice(output, slice);
         }

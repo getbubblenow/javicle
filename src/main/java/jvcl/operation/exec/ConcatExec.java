@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.cobbzilla.util.io.FileUtil.abs;
-import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
 public class ConcatExec extends ExecBase<ConcatOperation> {
@@ -51,7 +50,7 @@ public class ConcatExec extends ExecBase<ConcatOperation> {
         final String script = renderScript(toolbox, ctx, CONCAT_RECODE_TEMPLATE_1);
 
         log.debug("operate: running script: "+script);
-        final String scriptOutput = execScript(script);
+        final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
         assetManager.addOperationAsset(output);
     }

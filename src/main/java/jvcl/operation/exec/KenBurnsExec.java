@@ -20,7 +20,6 @@ import static java.math.BigDecimal.ZERO;
 import static jvcl.service.Toolbox.TWO;
 import static jvcl.service.Toolbox.divideBig;
 import static org.cobbzilla.util.io.FileUtil.abs;
-import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
 public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
@@ -97,7 +96,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
         final String script = renderScript(toolbox, ctx, KEN_BURNS_TEMPLATE);
 
         log.debug("operate: running script: "+script);
-        final String scriptOutput = execScript(script);
+        final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
         assetManager.addOperationAsset(output);
     }

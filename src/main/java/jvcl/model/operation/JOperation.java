@@ -31,6 +31,7 @@ public abstract class JOperation {
 
     @Getter @Setter private String operation;
     @Getter @Setter private JsonNode creates;
+    @Getter @Setter private boolean noExec = false;
 
     public String hash(JAsset[] sources) { return hash(sources, null); }
 

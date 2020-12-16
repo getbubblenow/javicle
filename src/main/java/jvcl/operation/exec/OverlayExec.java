@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.cobbzilla.util.io.FileUtil.abs;
-import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
 public class OverlayExec extends ExecBase<OverlayOperation> {
@@ -59,7 +58,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         final String script = renderScript(toolbox, ctx, OVERLAY_TEMPLATE);
 
         log.debug("operate: running script: "+script);
-        final String scriptOutput = execScript(script);
+        final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
         assetManager.addOperationAsset(output);
     }

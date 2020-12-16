@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.basename;
+import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
 public abstract class ExecBase<OP extends JOperation> {
@@ -34,6 +35,15 @@ public abstract class ExecBase<OP extends JOperation> {
             }
         } else {
             return defaultOutfile;
+        }
+    }
+
+    public String exec(String script, boolean noExec) {
+        if (noExec) {
+            System.out.println(script);
+            return "";
+        } else {
+            return execScript(script);
         }
     }
 }

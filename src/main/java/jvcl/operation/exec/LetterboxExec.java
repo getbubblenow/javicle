@@ -14,7 +14,6 @@ import java.util.Map;
 
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.string.StringUtil.safeShellArg;
-import static org.cobbzilla.util.system.CommandShell.execScript;
 
 @Slf4j
 public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperation> {
@@ -71,7 +70,7 @@ public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperatio
         final String script = renderScript(toolbox, ctx, LETTERBOX_TEMPLATE);
 
         log.debug("operate: running script: "+script);
-        final String scriptOutput = execScript(script);
+        final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
         if (output == subOutput) {
             assetManager.addOperationAsset(output);
