@@ -125,7 +125,7 @@ The above would set the `start` value to ten seconds before the end of `someAsse
 ### Supported Operations
 Today, JVCL supports seven basic operations.
 
-Each header below links to an example from the JVCL test suite.
+For each operation listed below, the header links to an example from the JVCL test suite.
 
 ### [scale](src/test/resources/tests/test_scale.jvcl)
 Scale a video asset from one size to another. Scaling can be proportional or anamorphic.
