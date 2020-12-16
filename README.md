@@ -123,36 +123,31 @@ Most of the operation settings can be JavaScript expressions, for example:
 The above would set the `start` value to ten seconds before the end of `someAsset`.
 
 ### Supported Operations
-Today, JVCL supports seven basic operations:
+Today, JVCL supports seven basic operations.
+
+Each header below links to an example from the JVCL test suite.
 
 ### [scale](src/test/resources/tests/test_scale.jvcl)
 Scale a video asset from one size to another. Scaling can be proportional or anamorphic.
-[Scale Example](src/test/resources/tests/test_scale.jvcl)
 
 ### [split](src/test/resources/tests/test_split.jvcl)
 Split an audio/video asset into multiple assets of equal time lengths.
-[Split Example](src/test/resources/tests/test_split.jvcl)
 
 ### [concat](src/test/resources/tests/test_concat.jvcl)
 Concatenate audio/video assets together into one asset.
-[Concat Example](src/test/resources/tests/test_concat.jvcl)
 
 ### [trim](src/test/resources/tests/test_trim.jvcl)
 Trim audio/video; crop a section of an asset, becomes a new asset.
-[Trim Example](src/test/resources/tests/test_trim.jvcl)
 
 ### [overlay](src/test/resources/tests/test_overlay.jvcl)
 Overlay one asset onto another.
-[Overlay Example](src/test/resources/tests/test_overlay.jvcl)
 
 ### [ken-burns](src/test/resources/tests/test_ken_burns.jvcl)
 For transforming still images into video via a fade-pan (aka Ken Burns) effect.
-[Ken Burns Example](src/test/resources/tests/test_ken_burns.jvcl)
 
 ### [letterbox](src/test/resources/tests/test_letterbox.jvcl)
 Transform a video in one size to another size using black letterboxes on the sides or top/bottom.
 Handy for embedding mobile videos into other screen formats.
-[Letterbox Example](src/test/resources/tests/test_letterbox.jvcl)
 
 # Complex Example
 Here is a complex example using multiple assets and operations.
