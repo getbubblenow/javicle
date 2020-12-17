@@ -5,8 +5,7 @@ The `jvc` script (in the `bin` directory) is the primary way to transform video
 assets with JVC.
 
 `jvc` is a swiss army knife that can read a spec file and perform any number
-of operations on any number of assets. It's at the core of repeatable creation
-of video assets from sources, based on spec files.
+of operations on any number of assets.
 
 ## Operation-specific scripts
 There are other scripts in [`bin`](../bin) that perform a single operation using
