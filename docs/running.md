@@ -47,6 +47,11 @@ Unlike most JSON, comments *are* allowed in JVC spec files:
 * A line comment starts with `//` and continue to the end of the line
 * A multi-line block starts with `/*` and ends with `*/`
 
+<sub><sup>Doug C: I promise that in jvc comments will always be just comments;
+jvc will never use
+[comments as parsing directives or otherwise break interoperability](https://web.archive.org/web/20120507155137/https://plus.google.com/118095276221607585885/posts/RK8qyGVaGSr)
+(note: disabling javascript required to view link)</sup></sub>
+
 ## Writing a JVC Spec
 The easiest way to write a spec is to copy one of the
 [test specs](../src/test/resources/tests) and edit it.
