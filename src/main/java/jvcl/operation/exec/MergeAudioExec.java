@@ -19,8 +19,6 @@ import java.util.Map;
 import static java.math.BigDecimal.ZERO;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.io.FileUtil.*;
-import static org.cobbzilla.util.system.OsType.CURRENT_OS;
-import static org.cobbzilla.util.system.OsType.windows;
 
 @Slf4j
 public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperation> {
@@ -110,8 +108,7 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
         ctx.put("padded", paddedName);
 
         // create a temp dir for concat, it really likes to have everything in the same directory
-        final boolean doChmod = CURRENT_OS != windows; // don't chmod the dir on windows
-        @Cleanup("delete") final TempDir tempDir = new TempDir(assetManager.getScratchDir(), doChmod);
+        @Cleanup("delete") final TempDir tempDir = new TempDir(assetManager.getScratchDir());
         ctx.put("tempDir", abs(tempDir));
 
         final String silenceName = basename(silence.getPath());
