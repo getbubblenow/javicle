@@ -4,14 +4,15 @@
 The `jvc` script (in the `bin` directory) is the primary way to transform video
 assets with JVC.
 
-It is the swiss army knife that reads a spec file and can perform any number of
-operations on any number of assets.
+`jvc` is a swiss army knife that can read a spec file and perform any number
+of operations on any number of assets. It's at the core of repeatable creation
+of video assets from sources, based on spec files.
 
 ## Operation-specific scripts
 There are other scripts in [`bin`](../bin) that perform a single operation using
 command-line arguments, without requiring you to write a spec file.
 
-If you need to do a quick operation and don't feel like writing up a quick JSON
+If you need to do a quick operation and don't feel like writing a JSON
 spec file, use one of [these tools](../bin).
 
 For example, to extract the first 5 seconds of a video:
