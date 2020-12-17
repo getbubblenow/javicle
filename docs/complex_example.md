@@ -63,7 +63,7 @@ support a `comment` field, which can be used as well.
       "operation": "scale",            // name of the operation
       "creates": "vid2_big",           // asset it creates
       "source": "vid2",                // source asset
-      "factor": "2.2"                 // scale factor. if factor is set, width and height are ignored.
+      "factor": "2.2"                  // scale factor. if factor is set, width and height are ignored.
     },
 
     // split example
@@ -98,14 +98,14 @@ support a `comment` field, which can be used as well.
     // trim example
     {
       "comment": "trim all of the assets that were split above",
-      "operation": "trim",          // name of the operation
-      "creates": {                  // create multiple files, will be prefixed with `name`, store them in `dest`
+      "operation": "trim",             // name of the operation
+      "creates": {                     // create multiple files, will be prefixed with `name`, store them in `dest`
         "name": "vid1_trims",
         "dest": "src/test/resources/outputs/trims/"
       },
-      "source": "vid1_split",        // trim these source assets
-      "start": "1",                  // cropped region starts here, default is zero
-      "end": "6"                     // cropped region ends here, default is end of video
+      "source": "vid1_split",          // trim these source assets
+      "start": "1",                    // cropped region starts here, default is zero
+      "end": "6"                       // cropped region ends here, default is end of video
     },
 
     // overlay example
