@@ -70,7 +70,7 @@ To execute a spec stored in the file `my-spec.json`, you would run:
 ```shell script
 jvcl my-spec.jvcl
 ```
-or you use stdin:
+or use stdin:
 ```shell script
 cat my-spec.jvcl | jvcl
 ```
