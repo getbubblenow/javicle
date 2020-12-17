@@ -4,7 +4,7 @@
 The `bin/jvcl` script is the primary way to transform video assets with JVCL.
 
 ## Operation-specific scripts
-There are other scripts in `bin` that perform a single operation using
+There are other scripts in [`bin`](../bin) that perform a single operation using
 command-line arguments. If you need to do a quick operation and don't want to write
 a JVCL spec, use one of these tools.
 
