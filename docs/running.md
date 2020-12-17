@@ -18,6 +18,9 @@ All commands accept a `-h` / `--help` option, use this to print usage informatio
 jscale -h
 ```
 
+## Help
+To view a list of all `jvc` command-line options, run `jvc -h` or `jvc --help`
+
 ## JVC Spec Files
 A JVC spec is just a regular JSON file that happens to contain a single JSON object,
 whose properties are `assets` and `operations`.
