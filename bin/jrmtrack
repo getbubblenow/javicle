@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Remove a track from a video file
+#
+# Usage:
+#
+#    jrmtrack in-file out-file track-type [track-number]
+#
+# in-file      : file to trim
+# out-file     : write output file here
+# track-type   : the track type to remove. Usually 'audio' or 'video'
+# track-number : the track number to remove. If omitted, all tracks whose
+#                type matches `track-type` will be removed
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
+
+IN_FILE="${1?no in-file provided}"
+OUT_FILE="${2?no out-file provided}"
+TRACK_TYPE="${3?no track-type provided}"
+TRACK_NUMBER="${4}"
+
+echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"remove-track\",
+      \"creates\": {
+        \"name\": \"removed_track\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"source\": \"input\",
+      \"track\": {
+        \"type\": \"${TRACK_TYPE}\"$(if [[ -n "${TRACK_NUMBER}" ]] ; then echo ",
+        \"number\": \"${TRACK_NUMBER}\""; fi)
+      }
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}
