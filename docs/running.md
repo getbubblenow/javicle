@@ -71,10 +71,11 @@ cat my-spec.jvc | jvc
 ```
 
 ## Command Line Options
-The command line options that `jvc` accepts are described below.
+The command line options described below are for `jvc` only, not for the
+single-operation scripts.
 
-For the other single-operation commands, you can pass options to `jvc` using
-environment variables.
+For the other scripts, you can use environment variables
+to pass options to `jvc`, as described below.
 
 #### Scratch Directory: `-t` or `--temp-dir`
 Output assets will be placed in the scratch directory, unless otherwise specified
