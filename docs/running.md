@@ -1,7 +1,8 @@
 # Running JVC
 
 ## The `jvc` Script
-The `bin/jvc` script is the primary way to transform video assets with JVC.
+The `jvc` script (in the `bin` directory) is the primary way to transform video
+assets with JVC.
 
 ## Operation-specific scripts
 There are other scripts in [`bin`](../bin) that perform a single operation using
