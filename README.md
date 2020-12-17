@@ -79,10 +79,19 @@ cat my-spec.jvcl | jvcl
 Output assets will be placed in the scratch directory, unless otherwise specified
 in the spec file. By default, JVCL will create a new temporary directory to use as the scratch
 directory. You can set the scratch directory explicitly using the `-t` or `--temp-dir` option:
-
 ```shell script
 jvcl -t /some/tempdir my-spec.json
 ```
+
+#### Dry Running
+Use the `-n` or `--no-exec` option to print out the commands that would have been run,
+but do not actually run anything.
+```shell script
+jvcl -n my-spec.json         # will not run any ffmpeg commands
+```
+Note that this breaks JVCL operations that require information from any assets created by
+previous operations: since the command did not actually run, the intermediate asset was
+never created.
 
 #### Command Help
 To view a list of all `jvcl` command-line options, run `jvcl -h` or `jvcl --help`
