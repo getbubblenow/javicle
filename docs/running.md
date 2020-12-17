@@ -55,7 +55,6 @@ jvc will never use
 ## Writing a JVC Spec
 The easiest way to write a spec is to copy one of the
 [test specs](../src/test/resources/tests) and edit it.
-
 There examples for every JVC operation.
 Or read through the [complex example](complex_example.md) and adapt as needed.
 
