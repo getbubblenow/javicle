@@ -150,7 +150,7 @@ Transform a video in one size to another size using black letterboxes on the sid
 Handy for embedding mobile videos into other screen formats.
 
 ### [remove-track](src/test/resources/tests/test_remove_track.jvcl)
-For transforming still images into video via a fade-pan (aka Ken Burns) effect.
+Remove a track from a video asset.
 
 # Complex Example
 Here is a complex example using multiple assets and operations.
