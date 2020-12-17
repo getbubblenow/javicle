@@ -4,15 +4,23 @@
 The `jvc` script (in the `bin` directory) is the primary way to transform video
 assets with JVC.
 
+It is the swiss army knife that reads a spec file and can perform any number of
+operations on any number of assets.
+
 ## Operation-specific scripts
 There are other scripts in [`bin`](../bin) that perform a single operation using
-command-line arguments. If you need to do a quick operation and don't want to write
-a JVC spec, use one of [these tools](../bin).
+command-line arguments, without requiring you to write a spec file.
+
+If you need to do a quick operation and don't feel like writing up a quick JSON
+spec file, use one of [these tools](../bin).
 
 For example, to extract the first 5 seconds of a video:
 ```shell script
 jtrim /tmp/input-file.mp4 /tmp/output-5s.mp4 0 5
 ```
+
+There is a command-line tool for every operation except for `overlay` and
+`ken-burns`, which are more complex. Pull requests welcome.
 
 ## Help
 All commands accept a `-h` / `--help` option, this will print information about
