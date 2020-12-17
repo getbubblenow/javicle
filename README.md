@@ -15,9 +15,9 @@ that requires some deep research into
 [ffmpeg filter arcana](https://ffmpeg.org/ffmpeg-filters.html)
 and before I know it, the day is done.
 
-I created JVCL to capture the most common things people usually do to videos:
-splitting, concatenating, letterboxing, overlaying one video onto another,
-and so on.
+I created JVCL to make it really easy to do the most common things people
+usually do to videos: splitting, concatenating, letterboxing, overlaying
+one video onto another, and so on.
 
 # A Quick Example
 Suppose you have one video that is five minutes long,
