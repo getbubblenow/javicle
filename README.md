@@ -105,7 +105,7 @@ Add a silent audio track to a video asset.
 Concatenate audio/video assets together into one asset.
 
 ### [ken-burns](src/test/resources/tests/test_ken_burns.jvc)
-Transform a still image into video via a fade-pan (aka Ken Burns) effect.
+Transform a still image into video via a zoom-pan (aka Ken Burns) effect.
 
 ### [letterbox](src/test/resources/tests/test_letterbox.jvc)
 Transform a video from one size to another size, maintaining the aspect ratio
