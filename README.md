@@ -6,14 +6,17 @@ Under the hood, it's all shell commands: `ffmpeg`, `mediainfo` and so on.
 JVC provides higher-level semantics for working with these lower level tools.
 
 # Motivation
-I don't do much video editing, so I've never bothered to learn iMovie or any
-graphical video editor. My editing needs are usually pretty simple, so I bust
-out ffmpeg and get it done.
+I infrequently find myself doing video editing, so I've never bothered to
+learn iMovie or any graphical video editor.
 
-But it seems like every time, there is at least one wrinkle in my requirements
+My editing needs are usually pretty simple, so I bust out ffmpeg and get the
+job done.
+
+But it seems like every time, there is at least one wrinkle in the requirements
 that requires some deep research into
-[ffmpeg filter arcana](https://ffmpeg.org/ffmpeg-filters.html)
-and before I know it, the day is done.
+[ffmpeg filter arcana](https://ffmpeg.org/ffmpeg-filters.html).
+
+Hours later, before I know it, the day has gone by.
 
 I created JVC to make it really easy to do the most common things people
 usually do to videos: splitting, concatenating, letterboxing, overlaying
@@ -66,6 +69,12 @@ JVC is for people who like CLIs and automation.
 
 JVC is for people with relatively simple video composition needs (for now),
 since the range of operations supported is limited.
+
+JVC is for people who have used ffmpeg filters before and had flashbacks
+of editing Sendmail configs and debugging PostScript.
+
+Obligatory Disclaimer: JVC is still relatively new software and lots of stuff might break.
+At least it should never overwrite your source files. All output goes to new files.
 
 # Requirements
  * Java 11
