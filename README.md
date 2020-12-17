@@ -31,7 +31,7 @@ With ffmpeg and bash, you might do something like this:
     done
 ```
 With JVCL, you'd write this spec file and save it to a file
-(for example `my-spec.jvcl`):
+(for example `my-spec.jvc`):
 ```json
 {
   "assets": [ {"name": "src", "path": "/tmp/my/source.mp4"} ],
@@ -45,7 +45,7 @@ With JVCL, you'd write this spec file and save it to a file
 ```
 and then run it like this:
 ```shell script
-jvcl my-spec.jvcl
+jvcl my-spec.jvc
 ```
 Yes, the JVCL is longer, but I think many would agree it is easier to read
 and maintain.
@@ -88,37 +88,37 @@ Today, JVCL supports several basic operations.
 For each operation listed below, the header links to an example from the JVCL
 test suite.
 
-### [add-silence](src/test/resources/tests/test_add_silence.jvcl)
+### [add-silence](src/test/resources/tests/test_add_silence.jvc)
 Add a silent audio track to a video asset.
 
-### [concat](src/test/resources/tests/test_concat.jvcl)
+### [concat](src/test/resources/tests/test_concat.jvc)
 Concatenate audio/video assets together into one asset.
 
-### [ken-burns](src/test/resources/tests/test_ken_burns.jvcl)
+### [ken-burns](src/test/resources/tests/test_ken_burns.jvc)
 Transform still images into video via a fade-pan (aka Ken Burns) effect.
 
-### [letterbox](src/test/resources/tests/test_letterbox.jvcl)
+### [letterbox](src/test/resources/tests/test_letterbox.jvc)
 Transform a video from one size to another size, maintaining the aspect ratio
 of the video and adding letterboxes on the sides or top/bottom.
 Handy for embedding mobile videos into other screen formats.
 
-### [merge-audio](src/test/resources/tests/test_merge_audio.jvcl)
+### [merge-audio](src/test/resources/tests/test_merge_audio.jvc)
 Merge an audio asset into the audio track of a video asset.
 
-### [overlay](src/test/resources/tests/test_overlay.jvcl)
+### [overlay](src/test/resources/tests/test_overlay.jvc)
 Overlay one asset onto another.
 
-### [remove-track](src/test/resources/tests/test_remove_track.jvcl)
+### [remove-track](src/test/resources/tests/test_remove_track.jvc)
 Remove a track from a video asset.
 
-### [scale](src/test/resources/tests/test_scale.jvcl)
+### [scale](src/test/resources/tests/test_scale.jvc)
 Scale a video asset from one size to another. Scaling can be proportional
 or anamorphic.
 
-### [split](src/test/resources/tests/test_split.jvcl)
+### [split](src/test/resources/tests/test_split.jvc)
 Split an audio/video asset into multiple assets of equal time lengths.
 
-### [trim](src/test/resources/tests/test_trim.jvcl)
+### [trim](src/test/resources/tests/test_trim.jvc)
 Trim audio/video; crop a section of an asset, becomes a new asset.
 
 ## Complex Example

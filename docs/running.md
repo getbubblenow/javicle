@@ -39,11 +39,11 @@ There examples for every JVCL operation.
 ## Executing a JVCL Spec
 To execute a spec stored in the file `my-spec.json`, you would run:
 ```shell script
-jvcl my-spec.jvcl
+jvcl my-spec.jvc
 ```
 or use stdin:
 ```shell script
-cat my-spec.jvcl | jvcl
+cat my-spec.jvc | jvcl
 ```
 
 ## Command Line Options

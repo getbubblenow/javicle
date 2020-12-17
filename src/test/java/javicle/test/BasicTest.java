@@ -1,6 +1,6 @@
 package javicle.test;
 
-import jvcl.main.Jvcl;
+import jvcl.main.jvc;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -19,18 +19,18 @@ import static org.junit.Assert.fail;
 public class BasicTest {
 
     @Test public void testSplitConcatTrimScaleLetterbox  () {
-        runSpec("tests/test_split.jvcl");
-        runSpec("tests/test_concat.jvcl");
-        runSpec("tests/test_trim.jvcl");
-        runSpec("tests/test_scale.jvcl");
-        runSpec("tests/test_letterbox.jvcl");
+        runSpec("tests/test_split.jvc");
+        runSpec("tests/test_concat.jvc");
+        runSpec("tests/test_trim.jvc");
+        runSpec("tests/test_scale.jvc");
+        runSpec("tests/test_letterbox.jvc");
     }
 
-    @Test public void testOverlay     () { runSpec("tests/test_overlay.jvcl"); }
-    @Test public void testKenBurns    () { runSpec("tests/test_ken_burns.jvcl"); }
-    @Test public void testRemoveTrack () { runSpec("tests/test_remove_track.jvcl"); }
-    @Test public void testMergeAudio  () { runSpec("tests/test_merge_audio.jvcl"); }
-    @Test public void testAddSilence  () { runSpec("tests/test_add_silence.jvcl"); }
+    @Test public void testOverlay     () { runSpec("tests/test_overlay.jvc"); }
+    @Test public void testKenBurns    () { runSpec("tests/test_ken_burns.jvc"); }
+    @Test public void testRemoveTrack () { runSpec("tests/test_remove_track.jvc"); }
+    @Test public void testMergeAudio  () { runSpec("tests/test_merge_audio.jvc"); }
+    @Test public void testAddSilence  () { runSpec("tests/test_add_silence.jvc"); }
 
     private void runSpec(String specPath) {
         try {
