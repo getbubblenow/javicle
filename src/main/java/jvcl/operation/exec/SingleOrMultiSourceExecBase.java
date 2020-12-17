@@ -49,12 +49,22 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JOperation> extends
         }
     }
 
-    protected abstract void process(Map<String, Object> ctx,
-                                    OP op,
-                                    JAsset source,
-                                    JAsset output,
-                                    JAsset asset,
-                                    Toolbox toolbox,
-                                    AssetManager assetManager);
+    protected abstract String getProcessTemplate();
+
+    protected void process(Map<String, Object> ctx,
+                           OP op,
+                           JAsset source,
+                           JAsset output,
+                           JAsset subOutput,
+                           Toolbox toolbox,
+                           AssetManager assetManager) {
+        ctx.put("source", source);
+        ctx.put("output", subOutput);
+        final String script = renderScript(toolbox, ctx, getProcessTemplate());
+
+        log.debug("operate: running script: "+script);
+        final String scriptOutput = exec(script, op.isNoExec());
+        log.debug("operate: command output: "+scriptOutput);
+    }
 
 }

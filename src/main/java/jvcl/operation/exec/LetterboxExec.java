@@ -18,6 +18,8 @@ import static org.cobbzilla.util.string.StringUtil.safeShellArg;
 @Slf4j
 public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperation> {
 
+    public static final String DEFAULT_LETTERBOX_COLOR = "black";
+
     public static final String LETTERBOX_TEMPLATE
             = "{{ffmpeg}} -i {{{source.path}}} -filter_complex \""
             + "pad="
@@ -28,7 +30,7 @@ public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperatio
             + "color={{{color}}}"
             + "\" -y {{{output.path}}}";
 
-    public static final String DEFAULT_LETTERBOX_COLOR = "black";
+    @Override protected String getProcessTemplate() { return LETTERBOX_TEMPLATE; }
 
     @Override public void operate(LetterboxOperation op, Toolbox toolbox, AssetManager assetManager) {
 
@@ -55,22 +57,6 @@ public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperatio
         }
 
         operate(op, toolbox, assetManager, source, output, formatType, ctx);
-    }
-
-    @Override protected void process(Map<String, Object> ctx,
-                                     LetterboxOperation op,
-                                     JAsset source,
-                                     JAsset output,
-                                     JAsset subOutput,
-                                     Toolbox toolbox,
-                                     AssetManager assetManager) {
-        ctx.put("source", source);
-        ctx.put("output", subOutput);
-        final String script = renderScript(toolbox, ctx, LETTERBOX_TEMPLATE);
-
-        log.debug("operate: running script: "+script);
-        final String scriptOutput = exec(script, op.isNoExec());
-        log.debug("operate: command output: "+scriptOutput);
     }
 
 }

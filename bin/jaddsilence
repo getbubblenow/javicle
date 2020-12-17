@@ -4,10 +4,12 @@
 #
 # Usage:
 #
-#    jaddsilence in-file out-file
+#    jaddsilence in-file out-file [channel-mode] [sampling-rate]
 #
-# in-file     : input video file
-# out-file    : write output file here
+# in-file       : input video file
+# out-file      : write output file here
+# channel-mode  : channel layout, usually 'mono' or 'stereo'. Default is stereo
+# sampling-rate : sampling rate, in Hz. Default is 48000
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
@@ -15,6 +17,8 @@ SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
 
 IN_FILE="${1?no video-file provided}"
 OUT_FILE="${2?no out-file provided}"
+CHANNEL_LAYOUT="${3}"
+SAMPLING_RATE="${4}"
 
 echo "
 {
@@ -28,7 +32,9 @@ echo "
         \"name\": \"with_silence\",
         \"dest\": \"${OUT_FILE}\"
       },
-      \"source\": \"input\"
+      \"source\": \"input\"$(if [[ -n "${CHANNEL_LAYOUT}" ]] ; then echo ",
+      \"channelLayout\": \"${CHANNEL_LAYOUT}\"" ; fi)$(if [[ -n "${SAMPLING_RATE}" ]] ; then echo ",
+      \"samplingRate: \"${SAMPLING_RATE}\"" ; fi)
     }
   ]
 }

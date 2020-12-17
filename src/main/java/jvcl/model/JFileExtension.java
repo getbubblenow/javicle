@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static jvcl.model.info.JTrackType.*;
+import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 
 @AllArgsConstructor @Slf4j
 public enum JFileExtension {
 
+    avc        (".mp4",  video),
     mp4        (".mp4",  video),
     mkv        (".mkv",  video),
     mp3        (".mp3",  audio),
@@ -48,11 +50,9 @@ public enum JFileExtension {
         if (track.hasFormat()) {
             try {
                 return fromString(track.getFormat().replace(" ", "_"));
-            } catch (Exception e) {
-                log.warn("fromTrack: unrecognized format: "+track.getFormat());
-            }
+            } catch (Exception ignored) { }
         }
-        return null;
+        return die("fromTrack: unrecognized file extension/format: "+track.getFileExtension()+"/"+track.getFormat());
     }
 
 }

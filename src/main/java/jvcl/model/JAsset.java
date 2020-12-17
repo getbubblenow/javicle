@@ -177,6 +177,10 @@ public class JAsset implements JsObjectView {
     @JsonIgnore public String getChannelLayout() { return channelLayout(); }
     public boolean hasChannelLayout() { return channelLayout() != null; }
 
+    public JFileExtension audioExtension() { return hasInfo() ? getInfo().audioExtension() : null; }
+    @JsonIgnore public JFileExtension getAudioExtension() { return audioExtension(); }
+    public boolean hasAudioExtension() { return audioExtension() != null; }
+
     public JAsset init(AssetManager assetManager, Toolbox toolbox) {
         final JAsset asset = initPath(assetManager);
         if (!asset.hasListAssets()) {

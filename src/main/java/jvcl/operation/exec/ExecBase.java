@@ -1,6 +1,7 @@
 package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
+import jvcl.model.JFileExtension;
 import jvcl.model.operation.JOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
@@ -8,8 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.handlebars.HandlebarsUtil;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
+import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.basename;
 import static org.cobbzilla.util.system.CommandShell.execScript;
@@ -46,4 +50,40 @@ public abstract class ExecBase<OP extends JOperation> {
             return execScript(script);
         }
     }
+
+    public static final String CREATE_SILENCE_TEMPLATE
+            = "{{{ffmpeg}}} -f lavfi "
+            + "-i anullsrc=channel_layout={{channelLayout}}:sample_rate={{samplingRate}} "
+            + "-t {{duration}} "
+            + "-y {{{silence.path}}}";
+
+    protected JAsset createSilence(OP op,
+                                   Toolbox toolbox,
+                                   AssetManager assetManager,
+                                   BigDecimal duration,
+                                   JAsset asset) {
+        final Map<String, Object> ctx = new HashMap<>();
+        ctx.put("ffmpeg", toolbox.getFfmpeg());
+        ctx.put("duration", duration);
+
+        if (!asset.hasSamplingRate()) return die("createSilence: no sampling rate could be determined: "+asset);
+        ctx.put("samplingRate", asset.samplingRate());
+
+        if (!asset.hasChannelLayout()) return die("createSilence: no channel layout could be determined: "+asset);
+        ctx.put("channelLayout", asset.channelLayout());
+
+        final JFileExtension ext = asset.audioExtension();
+        final File silenceFile = assetManager.assetPath(op, asset, ext, new Object[]{duration});
+        final JAsset silence = new JAsset().setPath(abs(silenceFile));
+        ctx.put("silence", silence);
+
+        final String script = renderScript(toolbox, ctx, CREATE_SILENCE_TEMPLATE);
+
+        log.debug("createSilence: running script: "+script);
+        final String scriptOutput = exec(script, op.isNoExec());
+        log.debug("createSilence: command output: "+scriptOutput);
+
+        return silence;
+    }
+
 }

@@ -22,6 +22,8 @@ public class RemoveTrackExec extends SingleOrMultiSourceExecBase<RemoveTrackOper
             + "-c copy "
             + "-y {{{output.path}}}";
 
+    @Override protected String getProcessTemplate() { return REMOVE_TRACK_TEMPLATE; }
+
     @Override public void operate(RemoveTrackOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
@@ -39,22 +41,6 @@ public class RemoveTrackExec extends SingleOrMultiSourceExecBase<RemoveTrackOper
         if (trackId.hasNumber()) ctx.put("trackNumber", trackId.getNumber());
 
         operate(op, toolbox, assetManager, source, output, formatType, ctx);
-    }
-
-    @Override protected void process(Map<String, Object> ctx,
-                                     RemoveTrackOperation op,
-                                     JAsset source,
-                                     JAsset output,
-                                     JAsset subOutput,
-                                     Toolbox toolbox,
-                                     AssetManager assetManager) {
-        ctx.put("source", source);
-        ctx.put("output", subOutput);
-        final String script = renderScript(toolbox, ctx, REMOVE_TRACK_TEMPLATE);
-
-        log.debug("operate: running script: "+script);
-        final String scriptOutput = exec(script, op.isNoExec());
-        log.debug("operate: command output: "+scriptOutput);
     }
 
 }

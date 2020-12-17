@@ -23,12 +23,6 @@ import static org.cobbzilla.util.io.FileUtil.*;
 @Slf4j
 public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperation> {
 
-    public static final String CREATE_SILENCE_TEMPLATE
-            = "{{{ffmpeg}}} -f lavfi "
-            + "-i anullsrc=channel_layout={{channelLayout}}:sample_rate={{samplingRate}} "
-            + "-t {{duration}} "
-            + "-y {{{silence.path}}}";
-
     public static final String PAD_WITH_SILENCE_TEMPLATE
             = "cd {{{tempDir}}} && {{{ffmpeg}}} -f concat -i {{{playlist.path}}} -codec copy -y {{{padded}}}";
 
@@ -38,6 +32,8 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
             + "\" "
             + "-map 0:v -map \"[merged]\" -c:v copy "
             + "-y {{{output.path}}}";
+
+    @Override protected String getProcessTemplate() { return MERGE_AUDIO_TEMPLATE; }
 
     @Override public void operate(MergeAudioOperation op, Toolbox toolbox, AssetManager assetManager) {
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
@@ -63,35 +59,6 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
         }
 
         operate(op, toolbox, assetManager, source, output, formatType, ctx);
-    }
-
-    protected JAsset createSilence(MergeAudioOperation op,
-                                   Toolbox toolbox,
-                                   AssetManager assetManager,
-                                   BigDecimal duration,
-                                   JAsset audio) {
-        final Map<String, Object> ctx = new HashMap<>();
-        ctx.put("ffmpeg", toolbox.getFfmpeg());
-        ctx.put("duration", duration);
-
-        if (!audio.hasSamplingRate()) return die("createSilence: no sampling rate could be determined: "+audio);
-        ctx.put("samplingRate", audio.samplingRate());
-
-        if (!audio.hasChannelLayout()) return die("createSilence: no channel layout could be determined: "+audio);
-        ctx.put("channelLayout", audio.channelLayout());
-
-        final JFileExtension ext = audio.getFormat().getFileExtension();
-        final File silenceFile = assetManager.assetPath(op, audio, ext, new Object[]{duration});
-        final JAsset silence = new JAsset().setPath(abs(silenceFile));
-        ctx.put("silence", silence);
-
-        final String script = renderScript(toolbox, ctx, CREATE_SILENCE_TEMPLATE);
-
-        log.debug("operate: running script: "+script);
-        final String scriptOutput = exec(script, op.isNoExec());
-        log.debug("operate: command output: "+scriptOutput);
-
-        return silence;
     }
 
     protected JAsset padWithSilence(MergeAudioOperation op,
@@ -137,22 +104,6 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
         log.debug("padWithSilence: command output: "+scriptOutput);
 
         return padded;
-    }
-
-    @Override protected void process(Map<String, Object> ctx,
-                                     MergeAudioOperation op,
-                                     JAsset source,
-                                     JAsset output,
-                                     JAsset subOutput,
-                                     Toolbox toolbox,
-                                     AssetManager assetManager) {
-        ctx.put("source", source);
-        ctx.put("output", subOutput);
-        final String script = renderScript(toolbox, ctx, MERGE_AUDIO_TEMPLATE);
-
-        log.debug("operate: running script: "+script);
-        final String scriptOutput = exec(script, op.isNoExec());
-        log.debug("operate: command output: "+scriptOutput);
     }
 
 }

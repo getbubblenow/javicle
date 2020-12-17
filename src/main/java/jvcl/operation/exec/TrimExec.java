@@ -22,6 +22,8 @@ public class TrimExec extends SingleOrMultiSourceExecBase<TrimOperation> {
             "{{#exists interval}}-t {{interval}} {{/exists}}" +
             "-y {{{output.path}}}";
 
+    @Override protected String getProcessTemplate() { return TRIM_TEMPLATE; }
+
     @Override public void operate(TrimOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
@@ -42,19 +44,12 @@ public class TrimExec extends SingleOrMultiSourceExecBase<TrimOperation> {
                                      JAsset subOutput,
                                      Toolbox toolbox,
                                      AssetManager assetManager) {
-
-        ctx.put("source", source);
-        ctx.put("output", subOutput);
-
         final StandardJsEngine js = toolbox.getJs();
         final BigDecimal startTime = op.getStartTime(ctx, js);
         ctx.put("startSeconds", startTime);
         if (op.hasEndTime()) ctx.put("interval", op.getEndTime(ctx, js).subtract(startTime));
-        final String script = renderScript(toolbox, ctx, TRIM_TEMPLATE);
 
-        log.debug("operate: running script: "+script);
-        final String scriptOutput = exec(script, op.isNoExec());
-        log.debug("operate: command output: "+scriptOutput);
+        super.process(ctx, op, source, output, subOutput, toolbox, assetManager);
     }
 
 }

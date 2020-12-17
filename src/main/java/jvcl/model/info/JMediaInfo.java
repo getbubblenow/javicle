@@ -120,6 +120,11 @@ public class JMediaInfo {
         return null;
     }
 
+    public JFileExtension audioExtension() {
+        final JTrack audio = firstTrack(JTrackType.audio);
+        return audio == null ? null : JFileExtension.fromTrack(audio);
+    }
+
     public BigDecimal width() {
         if (emptyMedia()) return ZERO;
         // find the first video track

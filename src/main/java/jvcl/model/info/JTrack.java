@@ -44,7 +44,9 @@ public class JTrack {
     @JsonProperty("ChannelLayout") @Getter @Setter private String channelLayout;
 
     public String channelLayout () {
-        if (!empty(channelLayout)) return channelLayout;
+        if (!empty(channelLayout)) {
+            return channelLayout.equals("L R") ? "stereo": channelLayout;
+        }
         if (!empty(channels)) {
             if (isOnlyDigits(channels)) {
                 switch (parseInt(channels)) {

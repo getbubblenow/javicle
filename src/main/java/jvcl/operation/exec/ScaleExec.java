@@ -21,6 +21,8 @@ public class ScaleExec extends SingleOrMultiSourceExecBase<ScaleOperation> {
             + "scale={{width}}x{{height}}" +
             "\" -y {{{output.path}}}";
 
+    @Override protected String getProcessTemplate() { return SCALE_TEMPLATE; }
+
     @Override public void operate(ScaleOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
@@ -41,23 +43,6 @@ public class ScaleExec extends SingleOrMultiSourceExecBase<ScaleOperation> {
         }
 
         operate(op, toolbox, assetManager, source, output, formatType, ctx);
-    }
-
-    @Override protected void process(Map<String, Object> ctx,
-                                     ScaleOperation op,
-                                     JAsset source,
-                                     JAsset output,
-                                     JAsset subOutput,
-                                     Toolbox toolbox,
-                                     AssetManager assetManager) {
-
-        ctx.put("source", source);
-        ctx.put("output", subOutput);
-        final String script = renderScript(toolbox, ctx, SCALE_TEMPLATE);
-
-        log.debug("operate: running script: "+script);
-        final String scriptOutput = exec(script, op.isNoExec());
-        log.debug("operate: command output: "+scriptOutput);
     }
 
 }
