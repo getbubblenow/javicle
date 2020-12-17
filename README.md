@@ -71,7 +71,8 @@ JVC is for people with relatively simple video composition needs (for now),
 since the range of operations supported is limited.
 
 JVC is for people who have used ffmpeg filters before and had flashbacks
-of editing Sendmail configs and debugging PostScript.
+of editing Sendmail configs, debugging PostScript, or maintaining a legacy
+Perl system.
 
 ##### Caveat Emptor
 Obligatory Disclaimer: JVC is still relatively new software and lots of stuff
