@@ -20,8 +20,8 @@ splitting, concatenating, letterboxing, overlaying one video onto another,
 and so on.
 
 # A Quick Example
-Suppose you'd like to split one video that is five minutes long into five
-videos, each one minute long.
+Suppose you have one video that is five minutes long,
+and you want to split it into five videos, each one minute long.
 
 With ffmpeg and bash, you might do something like this:
 ```shell script
