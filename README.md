@@ -85,10 +85,10 @@ from sources, using maven and javac. This takes a little time but only needs
 to be done once.
 
 # Running JVC
-Learn more about [running `jvc`](docs/running.md) and other useful tools.
+Learn more about **[running `jvc`](docs/running.md)** and other useful tools.
 
 # JVC Concepts
-Learn about [Assets and Operations](docs/concepts.md), the core concepts
+Learn about **[Assets and Operations](docs/concepts.md)**, the core concepts
 of JVC.
 
 # Supported Operations
