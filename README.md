@@ -116,7 +116,7 @@ Handy for embedding mobile videos into other screen formats.
 Merge an audio asset into the audio track of a video asset.
 
 ### [overlay](src/test/resources/tests/test_overlay.jvc)
-Overlay one asset onto another.
+Overlay one video onto another.
 
 ### [remove-track](src/test/resources/tests/test_remove_track.jvc)
 Remove a track from a video asset.
