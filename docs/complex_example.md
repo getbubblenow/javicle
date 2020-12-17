@@ -80,13 +80,13 @@ support a `comment` field, which can be used as well.
       "comment": "re-combine previously split assets back together",
       "operation": "concat",           // name of the operation
       "creates": "recombined_vid1",    // asset it creates
-      "sources": ["vid1_split"]         // recombine all split assets
+      "sources": ["vid1_split"]        // recombine all split assets
     },
     {
       "comment": "append vid2 to the end of vid1 and create a new asset",
       "operation": "concat",           // name of the operation
       "creates": "combined_vid2",      // asset it creates
-      "sources": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
+      "sources": ["vid1", "vid2"]      // operation-specific: this says, concatenate these named assets
     },
     {
       "comment": "re-combine only some of the previously split assets",
