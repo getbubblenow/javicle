@@ -53,8 +53,8 @@ support a `comment` field, which can be used as well.
     {
       "comment": "scale using explicity height x width",
       "operation": "scale",            // name of the operation
-      "creates": "vid2_scaled",        // asset it creates
-      "source": "vid2",                // source asset
+      "creates": "vid2_scaled",        // asset it creates, can be referenced later
+      "source": "vid2",                // source asset, from `assets` above
       "width": "1024",                 // width of scaled asset. if omitted and height is present, width will be proportional
       "height": "768"                  // height of scaled asset. if omitted and width is present, height will be proportional
     },
@@ -62,7 +62,7 @@ support a `comment` field, which can be used as well.
       "comment": "scale proportionally by a scale factor",
       "operation": "scale",            // name of the operation
       "creates": "vid2_big",           // asset it creates
-      "source": "vid2",                // source asset
+      "source": "vid2",                // source asset, from `assets` above
       "factor": "2.2"                  // scale factor. if factor is set, width and height are ignored.
     },
 
@@ -70,8 +70,8 @@ support a `comment` field, which can be used as well.
     {
       "comment": "split one asset into many",
       "operation": "split",            // name of the operation
-      "creates": "vid1_split_%",       // assets it creates, the '%' will be replaced with a counter
-      "source": "vid1",                // split this source asset
+      "creates": "vid1_splits",        // assets it creates, 'vid1_splits' will be a list of assets
+      "source": "vid1",                // split this asset
       "interval": "10"                 // split every ten seconds
     },
 
@@ -79,14 +79,14 @@ support a `comment` field, which can be used as well.
     {
       "comment": "re-combine previously split assets back together",
       "operation": "concat",           // name of the operation
-      "creates": "recombined_vid1",    // assets it creates, the '%' will be replaced with a counter
-      "source": ["vid1_split"]         // recombine all split assets
+      "creates": "recombined_vid1",    // asset it creates
+      "sources": ["vid1_split"]         // recombine all split assets
     },
     {
       "comment": "append vid2 to the end of vid1 and create a new asset",
       "operation": "concat",           // name of the operation
-      "creates": "combined_vid2",      // asset it creates, can be referenced later
-      "source": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
+      "creates": "combined_vid2",      // asset it creates
+      "sources": ["vid1", "vid2"]       // operation-specific: this says, concatenate these named assets
     },
     {
       "comment": "re-combine only some of the previously split assets",
@@ -113,7 +113,7 @@ support a `comment` field, which can be used as well.
       "comment": "overlay one video onto another",
       "operation": "overlay",          // name of the operation
       "creates": "overlay1",           // asset it creates
-      "source": "combined_vid1",       // main video asset
+      "source": "combined_vid1",       // main video asset, `combined_vid1` was the output of an earlier operation
       "start": "30",                   // when (on the main video timeline) to begin showing the overlay. default is 0 (beginning)
       "end": "60",                     // when (on the main video timeline) to stop showing the overlay. default is to play the entire overlay
       "overlay": {
@@ -132,9 +132,9 @@ support a `comment` field, which can be used as well.
       "comment": "apply zoom-pan effect to image, creates video",
       "operation": "ken-burns",        // name of the operation
       "creates": "ken1",               // asset it creates
-      "source": "img1",                // source image
+      "source": "img1",                // source image, `img1` is defined above in `assets`
       "zoom": "1.3",                   // zoom level, from 1 to 10
-      "duration": "5",                 // how long the resulting video will be
+      "duration": "5.5",               // how long the resulting video will be
       "start": "0",                    // when to start zooming, default is 0
       "end": "duration",               // when to end zooming, default is duration
       "x": "source.width * 0.6",       // pan to this x-position
@@ -146,7 +146,7 @@ support a `comment` field, which can be used as well.
 
     // letterbox example
     {
-      "comment": "increase video size without scaling, add letterboxes as needed",
+      "comment": "increase video size proportionally and add letterboxes as needed",
       "operation": "letterbox",        // name of the operation
       "creates": "boxed1",             // asset it creates
       "source": "ken1",                // source asset
