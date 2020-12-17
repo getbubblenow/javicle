@@ -161,7 +161,7 @@ If you have other JSON-aware tools that need to read JVLC files, you may not wan
 use this comment syntax. The `asset` and `operation` JSON objects also support a `comment`
 field, which can be used as well.
 
-```json
+```js
 {
   "assets": [
     // file -- will be referenced directory
