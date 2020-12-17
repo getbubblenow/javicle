@@ -20,11 +20,11 @@ splitting, concatenating, letterboxing, overlaying one video onto another,
 and so on.
 
 # A Quick Example
-Say you want to split a portion of a video into ten-second chunks. With ffmpeg
-and bash, you might do something like this:
+Say you want to split the second minute of a video into ten-second chunks.
+With ffmpeg and bash, you might do something like this:
 ```shell script
     INCR=10
-    for ((i=10;i<130;i=(i+INCR))); do
+    for ((i=60;i<120;i=(i+INCR))); do
       ffmpeg -i /tmp/my/source.mp4 -ss ${i} -t $((i+INCR)) /tmp/my/slice_${i}_$((i+INCR)).mp4
     done
 ```
@@ -37,9 +37,9 @@ example `my-spec.jvcl`):
       "operation": "split",
       "creates": "src_split_files",
       "source": "src",
-      "interval": "10s",
-      "start": "10s",
-      "end": "130s"
+      "interval": "10",
+      "start": "60",
+      "end": "120"
   }]
 }
 ```
