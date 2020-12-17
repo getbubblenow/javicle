@@ -200,7 +200,7 @@ use [comments as parsing directives or otherwise break interoperability](https:/
       "creates": "v2_silent",          // output asset name
       "source": "v2",                  // main video asset
       "channelLayout": "stereo",       // optional channel layout, usually 'mono' or 'stereo'. Default is 'stereo'
-      "samplingRate": 48000            // optional samping rate, in Hz. default is 48000
+      "samplingRate": 48000            // optional sampling rate, in Hz. default is 48000
     }
   ]
 }
