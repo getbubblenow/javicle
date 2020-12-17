@@ -1,5 +1,5 @@
 # Javicle - a JSON Video Composition Language
-JVC (pronounced "Javicle") is a JSON DSL for audio/video transformations.
+Javicle (JVC for short) is a JSON DSL for audio/video transformations.
 
 Under the hood, it's all shell commands: `ffmpeg`, `mediainfo` and so on.
 
@@ -126,6 +126,6 @@ Here is a [long, complex example](docs/complex_example.md) that uses
 every operation.
 
 ## What's with the name?
-A cross between a javelin and an icicle?
-Does that have any positive connotations?
+A cross between a javelin and an icicle? JSON and a miracle?
+Something with positive connotations?
 I really don't like naming things.
