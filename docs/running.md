@@ -72,7 +72,7 @@ cat my-spec.jvc | jvc
 
 ## Command Line Options
 
-#### Scratch Directory (`-t` / `--temp-dir`)
+#### Scratch Directory `-t` / `--temp-dir`
 Output assets will be placed in the scratch directory, unless otherwise specified
 in the spec file. By default, JVC will create a new temporary directory to use as the scratch
 directory. You can set the scratch directory explicitly using the `-t` or `--temp-dir` option:
@@ -84,7 +84,7 @@ When using the other tools in `bin`, you can set the scratch directory via the
 `JVC_SCRATCH_DIR` environment variable. If the `JVC_SCRATCH_DIR` references a
 directory that does not exist, it will be created.
 
-#### Dry Run (`-n` / `--no-exec`)
+#### Dry Run `-n` / `--no-exec`
 Use the `-n` or `--no-exec` option to print out the commands that would have been run,
 but do not actually run anything.
 ```shell script
