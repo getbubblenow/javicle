@@ -75,8 +75,8 @@ of editing Sendmail configs and debugging PostScript.
 
 ##### Caveat Emptor
 Obligatory Disclaimer: JVC is still relatively new software and lots of stuff
-might not work right, or ffmpeg could crap out because we passed bad arguments,
-or whatever.
+might not work right, ffmpeg could crap out on bad arguments, encodings,
+formats, filter syntax errors, or whatever.
 
 In any case, JVC should never overwrite your source files, since all output
 goes to new files.
