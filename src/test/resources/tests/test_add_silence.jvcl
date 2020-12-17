@@ -1,0 +1,25 @@
+{
+  "assets": [
+    // this US government videos is covered by copyright
+    {
+      "name": "vid2",
+      "path": "https://archive.org/download/gov.archives.arc.49442/gov.archives.arc.49442_512kb.mp4",
+      "dest": "src/test/resources/sources/"
+    }
+  ],
+  "operations": [
+    // trim video first, so test runs faster
+    {
+      "operation": "trim",
+      "creates": "v2",
+      "source": "vid2",
+      "start": "10",
+      "end": "30"
+    },
+    {
+      "operation": "add-silence",      // name of the operation
+      "creates": "v2_silent",          // output asset name
+      "source": "v2"                   // main video asset
+    }
+  ]
+}

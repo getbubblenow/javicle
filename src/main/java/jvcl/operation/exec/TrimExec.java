@@ -49,7 +49,7 @@ public class TrimExec extends SingleOrMultiSourceExecBase<TrimOperation> {
         final StandardJsEngine js = toolbox.getJs();
         final BigDecimal startTime = op.getStartTime(ctx, js);
         ctx.put("startSeconds", startTime);
-        if (op.hasEnd()) ctx.put("interval", op.getEndTime(ctx, js).subtract(startTime));
+        if (op.hasEndTime()) ctx.put("interval", op.getEndTime(ctx, js).subtract(startTime));
         final String script = renderScript(toolbox, ctx, TRIM_TEMPLATE);
 
         log.debug("operate: running script: "+script);

@@ -11,16 +11,18 @@ import static jvcl.model.info.JTrackType.*;
 @AllArgsConstructor @Slf4j
 public enum JFileExtension {
 
-    mp4  (".mp4",  video),
-    mkv  (".mkv",  video),
-    mp3  (".mp3",  audio),
-    aac  (".aac",  audio),
-    flac (".flac", audio),
-    png  (".png",  image),
-    jpg  (".jpg",  image),
-    jpeg (".jpeg", image),
-    sub  (".sub",  subtitle),
-    dat  (".dat",  data);
+    mp4        (".mp4",  video),
+    mkv        (".mkv",  video),
+    mp3        (".mp3",  audio),
+    mpeg_audio (".mp3",  audio),
+    aac        (".aac",  audio),
+    flac       (".flac", audio),
+    png        (".png",  image),
+    jpg        (".jpg",  image),
+    jpeg       (".jpeg", image),
+    sub        (".sub",  subtitle),
+    dat        (".dat",  data),
+    txt        (".txt",  data);
 
     @JsonCreator public static JFileExtension fromString(String v) { return valueOf(v.toLowerCase()); }
 
@@ -45,7 +47,7 @@ public enum JFileExtension {
         }
         if (track.hasFormat()) {
             try {
-                return fromString(track.getFormat());
+                return fromString(track.getFormat().replace(" ", "_"));
             } catch (Exception e) {
                 log.warn("fromTrack: unrecognized format: "+track.getFormat());
             }

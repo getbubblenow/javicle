@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Merge an audio asset into the audio track of a video asset
+#
+# Usage:
+#
+#    jmergeaudio video-file audio-file out-file [at]
+#
+# video-file  : input video file
+# audio-file  : audio file to insert into video
+# out-file    : write output file here
+# at          : when (on the video timeline) to start playing the audio
+#               If omitted, audio will start when video starts
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
+
+VIDEO_FILE="${1?no video-file provided}"
+AUDIO_FILE="${2?no audio-file provided}"
+OUT_FILE="${3?no out-file provided}"
+T_START="${4}"
+
+echo "
+{
+  \"assets\": [
+    { \"name\": \"video_file\", \"path\": \"${VIDEO_FILE}\" },
+    { \"name\": \"audio_file\", \"path\": \"${AUDIO_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"merge-audio\",
+      \"creates\": {
+        \"name\": \"with_audio\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"source\": \"video_file\",
+      \"audio\": \"audio_file\"$(if [[ -n "${T_START}" ]] ; then echo ",
+      \"at\": \"${T_START}\""; fi)
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}

@@ -109,6 +109,10 @@ javicle is available under the Apache License, version 2: http://www.apache.org/
                     <artifactId>*</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>com.nixxcode.jvmbrotli</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>jtidy</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
@@ -122,6 +126,14 @@ javicle is available under the Apache License, version 2: http://www.apache.org/
                 </exclusion>
                 <exclusion>
                     <groupId>org.apache.ant</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
                 <exclusion>

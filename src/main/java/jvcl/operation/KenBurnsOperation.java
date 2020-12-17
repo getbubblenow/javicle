@@ -8,12 +8,12 @@ import org.cobbzilla.util.javascript.JsEngine;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static java.math.BigDecimal.ZERO;
 import static jvcl.service.Toolbox.evalBig;
 import static org.cobbzilla.util.daemon.ZillaRuntime.big;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 
-public class KenBurnsOperation extends JSingleSourceOperation {
+public class KenBurnsOperation extends JSingleSourceOperation
+        implements HasWidthAndHeight, HasStartAndEnd {
 
     public static final BigDecimal DEFAULT_FPS = big(25);
     public static final BigDecimal DEFAULT_UPSCALE = big(8);
@@ -29,16 +29,7 @@ public class KenBurnsOperation extends JSingleSourceOperation {
     }
 
     @Getter @Setter private String start;
-    public boolean hasStart () { return !empty(start); }
-    public BigDecimal getStartTime(Map<String, Object> ctx, JsEngine js) {
-        return evalBig(start, ctx, js, ZERO);
-    }
-
     @Getter @Setter private String end;
-    public boolean hasEndTime () { return !empty(end); }
-    public BigDecimal getEndTime(Map<String, Object> ctx, JsEngine js, BigDecimal defaultValue) {
-        return evalBig(end, ctx, js, defaultValue);
-    }
 
     @Getter @Setter private String x;
     public boolean hasX () { return !empty(x); }
@@ -49,12 +40,7 @@ public class KenBurnsOperation extends JSingleSourceOperation {
     public BigDecimal getY(Map<String, Object> ctx, JsEngine js) { return evalBig(y, ctx, js); }
 
     @Getter @Setter private String width;
-    public boolean hasWidth () { return !empty(width); }
-    public BigDecimal getWidth(Map<String, Object> ctx, JsEngine js) { return evalBig(width, ctx, js); }
-
     @Getter @Setter private String height;
-    public boolean hasHeight () { return !empty(height); }
-    public BigDecimal getHeight(Map<String, Object> ctx, JsEngine js) { return evalBig(height, ctx, js); }
 
     @Getter @Setter private String fps;
     public boolean hasFps () { return !empty(fps); }

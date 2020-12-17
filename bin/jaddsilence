@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# Add a silent audio track to a video asset
+#
+# Usage:
+#
+#    jaddsilence in-file out-file
+#
+# in-file     : input video file
+# out-file    : write output file here
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
+
+IN_FILE="${1?no video-file provided}"
+OUT_FILE="${2?no out-file provided}"
+
+echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"add-silence\",
+      \"creates\": {
+        \"name\": \"with_silence\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"source\": \"input\"
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}

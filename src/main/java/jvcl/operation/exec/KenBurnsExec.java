@@ -67,7 +67,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
 
         final BigDecimal start = op.getStartTime(ctx, js);
         final BigDecimal end = op.getEndTime(ctx, js, duration.subtract(start));
-        if (op.hasStart() || op.hasEndTime()) {
+        if (op.hasStartTime() || op.hasEndTime()) {
             ctx.put("startFrame", start.multiply(fps).intValue());
             ctx.put("endFrame", end.multiply(fps).intValue());
         }

@@ -4,27 +4,16 @@ import jvcl.model.operation.JSingleSourceOperation;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.javascript.JsEngine;
 
-import java.math.BigDecimal;
-import java.util.Map;
-
-import static java.math.BigDecimal.ZERO;
-import static jvcl.service.Toolbox.evalBig;
-import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.string.StringUtil.safeShellArg;
 
 @Slf4j
-public class TrimOperation extends JSingleSourceOperation {
+public class TrimOperation extends JSingleSourceOperation implements HasStartAndEnd {
 
     @Getter @Setter private String start;
-    public BigDecimal getStartTime(Map<String, Object> ctx, JsEngine js) { return evalBig(start, ctx, js, ZERO); }
-
     @Getter @Setter private String end;
-    public boolean hasEnd() { return !empty(end); }
-    public BigDecimal getEndTime(Map<String, Object> ctx, JsEngine js) { return evalBig(end, ctx, js); }
 
-    @Override public String shortString() { return safeShellArg("trim_" + getStart() + (hasEnd() ? "_" + getEnd() : "")); }
-    public String toString() { return getSource()+"_"+getStart()+(hasEnd() ? "_"+getEnd() : ""); }
+    @Override public String shortString() { return safeShellArg("trim_" + getStart() + (hasEndTime() ? "_" + getEnd() : "")); }
+    public String toString() { return getSource()+"_"+getStart()+(hasEndTime() ? "_"+getEnd() : ""); }
 
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import static java.lang.Integer.parseInt;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
+import static org.cobbzilla.util.string.StringUtil.isOnlyDigits;
 
 public class JTrack {
 
@@ -41,8 +42,26 @@ public class JTrack {
     @JsonProperty("Channels") @Getter @Setter private String channels;
     @JsonProperty("ChannelPositions") @Getter @Setter private String channelPositions;
     @JsonProperty("ChannelLayout") @Getter @Setter private String channelLayout;
+
+    public String channelLayout () {
+        if (!empty(channelLayout)) return channelLayout;
+        if (!empty(channels)) {
+            if (isOnlyDigits(channels)) {
+                switch (parseInt(channels)) {
+                    case 1: return "mono";
+                    case 2: return "stereo";
+                }
+            }
+            return channels;
+        }
+        return null;
+    }
+
     @JsonProperty("SamplesPerFrame") @Getter @Setter private String samplesPerFrame;
+
     @JsonProperty("SamplingRate") @Getter @Setter private String samplingRate;
+    public boolean hasSamplingRate () { return !empty(samplingRate); }
+
     @JsonProperty("SamplingCount") @Getter @Setter private String samplingCount;
     @JsonProperty("Compression_Mode") @Getter @Setter private String compressionMode;
     @JsonProperty("BitRate") @Getter @Setter private String bitrate;

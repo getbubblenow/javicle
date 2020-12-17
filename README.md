@@ -88,6 +88,9 @@ Today, JVCL supports several basic operations.
 For each operation listed below, the header links to an example from the JVCL
 test suite.
 
+### [add-silence](src/test/resources/tests/test_add_silence.jvcl)
+Add a silent audio track to a video asset.
+
 ### [concat](src/test/resources/tests/test_concat.jvcl)
 Concatenate audio/video assets together into one asset.
 
@@ -98,6 +101,9 @@ For transforming still images into video via a fade-pan (aka Ken Burns) effect.
 Transform a video from one size to another size, maintaining the aspect ratio
 of the video and adding letterboxes on the sides or top/bottom.
 Handy for embedding mobile videos into other screen formats.
+
+### [merge-audio](src/test/resources/tests/test_merge_audio.jvcl)
+Merge an audio asset into the audio track of a video asset.
 
 ### [overlay](src/test/resources/tests/test_overlay.jvcl)
 Overlay one asset onto another.

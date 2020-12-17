@@ -1,0 +1,33 @@
+{
+  "assets": [
+    // this US government videos is covered by copyright
+    {
+      "name": "vid2",
+      "path": "https://archive.org/download/gov.archives.arc.49442/gov.archives.arc.49442_512kb.mp4",
+      "dest": "src/test/resources/sources/"
+    },
+    // this sound clip is in the public domain: http://soundbible.com/2073-Red-Stag-Roar.html
+    {
+      "name": "bull-roar",
+      "path": "http://soundbible.com/grab.php?id=2073&type=mp3",
+      "dest": "src/test/resources/sources/"
+    }
+  ],
+  "operations": [
+    // trim video first, so test runs faster
+    {
+      "operation": "trim",
+      "creates": "v2",
+      "source": "vid2",
+      "start": "10",
+      "end": "30"
+    },
+    {
+      "operation": "merge-audio",      // name of the operation
+      "creates": "with_roar",          // output asset name
+      "source": "v2",                  // main video asset
+      "insert": "bull-roar",           // audio asset to insert
+      "at": "5"                        // when (on the video timeline) to start playing the audio. default is 0 (beginning)
+    }
+  ]
+}

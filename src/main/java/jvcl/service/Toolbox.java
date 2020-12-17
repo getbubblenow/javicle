@@ -108,7 +108,8 @@ public class Toolbox {
         final File infoFile = new File(infoName);
         final String infoPath = abs(infoFile);
         if (!infoFile.exists() || infoFile.length() == 0) {
-            execScript(getMediainfo() + " --Output=JSON " + abs(asset.getPath())+" > "+infoPath);
+            final String mediaInfoScript = getMediainfo() + " --Output=JSON " + abs(asset.getPath()) + " > " + infoPath;
+            execScript(mediaInfoScript);
         }
         if (!infoFile.exists() || infoFile.length() == 0) {
             return die("getInfo: info file was not created or was empty: "+infoPath);

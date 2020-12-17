@@ -29,6 +29,8 @@ public class BasicTest {
     @Test public void testOverlay     () { runSpec("tests/test_overlay.jvcl"); }
     @Test public void testKenBurns    () { runSpec("tests/test_ken_burns.jvcl"); }
     @Test public void testRemoveTrack () { runSpec("tests/test_remove_track.jvcl"); }
+    @Test public void testMergeAudio  () { runSpec("tests/test_merge_audio.jvcl"); }
+    @Test public void testAddSilence  () { runSpec("tests/test_add_silence.jvcl"); }
 
     private void runSpec(String specPath) {
         try {

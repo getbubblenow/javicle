@@ -3,6 +3,7 @@ package jvcl.service;
 import jvcl.model.JAsset;
 import jvcl.model.JFileExtension;
 import jvcl.model.operation.JOperation;
+import lombok.Getter;
 import org.cobbzilla.util.handlebars.HandlebarsUtil;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class AssetManager {
     public static final String RANGE_SEP = "..";
 
     private final Toolbox toolbox;
-    private final File scratchDir;
+    @Getter private final File scratchDir;
     private final Map<String, JAsset> assets = new ConcurrentHashMap<>();
 
     public AssetManager(Toolbox toolbox, File scratchDir) {

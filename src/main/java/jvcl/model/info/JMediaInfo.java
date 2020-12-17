@@ -22,6 +22,7 @@ public class JMediaInfo {
     }
 
     @Getter @Setter private JMedia media;
+    private boolean emptyMedia() { return media == null || empty(media.getTrack()); }
 
     private final AtomicReference<JFormat> formatRef = new AtomicReference<>();
 
@@ -31,7 +32,7 @@ public class JMediaInfo {
     }
 
     private JFormat initFormat () {
-        if (media == null || empty(media.getTrack())) return null;
+        if (emptyMedia()) return null;
         JTrack general = null;
         JTrack video = null;
         JTrack audio = null;
@@ -64,12 +65,16 @@ public class JMediaInfo {
 
         final JFormat format = new JFormat();
         if (video != null) {
-            format.setFileExtension(JFileExtension.fromString(general.getFileExtension()))
+            format.setFileExtension(video.hasFormat()
+                    ? JFileExtension.fromTrack(video)
+                    : JFileExtension.fromString(general.getFileExtension()))
                     .setHeight(video.height())
                     .setWidth(video.width());
 
         } else if (audio != null) {
-            format.setFileExtension(JFileExtension.fromString(general.getFileExtension()));
+            format.setFileExtension(audio.hasFormat()
+                    ? JFileExtension.fromTrack(audio)
+                    : JFileExtension.fromString(general.getFileExtension()));
 
         } else if (image != null) {
             format.setFileExtension(JFileExtension.fromString(general.getFileExtension()))
@@ -83,7 +88,7 @@ public class JMediaInfo {
     }
 
     public BigDecimal duration() {
-        if (media == null || empty(media.getTrack())) return ZERO;
+        if (emptyMedia()) return ZERO;
 
         // find the longest media track
         BigDecimal longest = null;
@@ -96,8 +101,27 @@ public class JMediaInfo {
         return longest;
     }
 
+    public BigDecimal samplingRate() {
+        if (emptyMedia()) return null;
+        for (JTrack t : media.getTrack()) {
+            if (!t.audioOrVideo()) continue;
+            if (t.hasSamplingRate()) return big(t.getSamplingRate());
+        }
+        return null;
+    }
+
+    public String channelLayout() {
+        if (emptyMedia()) return null;
+        for (JTrack t : media.getTrack()) {
+            if (!t.audioOrVideo()) continue;
+            final String channelLayout = t.channelLayout();
+            if (!empty(channelLayout)) return channelLayout;
+        }
+        return null;
+    }
+
     public BigDecimal width() {
-        if (media == null || empty(media.getTrack())) return ZERO;
+        if (emptyMedia()) return ZERO;
         // find the first video track
         for (JTrack t : media.getTrack()) {
             if (!t.imageOrVideo()) continue;
@@ -108,7 +132,7 @@ public class JMediaInfo {
     }
 
     public BigDecimal height() {
-        if (media == null || empty(media.getTrack())) return ZERO;
+        if (emptyMedia()) return ZERO;
         // find the first video track
         for (JTrack t : media.getTrack()) {
             if (!t.imageOrVideo()) continue;
@@ -119,7 +143,7 @@ public class JMediaInfo {
     }
 
     public int numTracks(JTrackType type) {
-        if (media == null || empty(media.getTrack())) return 0;
+        if (emptyMedia()) return 0;
         int count = 0;
         for (JTrack t : media.getTrack()) {
             if (t.type() == type) count++;
@@ -128,7 +152,7 @@ public class JMediaInfo {
     }
 
     public JTrack firstTrack(JTrackType type) {
-        if (media == null || empty(media.getTrack())) return null;
+        if (emptyMedia()) return null;
         for (JTrack t : media.getTrack()) {
             if (t.type() == type) return t;
         }

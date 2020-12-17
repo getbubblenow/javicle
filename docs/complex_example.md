@@ -38,6 +38,13 @@ field, which can be used as well.
       "name": "img1",
       "path": "https://live.staticflickr.com/65535/48159911972_01efa0e5ea_b.jpg",
       "dest": "src/test/resources/sources/"
+    },
+
+    // Audio clip
+    {
+      "name": "bull-roar",
+      "path": "http://soundbible.com/grab.php?id=2073&type=mp3",
+      "dest": "src/test/resources/sources/"
     }
   ],
   "operations": [
@@ -172,6 +179,15 @@ field, which can be used as well.
         "type": "audio",               // track type to remove
         "number": "0"                  // track number to remove
       }
+    },
+
+    // merge-audio example
+    {
+      "operation": "merge-audio",      // name of the operation
+      "creates": "with_roar",          // output asset name
+      "source": "vid2",                // main video asset
+      "insert": "bull-roar",           // audio asset to insert
+      "at": "5"                        // when (on the video timeline) to start playing the audio. default is 0 (beginning)
     }
   ]
 }

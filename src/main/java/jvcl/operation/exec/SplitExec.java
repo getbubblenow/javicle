@@ -38,7 +38,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
 
         assetManager.addOperationArrayAsset(output);
         final BigDecimal incr = op.getIntervalIncr(ctx, js);
-        final BigDecimal endTime = op.getEndTime(source, ctx, js);
+        final BigDecimal endTime = op.getEndTime(ctx, js, source.duration());
         for (BigDecimal i = op.getStartTime(ctx, js);
              i.compareTo(endTime) < 0;
              i = i.add(incr)) {

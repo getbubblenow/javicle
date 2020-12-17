@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.cobbzilla.util.collection.ArrayUtil;
 import org.cobbzilla.util.http.HttpUtil;
+import org.cobbzilla.util.http.URIUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -168,6 +169,14 @@ public class JAsset implements JsObjectView {
         return width == null || height == null ? null : divideBig(width, height);
     }
 
+    public BigDecimal samplingRate() { return hasInfo() ? getInfo().samplingRate() : null; }
+    @JsonIgnore public BigDecimal getSamplingRate() { return samplingRate(); }
+    public boolean hasSamplingRate() { return samplingRate() != null; }
+
+    public String channelLayout() { return hasInfo() ? getInfo().channelLayout() : null; }
+    @JsonIgnore public String getChannelLayout() { return channelLayout(); }
+    public boolean hasChannelLayout() { return channelLayout() != null; }
+
     public JAsset init(AssetManager assetManager, Toolbox toolbox) {
         final JAsset asset = initPath(assetManager);
         if (!asset.hasListAssets()) {
@@ -195,7 +204,7 @@ public class JAsset implements JsObjectView {
         final File sourcePath;
         if (hasDest()) {
             if (destIsDirectory()) {
-                sourcePath = new File(getDest(), basename(getPath()));
+                sourcePath = new File(getDest(), basename(URIUtil.getPath(getPath())));
             } else {
                 sourcePath = new File(getDest());
             }
