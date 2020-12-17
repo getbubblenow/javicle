@@ -2,13 +2,13 @@
 Here is a complex example using multiple assets and operations.
 
 Note that comments, which are not usually legal in JSON, are allowed in
-JVCL files.
+JVC files.
 
 If you have other JSON-aware tools that need to read JVLC files, you may not
 want to use this comment syntax. The `asset` and `operation` JSON objects also
 support a `comment` field, which can be used as well.
 
-<sub><sup>Doug C: I promise these will always be just comments; jvcl will never
+<sub><sup>Doug C: I promise these will always be just comments; jvc will never
 use [comments as parsing directives or otherwise break interoperability](https://web.archive.org/web/20120507155137/https://plus.google.com/118095276221607585885/posts/RK8qyGVaGSr) (note: disable javascript to view this link)</sup></sub>
 
 ```js

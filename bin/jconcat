@@ -13,7 +13,7 @@
 # Shell wildcards will match files in non-deterministic order, meaning that
 # your combined file will be assembled out of order.
 #
-# If you are combining files that were split with `jvcl` (or `jsplit`), then
+# If you are combining files that were split with `jvc` (or `jsplit`), then
 # sorting them by time (oldest first) is sufficient.
 #
 # For example, do this:
@@ -26,7 +26,7 @@
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
-. "${SCRIPT_DIR}"/jvcl_common
+. "${SCRIPT_DIR}"/jvc_common
 
 OUT_FILE="${1?no out-file provided}"
 shift
@@ -63,4 +63,4 @@ done)
     }
   ]
 }
-" | "${SCRIPT_DIR}"/jvcl -z ${JVCL_OPTIONS}
+" | "${SCRIPT_DIR}"/jvc -z ${JVC_OPTIONS}

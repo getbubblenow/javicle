@@ -14,7 +14,7 @@
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
-. "${SCRIPT_DIR}"/jvcl_common
+. "${SCRIPT_DIR}"/jvc_common
 
 VIDEO_FILE="${1?no video-file provided}"
 AUDIO_FILE="${2?no audio-file provided}"
@@ -40,4 +40,4 @@ echo "
     }
   ]
 }
-" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}
+" | "${SCRIPT_DIR}"/jvc ${JVC_OPTIONS}

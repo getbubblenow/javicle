@@ -1,9 +1,9 @@
 # Javicle - a JSON Video Composition Language
-JVCL (pronounced "Javicle") is a JSON DSL for audio/video transformations.
+JVC (pronounced "Javicle") is a JSON DSL for audio/video transformations.
 
 Under the hood, it's all shell commands: `ffmpeg`, `mediainfo` and so on.
 
-JVCL provides higher-level semantics for working with these lower level tools.
+JVC provides higher-level semantics for working with these lower level tools.
 
 # Motivation
 I don't do much video editing, so I've never bothered to learn iMovie or any
@@ -15,7 +15,7 @@ that requires some deep research into
 [ffmpeg filter arcana](https://ffmpeg.org/ffmpeg-filters.html)
 and before I know it, the day is done.
 
-I created JVCL to make it really easy to do the most common things people
+I created JVC to make it really easy to do the most common things people
 usually do to videos: splitting, concatenating, letterboxing, overlaying
 one video onto another, and so on.
 
@@ -30,7 +30,7 @@ With ffmpeg and bash, you might do something like this:
       ffmpeg -i /tmp/my/source.mp4 -ss ${i} -t $((i+INCR)) /tmp/my/slice_${i}_$((i+INCR)).mp4
     done
 ```
-With JVCL, you'd write this spec file and save it to a file
+With JVC, you'd write this spec file and save it to a file
 (for example `my-spec.jvc`):
 ```json
 {
@@ -45,47 +45,47 @@ With JVCL, you'd write this spec file and save it to a file
 ```
 and then run it like this:
 ```shell script
-jvcl my-spec.jvc
+jvc my-spec.jvc
 ```
-Yes, the JVCL is longer, but I think many would agree it is easier to read
+Yes, the JVC is longer, but I think many would agree it is easier to read
 and maintain.
 
 **As the number of media assets and operations grows, hand-crafted shell
 scripts with magical ffmpeg incantations become ever more inscrutable.**
 
-JVCL is designed for readability and maintainability. JVCL will continue to
+JVC is designed for readability and maintainability. JVC will continue to
 evolve towards greater coverage of the full capabilities of ffmpeg.
 
-# Who is JVCL not for?
-If you like GUIs, JVCL is probably not for you.
+# Who is JVC not for?
+If you like GUIs, JVC is probably not for you.
 
-JVCL is not a replacement for Final Cut Pro or even iMovie.
+JVC is not a replacement for Final Cut Pro or even iMovie.
 
-# Who is JVCL for?
-JVCL is for people who like CLIs and automation.
+# Who is JVC for?
+JVC is for people who like CLIs and automation.
 
-JVCL is for people with relatively simple video composition needs (for now),
+JVC is for people with relatively simple video composition needs (for now),
 since the range of operations supported is limited.
 
 # Requirements
  * Java 11
  * Maven 3
 
-The first time you run `jvcl`, it will automatically build the JVCL jar file
+The first time you run `jvc`, it will automatically build the JVC jar file
 from sources, using maven and javac. This takes a little time but only needs
 to be done once.
 
-# Running JVCL
-Learn more about [running `jvcl`](docs/running.md) and other useful tools.
+# Running JVC
+Learn more about [running `jvc`](docs/running.md) and other useful tools.
 
-# JVCL Concepts
+# JVC Concepts
 Learn about [Assets and Operations](docs/concepts.md), the core concepts
-of JVCL.
+of JVC.
 
 # Supported Operations
-Today, JVCL supports several basic operations.
+Today, JVC supports several basic operations.
 
-For each operation listed below, the header links to an example from the JVCL
+For each operation listed below, the header links to an example from the JVC
 test suite.
 
 ### [add-silence](src/test/resources/tests/test_add_silence.jvc)

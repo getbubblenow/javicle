@@ -1,0 +1,93 @@
+#!/bin/bash
+function die () {
+  echo 1>&2 "${1}"
+  exit 1
+}
+
+function java_major_version () {
+  for token in $(java -version 2>&1 | grep -i version) ; do
+    case "${token}" in '"1'*)
+      echo -n "${token}" | tr -d '"' | awk -F '.' '{print $1}'
+    esac
+  done
+}
+
+function handle_help_request() {
+  if [[ -z "${2}" ]]; then
+    return
+  fi
+
+  if [[ ${2} == "-h" || ${2} == "--help" ]]; then
+    while IFS='' read -r line || [[ -n "$line" ]]; do
+      if [[ ${line} =~ ^#.* ]]; then
+        if [[ ! ${line} =~ ^#!/bin/bash.* ]]; then
+          echo "${line}"
+        fi
+      else
+        break
+      fi
+    done <"${1}"
+    if [[ -z "${JVC_SKIP_ENV_VAR_HELP}" ]] ; then
+      echo "# Environment Variables
+#
+#     JVC_SCRATCH_DIR  : Use this as the scratch directory
+#                         Default is to create a new temp directory
+#
+#     JVC_NO_EXEC      : If set to anything, print the commands that would
+#                         have run but do not execute anything
+#
+"
+    fi
+    exit 1
+  fi
+}
+
+# Ensure Java is installed and that it is Java 11
+if [[ -z "$(which java)" ]] ; then
+  die "Java 11 (or higher) not installed (java command not found on PATH)"
+fi
+JAVA_VERSION="$(java_major_version)"
+if [[ -z "${JAVA_VERSION}" ]] ; then
+  die "Error determining Java version"
+elif [[ ${JAVA_VERSION} -lt 11 ]] ; then
+  die "Java 11 (or higher) not installed (java -version check failed)"
+fi
+
+JVC_DIR="$(cd "$(dirname "${0}")"/.. && pwd)"
+JVC_JAR="$(find "${JVC_DIR}"/target -type f -name "jvc-*-prod.jar" | head -1)"
+if [[ -z "${JVC_JAR}" ]] ; then
+  # Ensure maven is installed
+  if [[ -z "$(which mvn)" ]] ; then
+    die "Maven not installed (mvn command not found on PATH), cannot build JVC jar"
+  fi
+
+  # Build and install utility library
+  pushd "${JVC_DIR}"/utils/cobbzilla-utils || die "Error changing directories to ${JVC_DIR}/utils/cobbzilla-utils"
+  mvn -DskipTests=true clean install || die "Error building cobbzilla-utils library"
+  popd || die "popd error"
+
+  # Build jvc uberjar
+  pushd "${JVC_DIR}" || die "Error changing directories to ${JVC_DIR}"
+  mvn -DskipTests=true -Puberjar clean package || die "Error building JVC jar"
+  popd || die "popd error"
+
+  JVC_JAR="$(find "${JVC_DIR}"/target -type f -name "jvc-*-prod.jar" | head -1)"
+  if [[ -z "${JVC_JAR}" ]] ; then
+    die "No JVC jar file found after successful build"
+  fi
+fi
+
+SCRATCH_DIR=""
+NO_EXEC=""
+if [[ -z "${JVC_SKIP_ENV_VAR_HELP}" ]] ; then
+  if [[ -n "${JVC_SCRATCH_DIR}" ]] ; then
+    SCRATCH_DIR="--temp-dir ${JVC_SCRATCH_DIR}"
+  fi
+
+  if [[ -n "${JVC_NO_EXEC}" ]] ; then
+    NO_EXEC="--no-exec"
+  fi
+fi
+JVC_OPTIONS="${SCRATCH_DIR} ${NO_EXEC}"
+
+handle_help_request "${0}" "${1}"

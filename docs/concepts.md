@@ -1,12 +1,12 @@
 # Concepts
-In JVCL the main concepts are assets and operations.
+In JVC the main concepts are assets and operations.
 
 ## Assets
 Assets are your media files: generally image, audio and video files.
 
 All assets have a name and a path.
 
-Input assets are defined using the `assets` array of a JVCL spec.
+Input assets are defined using the `assets` array of a JVC spec.
 
 For input assets, the path can be a file or a URL. URL-based assets will be downloaded
 to the scratch directory. This can be overridden using the `dest` property on the asset.
