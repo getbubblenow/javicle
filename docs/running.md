@@ -6,7 +6,7 @@ The `bin/jvc` script is the primary way to transform video assets with JVC.
 ## Operation-specific scripts
 There are other scripts in [`bin`](../bin) that perform a single operation using
 command-line arguments. If you need to do a quick operation and don't want to write
-a JVC spec, use one of these tools.
+a JVC spec, use one of [these tools](../bin).
 
 For example, to extract the first 5 seconds of a video:
 ```shell script
