@@ -20,16 +20,18 @@ splitting, concatenating, letterboxing, overlaying one video onto another,
 and so on.
 
 # A Quick Example
-Say you want to split the second minute of a video into ten-second chunks.
+Suppose you'd like to split one video that is five minutes long into five
+videos, each one minute long.
+
 With ffmpeg and bash, you might do something like this:
 ```shell script
-    INCR=10
-    for ((i=60;i<120;i=(i+INCR))); do
+    INCR=60
+    for ((i=0;i<300;i=(i+INCR))); do
       ffmpeg -i /tmp/my/source.mp4 -ss ${i} -t $((i+INCR)) /tmp/my/slice_${i}_$((i+INCR)).mp4
     done
 ```
-With JVCL, you'd write this spec file and save it to a file (for
-example `my-spec.jvcl`):
+With JVCL, you'd write this spec file and save it to a file
+(for example `my-spec.jvcl`):
 ```json
 {
   "assets": [ {"name": "src", "path": "/tmp/my/source.mp4"} ],
@@ -37,9 +39,7 @@ example `my-spec.jvcl`):
       "operation": "split",
       "creates": "src_split_files",
       "source": "src",
-      "interval": "10",
-      "start": "60",
-      "end": "120"
+      "interval": "60"
   }]
 }
 ```
