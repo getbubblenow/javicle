@@ -13,13 +13,18 @@ For example, to extract the first 5 seconds of a video:
 jtrim /tmp/input-file.mp4 /tmp/output-5s.mp4 0 5
 ```
 
-All commands accept a `-h` / `--help` option, use this to print usage information:
-```shell script
-jscale -h
-```
-
 ## Help
-To view a list of all `jvc` command-line options, run `jvc -h` or `jvc --help`
+All commands accept a `-h` / `--help` option, this will print information about
+how to use the command, and what arguments it takes.
+
+To view a help for a command, just run the command with `-h` or `--help` as the
+first option:
+```shell script
+jvc -h
+jscale -h
+jtrim -h
+...
+```
 
 ## JVC Spec Files
 A JVC spec is just a regular JSON file that happens to contain a single JSON object,
