@@ -4,18 +4,22 @@
 #
 # Usage:
 #
-#    jvcl [-t temp-dir] spec-file
+#    jvcl [-t temp-dir] [-n] spec-file
 #
-# If `spec-file` is omitted, then jvcl will try to read a spec from stdin.
+#  spec-file       : the JVCL to run. If omitted, read a spec from stdin
 #
-# Every run of JVCL will create a temp directory. You can either specify the name of the directory
-# with `-t` (it will be created if it does not exist), or let jvcl create a temp directory for you.
+#  -t temp-dir     : where to write generated assets. If omitted, jvcl will
+#                    create a new temporary directory
 #
-# Note: this command will build the jvcl jar file if needed. The first time you run it, it might
-# take a long time to start up.
+#  -n              : print commands that would have been run, but don't
+#                    actually run anything
+#
+# Note: If the JVCL jar does not exist, it will be built from source.
+# The first time you run it, it might take a long time to start up.
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+JVCL_SKIP_ENV_VAR_HELP=1
 . "${SCRIPT_DIR}"/jvcl_common
 
 DEBUG=""
