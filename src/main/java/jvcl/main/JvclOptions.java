@@ -12,8 +12,7 @@ import org.kohsuke.args4j.Option;
 import java.io.File;
 
 import static jvcl.service.Toolbox.JSON_MAPPER;
-import static org.cobbzilla.util.daemon.ZillaRuntime.die;
-import static org.cobbzilla.util.daemon.ZillaRuntime.readStdin;
+import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.toStringOrDie;
 import static org.cobbzilla.util.json.JsonUtil.json;
@@ -37,7 +36,7 @@ public class JvclOptions extends BaseMainOptions {
         try {
             return json(json, JSpec.class, JSON_MAPPER);
         } catch (Exception e) {
-            return die("getSpec: invalid spec: "+specFile);
+            return die("getSpec: invalid spec: "+specFile+": "+shortError(e));
         }
     }
 

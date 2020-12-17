@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+# Concatenate media files
+#
+# Usage:
+#
+#    jconcat out-file in-file-1 [in-file-2 ...]
+#
+# out-file  : output file
+# in-file-N : input files
+#
+# BEWARE SHELL WILDCARDS!
+# Shell wildcards will match files in non-deterministic order, meaning that
+# your combined file will be assembled out of order.
+#
+# If you are combining files that were split with `jvcl` (or `jsplit`), then
+# sorting them by time (oldest first) is sufficient.
+#
+# For example, do this:
+#
+#    jconcat combined-file.mp4 $(ls -1tr path/to/parts*.mp4)
+#
+# NOT THIS:
+#
+#    jconcat combined-file.mp4 path/to/parts*.mp4  # args not ordered!
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
+
+OUT_FILE="${1?no out-file provided}"
+shift
+
+IN_FILE="${1?no in-file(s) provided}"
+echo "
+{
+  \"assets\": [
+$(
+F_INDEX=0
+for path in "$@" ; do
+  if [[ ${F_INDEX} -gt 0 ]] ; then
+    echo ","
+  fi
+  F_INDEX=$((F_INDEX + 1))
+  echo -n "    { \"name\": \"input_${F_INDEX}\", \"path\": \"${path}\" }"
+  shift
+done)
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"concat\",
+      \"creates\": {
+        \"name\": \"combined\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"sources\": [$(END=$#
+for ((i=1;i<=END;i++)); do
+  if [[ ${i} -gt 1 ]] ; then echo -n "," ; fi
+  echo -n "
+          \"input_${i}\""
+done)
+      ]
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl -z ${JVCL_OPTIONS}

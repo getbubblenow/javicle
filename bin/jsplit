@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# Split a media file into multiple files of equal time length
+#
+# Usage:
+#
+#    jsplit in-file out-dir interval [start] [end]
+#
+# in-file  : file to trim
+# out-dir  : write split files to this directory (will be created if it does not exist)
+# interval : time duration of output files, in seconds
+# start    : when to start splitting the in-file. default is 0 (start)
+# end      : when to stop splitting the in-file. default is to continue until end of file is reached
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
+
+IN_FILE="${1?no in-file provided}"
+OUT_DIR="${2?no out-dir provided}"
+if [[ -e "${OUT_DIR}" && ! -d "${OUT_DIR}" ]] ; then
+  die "Not a directory: ${OUT_DIR}"
+fi
+mkdir -p "${OUT_DIR}" || die "Error creating ${OUT_DIR}"
+
+INTERVAL="${3?no interval provided}"
+T_START="${4}"
+T_END="${5}"
+
+echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"split\",
+      \"creates\": {
+        \"name\": \"splits\",
+        \"dest\": \"${OUT_DIR}/\"
+      },
+      \"source\": \"input\",
+      \"interval\": \"${INTERVAL}\"$(if [[ -n "${T_START}" ]] ; then echo ",
+      \"start\": \"${T_START}\"" ; fi)$(if [[ -n "${T_END}" ]] ; then echo ",
+      \"end\": \"${T_END}\"," ; fi)
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}

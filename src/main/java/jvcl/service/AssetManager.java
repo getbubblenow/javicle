@@ -120,7 +120,7 @@ public class AssetManager {
                 final int fromIndex = parseIndexExpression(from, list, JIndexType.from);
                 final int toIndex = parseIndexExpression(to, list, JIndexType.to);
                 if (toIndex < fromIndex) return die("parseIndexExpression("+indexExpr+"): 'to' index ("+toIndex+") < 'from' index ("+fromIndex+")");
-                final int len = toIndex - fromIndex;
+                final int len = 1 + (toIndex - fromIndex);
                 final JAsset[] subList = new JAsset[len];
                 System.arraycopy(list, fromIndex, subList, 0, len);
                 return new JAsset(asset).setList(subList);
@@ -142,7 +142,7 @@ public class AssetManager {
         if (empty(indexExpr)) {
             switch (type) {
                 case from: return 0;
-                case to: return list.length;
+                case to: return list.length-1;
                 case single: return die("parseIndexExpression(): no expression provided!");
                 default: return die("parseIndexExpression(): invalid type: "+type);
             }

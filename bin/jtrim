@@ -19,6 +19,7 @@ IN_FILE="${1?no in-file provided}"
 OUT_FILE="${2?no out-file provided}"
 T_START="${3}"
 T_END="${4}"
+
 echo "
 {
   \"assets\": [
@@ -31,10 +32,10 @@ echo "
         \"name\": \"trimmed\",
         \"dest\": \"${OUT_FILE}\"
       },
-      \"trim\": \"input\",
+      \"source\": \"input\",
       \"start\": \"${T_START}\",
       \"end\": \"${T_END}\"
     }
   ]
 }
-" | "${SCRIPT_DIR}"/jvcl
+" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}

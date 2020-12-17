@@ -1,0 +1,46 @@
+#!/bin/bash
+#!/bin/bash
+#
+# Letterbox a video file
+#
+# Usage:
+#
+#    jletterbox in-file out-file width height [color]
+#
+# in-file  : file to trim
+# out-file : write scaled file here
+# width    : output width
+# height   : output height
+# color    : padding color, can be a hex value (0xff0000 is red), or a color
+#            name from https://ffmpeg.org/ffmpeg-utils.html#color-syntax
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
+
+IN_FILE="${1?no in-file provided}"
+OUT_FILE="${2?no out-file provided}"
+WIDTH="${3}"
+HEIGHT="${4}"
+COLOR="${5:-black}"
+
+echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"letterbox\",
+      \"creates\": {
+        \"name\": \"boxed\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"source\": \"input\",
+      \"width\": \"${WIDTH}\",
+      \"height\": \"${HEIGHT}\",
+      \"color\": \"${COLOR}\"
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}

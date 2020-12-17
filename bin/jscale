@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+# Scale a media file
+#
+# Usage:
+#
+#    jscale in-file out-file factor
+# or
+#    jscale in-file out-file width height
+#
+# in-file  : file to trim
+# out-file : write scaled file here
+# factor   : scale factor
+# width    : output width
+# height   : output height
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvcl_common
+
+IN_FILE="${1?no in-file provided}"
+OUT_FILE="${2?no out-file provided}"
+WIDTH="${3}"
+HEIGHT="${4}"
+FACTOR=""
+
+if [[ -z "${HEIGHT}" ]] ; then
+  FACTOR=${WIDTH}
+  echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"scale\",
+      \"creates\": {
+        \"name\": \"scaled\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"source\": \"input\",
+      \"factor\": \"${FACTOR}\"
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}
+else
+    echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"scale\",
+      \"creates\": {
+        \"name\": \"scaled\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"source\": \"input\",
+      \"width\": \"${WIDTH}\",
+      \"height\": \"${HEIGHT}\"
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvcl ${JVCL_OPTIONS}
+fi

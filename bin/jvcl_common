@@ -19,6 +19,15 @@ function handle_help_request() {
         break
       fi
     done <"${1}"
+    echo "# Environment Variables
+#
+#     JVCL_SCRATCH_DIR  : Use this as the scratch directory
+#                         Default is to create a new temp directory
+#
+#     JVCL_NO_EXEC      : If set to anything, print the commands that would
+#                         have run but do not execute anything
+#
+"
     exit 1
   fi
 }
@@ -32,5 +41,16 @@ if [[ -z "${JVCL_JAR}" ]] ; then
     die "No JVCL jar file found after successful build"
   fi
 fi
+
+SCRATCH_DIR=""
+if [[ -n "${JVCL_SCRATCH_DIR}" ]] ; then
+  SCRATCH_DIR="--temp-dir ${JVCL_SCRATCH_DIR}"
+fi
+
+NO_EXEC=""
+if [[ -n "${JVCL_NO_EXEC}" ]] ; then
+  NO_EXEC="--no-exec"
+fi
+JVCL_OPTIONS="${SCRATCH_DIR} ${NO_EXEC}"
 
 handle_help_request "${0}" "${1}"

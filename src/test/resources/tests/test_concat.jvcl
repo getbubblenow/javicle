@@ -6,11 +6,16 @@
   "operations": [
     {
       "operation": "concat",              // name of the operation
-      "sources": ["vid1_splits[1..]"],    // concatentate these sources (everything but the first video in vid1_splits)
+      "sources": ["vid1_splits"],         // concatentate these sources -- all split files
       "creates": {
-        "name": "combined_vid",           // name of the output asset
-        "dest": "src/test/resources/outputs/combined.mp4" // asset will be written to this file
-      },
+        "name": "combined_vid1",          // name of the output asset
+        "dest": "src/test/resources/outputs/combined1.mp4" // asset will be written to this file
+      }
+    },
+    {
+      "operation": "concat",              // name of the operation
+      "sources": ["vid1_splits[1..2]"],   // concatentate these sources -- the 2nd and 3rd files only
+      "creates": "combined_vid2",         // name of the output asset, will be written to scratch directory
     }
   ]
 }
