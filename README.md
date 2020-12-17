@@ -73,8 +73,9 @@ since the range of operations supported is limited.
 JVC is for people who have used ffmpeg filters before and had flashbacks
 of editing Sendmail configs and debugging PostScript.
 
+##### Caveat Emptor
 Obligatory Disclaimer: JVC is still relatively new software and lots of stuff might break.
-At least it should never overwrite your source files. All output goes to new files.
+It should never overwrite your source files, all output goes to new files.
 
 # Requirements
  * Java 11
