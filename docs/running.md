@@ -26,7 +26,7 @@ There is a command-line tool for every operation except for `overlay` and
 All commands accept a `-h` / `--help` option, this will print information about
 how to use the command, and what arguments it takes.
 
-To view a help for a command, just run the command with `-h` or `--help` as the
+To view help for a command, just run the command with `-h` or `--help` as the
 first option:
 ```shell script
 jvc -h
