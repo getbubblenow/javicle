@@ -82,7 +82,7 @@ Learn more about [running `jvcl`](docs/running.md) and other useful tools.
 Learn about [Assets and Operations](docs/concepts.md), the core concepts
 of JVCL.
 
-### Supported Operations
+# Supported Operations
 Today, JVCL supports several basic operations.
 
 For each operation listed below, the header links to an example from the JVCL
