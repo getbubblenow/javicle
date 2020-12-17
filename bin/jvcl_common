@@ -4,6 +4,14 @@ function die () {
   exit 1
 }
 
+function java_major_version () {
+  for token in $(java -version 2>&1 | grep -i version) ; do
+    case "${token}" in '"1'*)
+      echo -n "${token}" | tr -d '"' | awk -F '.' '{print $1}'
+    esac
+  done
+}
+
 function handle_help_request() {
   if [[ -z "${2}" ]]; then
     return
@@ -36,16 +44,13 @@ function handle_help_request() {
 
 # Ensure Java is installed and that it is Java 11
 if [[ -z "$(which java)" ]] ; then
-  die "Java 11 not installed (java command not found on PATH)"
+  die "Java 11 (or higher) not installed (java command not found on PATH)"
 fi
-JAVA_OK=0
-for token in $(java -version 2>&1 | grep -i version) ; do
-  case "${token}" in '"11.'*)
-    JAVA_OK=1
-  esac
-done
-if [[ ${JAVA_OK} -eq 0 ]] ; then
-  die "Java 11 not installed (java -version check failed)"
+JAVA_VERSION="$(java_major_version)"
+if [[ -z "${JAVA_VERSION}" ]] ; then
+  die "Error determining Java version"
+elif [[ ${JAVA_VERSION} -lt 11 ]] ; then
+  die "Java 11 (or higher) not installed (java -version check failed)"
 fi
 
 JVCL_DIR="$(cd "$(dirname "${0}")"/.. && pwd)"
