@@ -28,7 +28,7 @@ Learn more about [Assets and Operations](concepts.md)
 
 Unlike most JSON, comments *are* allowed in JVCL spec files:
 * A line comment starts with `//` and continue to the end of the line
-* A multi-line block syntax starts with `/*` and ends with `*/`
+* A multi-line block starts with `/*` and ends with `*/`
 
 ## Writing a JVCL Spec
 The easiest way to write a spec is to copy one of the
@@ -54,6 +54,10 @@ directory. You can set the scratch directory explicitly using the `-t` or `--tem
 jvcl -t /some/tempdir my-spec.json
 ```
 
+When using the other tools in `bin`, you can set the scratch directory via the
+`JVCL_SCRATCH_DIR` environment variable. If the `JVCL_SCRATCH_DIR` references a
+directory that does not exist, it will be created.
+
 #### Dry Run
 Use the `-n` or `--no-exec` option to print out the commands that would have been run,
 but do not actually run anything.
@@ -63,6 +67,11 @@ jvcl -n my-spec.json         # will not run any ffmpeg commands
 Note that this breaks JVCL operations that require information from any assets created by
 previous operations: since the command did not actually run, the intermediate asset was
 never created.
+
+When using the other tools in `bin`, you can set the "no exec" flag via the
+`JVCL_NO_EXEC` environment variable. If the `JVCL_NO_EXEC` is non-empty, then
+the script will pass the `-n` flag when it calls `jvcl` and commands will
+be printed out instead of actually being run.
 
 #### Help
 To view a list of all `jvcl` command-line options, run `jvcl -h` or `jvcl --help`
