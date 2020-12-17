@@ -57,7 +57,7 @@ The easiest way to write a spec is to copy one of the
 [test specs](../src/test/resources/tests) and edit it.
 
 There examples for every JVC operation.
-Or copy from the [complex example](complex_example.md).
+Or read through the [complex example](complex_example.md) and adapt as needed.
 
 ## Executing a JVC Spec
 To execute a spec stored in the file `my-spec.json`, you would run:
