@@ -1,6 +1,13 @@
 # Concepts
 In JVC the main concepts are assets and operations.
 
+The [complex example](complex_example.md)
+illustrates just about every way to represent input assets,
+output assets, operation configs.
+
+If you find yourself getting confused with some of what follows,
+maybe browse through that [example](complex_example.md) first.
+
 ## Assets
 Assets are your media files: generally image, audio and video files.
 
