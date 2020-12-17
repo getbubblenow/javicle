@@ -71,6 +71,10 @@ cat my-spec.jvc | jvc
 ```
 
 ## Command Line Options
+The command line options that `jvc` accepts are described below.
+
+For the other single-operation commands, you can pass options to `jvc` using
+environment variables.
 
 #### Scratch Directory: `-t` or `--temp-dir`
 Output assets will be placed in the scratch directory, unless otherwise specified
@@ -80,6 +84,7 @@ directory. You can set the scratch directory explicitly using the `-t` or `--tem
 jvc -t /some/tempdir my-spec.json
 ```
 
+##### Environment Variable: `JVC_SCRATCH_DIR`
 When using the other tools in `bin`, you can set the scratch directory via the
 `JVC_SCRATCH_DIR` environment variable. If the `JVC_SCRATCH_DIR` references a
 directory that does not exist, it will be created.
@@ -94,6 +99,7 @@ Note that this breaks JVC operations that require information from any assets cr
 previous operations: since the command did not actually run, the intermediate asset was
 never created.
 
+##### Environment Variable: `JVC_NO_EXEC`
 When using the other tools in `bin`, you can set the "no exec" flag via the
 `JVC_NO_EXEC` environment variable. If the `JVC_NO_EXEC` is non-empty, then
 the script will pass the `-n` flag when it calls `jvc` and commands will
