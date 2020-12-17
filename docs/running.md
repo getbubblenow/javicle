@@ -46,6 +46,8 @@ or use stdin:
 cat my-spec.jvcl | jvcl
 ```
 
+## Command Line Options
+
 #### Scratch Directory
 Output assets will be placed in the scratch directory, unless otherwise specified
 in the spec file. By default, JVCL will create a new temporary directory to use as the scratch
