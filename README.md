@@ -22,7 +22,7 @@ With JVCL, you'd write this spec file and save it to a file (for example `my-spe
   "operations": [{
       "operation": "split",
       "creates": "src_split_files",
-      "split": "src",
+      "source": "src",
       "interval": "10s",
       "start": "10s",
       "end": "130s"
