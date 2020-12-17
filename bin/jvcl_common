@@ -60,7 +60,17 @@ if [[ -z "${JVCL_JAR}" ]] ; then
   if [[ -z "$(which mvn)" ]] ; then
     die "Maven not installed (mvn command not found on PATH), cannot build JVCL jar"
   fi
+
+  # Build and install utility library
+  pushd "${JVCL_DIR}"/utils/cobbzilla-utils || die "Error changing directories to ${JVCL_DIR}/utils/cobbzilla-utils"
+  mvn -DskipTests=true clean install || die "Error building cobbzilla-utils library"
+  popd || die "popd error"
+
+  # Build jvcl uberjar
+  pushd "${JVCL_DIR}" || die "Error changing directories to ${JVCL_DIR}"
   mvn -DskipTests=true -Puberjar clean package || die "Error building JVCL jar"
+  popd || die "popd error"
+
   JVCL_JAR="$(find "${JVCL_DIR}"/target -type f -name "jvcl-*-prod.jar" | head -1)"
   if [[ -z "${JVCL_JAR}" ]] ; then
     die "No JVCL jar file found after successful build"
