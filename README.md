@@ -67,6 +67,14 @@ JVCL is for people who like CLIs and automation.
 JVCL is for people with relatively simple video composition needs (for now),
 since the range of operations supported is limited.
 
+# Requirements
+ * Java 11
+ * Maven 3
+
+The first time you run `jvcl`, it will automatically build the JVCL jar file
+from sources, using maven and javac. This takes a little time but only needs
+to be done once.
+
 # Running JVCL
 Learn more about [running `jvcl`](docs/running.md) and other useful tools.
 
