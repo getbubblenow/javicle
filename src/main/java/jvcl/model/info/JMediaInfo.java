@@ -1,22 +1,34 @@
 package jvcl.model.info;
 
-import jvcl.model.JFormat;
 import jvcl.model.JFileExtension;
+import jvcl.model.JFormat;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.math.BigDecimal.ZERO;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 
-@Slf4j
+@NoArgsConstructor @Slf4j
 public class JMediaInfo {
 
+    public JMediaInfo (JMediaInfo other, JFormat format) {
+        this.media = other.getMedia();
+        this.formatRef.set(format);
+    }
+
     @Getter @Setter private JMedia media;
-    @Getter(lazy=true) private final JFormat format = initFormat();
-    public boolean hasFormat () { return getFormat() != null; }
+
+    private final AtomicReference<JFormat> formatRef = new AtomicReference<>();
+
+    public JFormat getFormat () {
+        if (formatRef.get() == null) formatRef.set(initFormat());
+        return formatRef.get();
+    }
 
     private JFormat initFormat () {
         if (media == null || empty(media.getTrack())) return null;
@@ -102,6 +114,23 @@ public class JMediaInfo {
             if (!t.imageOrVideo()) continue;
             if (!t.hasHeight()) continue;
             return big(t.getHeight());
+        }
+        return null;
+    }
+
+    public int numTracks(JTrackType type) {
+        if (media == null || empty(media.getTrack())) return 0;
+        int count = 0;
+        for (JTrack t : media.getTrack()) {
+            if (t.type() == type) count++;
+        }
+        return count;
+    }
+
+    public JTrack firstTrack(JTrackType type) {
+        if (media == null || empty(media.getTrack())) return null;
+        for (JTrack t : media.getTrack()) {
+            if (t.type() == type) return t;
         }
         return null;
     }

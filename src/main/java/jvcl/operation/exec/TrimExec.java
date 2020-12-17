@@ -55,11 +55,6 @@ public class TrimExec extends SingleOrMultiSourceExecBase<TrimOperation> {
         log.debug("operate: running script: "+script);
         final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
-        if (output == subOutput) {
-            assetManager.addOperationAsset(output);
-        } else {
-            assetManager.addOperationAssetSlice(output, subOutput);
-        }
     }
 
 }

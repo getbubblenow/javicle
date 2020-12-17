@@ -33,6 +33,8 @@ public class JTrack {
     public boolean hasFileExtension () { return !empty(fileExtension); }
 
     @JsonProperty("Format") @Getter @Setter private String format;
+    public boolean hasFormat () { return !empty(format); }
+
     @JsonProperty("Format_AdditionalFeatures") @Getter @Setter private String formatAdditionalFeatures;
     @JsonProperty("Format_Profile") @Getter @Setter private String formatProfile;
     @JsonProperty("Format_Level") @Getter @Setter private String formatLevel;

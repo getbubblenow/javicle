@@ -3,6 +3,8 @@ package jvcl.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import jvcl.model.info.JMediaInfo;
+import jvcl.model.info.JTrack;
+import jvcl.model.info.JTrackType;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
 import lombok.*;
@@ -113,6 +115,9 @@ public class JAsset implements JsObjectView {
     }
     public boolean hasInfo() { return info != null; }
 
+    @Getter @Setter private String comment;
+    public boolean hasComment () { return !empty(comment); }
+
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -152,6 +157,10 @@ public class JAsset implements JsObjectView {
 
     public BigDecimal height() { return hasInfo() ? getInfo().height() : null; }
     @JsonIgnore public BigDecimal getHeight () { return height(); }
+
+    public int numTracks(JTrackType type) { return hasInfo() ? getInfo().numTracks(type) : 0; }
+
+    public JTrack firstTrack(JTrackType type) { return hasInfo() ? getInfo().firstTrack(type) : null; }
 
     public BigDecimal aspectRatio() {
         final BigDecimal width = width();

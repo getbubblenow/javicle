@@ -23,7 +23,7 @@ public class JSingleSourceOperation extends JOperation {
         final JAsset output = json2asset(getCreates());
         output.mergeFormat(source.getFormat());
 
-        // ensure output is in the correct fprmat
+        // ensure output is in the correct format
         final JFormat format = output.getFormat();
         final JTrackType type = outputMediaType();
         if (!format.hasFileExtension() || format.getFileExtension().mediaType() != type) {
@@ -33,12 +33,12 @@ public class JSingleSourceOperation extends JOperation {
             }
             format.setFileExtension(ext);
         }
-        final JFileExtension formatType = getFileExtension(output);
+        final JFileExtension formatType = getFileExtension(source, output);
 
         return new JSingleOperationContext(source, output, formatType);
     }
 
-    protected JFileExtension getFileExtension(JAsset output) {
+    protected JFileExtension getFileExtension(JAsset source, JAsset output) {
         return output.getFormat().getFileExtension();
     }
 

@@ -64,7 +64,6 @@ public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperatio
                                      JAsset subOutput,
                                      Toolbox toolbox,
                                      AssetManager assetManager) {
-
         ctx.put("source", source);
         ctx.put("output", subOutput);
         final String script = renderScript(toolbox, ctx, LETTERBOX_TEMPLATE);
@@ -72,11 +71,6 @@ public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperatio
         log.debug("operate: running script: "+script);
         final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
-        if (output == subOutput) {
-            assetManager.addOperationAsset(output);
-        } else {
-            assetManager.addOperationAssetSlice(output, subOutput);
-        }
     }
 
 }

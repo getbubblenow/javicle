@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static jvcl.service.json.JOperationFactory.getOperationExecClass;
+import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 import static org.cobbzilla.util.daemon.ZillaRuntime.hashOf;
 import static org.cobbzilla.util.json.JsonUtil.json;
 import static org.cobbzilla.util.reflect.ReflectionUtil.instantiate;
@@ -32,6 +33,9 @@ public abstract class JOperation {
     @Getter @Setter private String operation;
     @Getter @Setter private JsonNode creates;
     @Getter @Setter private boolean noExec = false;
+
+    @Getter @Setter private String comment;
+    public boolean hasComment () { return !empty(comment); }
 
     public String hash(JAsset[] sources) { return hash(sources, null); }
 

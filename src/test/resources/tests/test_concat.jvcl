@@ -15,7 +15,7 @@
     {
       "operation": "concat",              // name of the operation
       "sources": ["vid1_splits[1..2]"],   // concatentate these sources -- the 2nd and 3rd files only
-      "creates": "combined_vid2",         // name of the output asset, will be written to scratch directory
+      "creates": "combined_vid2"          // name of the output asset, will be written to scratch directory
     }
   ]
 }

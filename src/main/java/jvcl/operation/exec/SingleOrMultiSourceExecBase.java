@@ -37,6 +37,7 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JOperation> extends
                 }
                 subOutput.setPath(abs(outfile));
                 process(ctx, op, asset, output, subOutput, toolbox, assetManager);
+                assetManager.addOperationAssetSlice(output, subOutput);
             }
         } else {
             final File defaultOutfile = assetManager.assetPath(op, source, formatType);
@@ -44,6 +45,7 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JOperation> extends
             if (path == null) return;
             output.setPath(abs(path));
             process(ctx, op, source, output, output, toolbox, assetManager);
+            assetManager.addOperationAsset(output);
         }
     }
 
@@ -54,6 +56,5 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JOperation> extends
                                     JAsset asset,
                                     Toolbox toolbox,
                                     AssetManager assetManager);
-
 
 }

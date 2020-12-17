@@ -26,8 +26,9 @@ public class BasicTest {
         runSpec("tests/test_letterbox.jvcl");
     }
 
-    @Test public void testOverlay() { runSpec("tests/test_overlay.jvcl"); }
-    @Test public void testKenBurns() { runSpec("tests/test_ken_burns.jvcl"); }
+    @Test public void testOverlay     () { runSpec("tests/test_overlay.jvcl"); }
+    @Test public void testKenBurns    () { runSpec("tests/test_ken_burns.jvcl"); }
+    @Test public void testRemoveTrack () { runSpec("tests/test_remove_track.jvcl"); }
 
     private void runSpec(String specPath) {
         try {

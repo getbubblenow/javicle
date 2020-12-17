@@ -2,58 +2,55 @@ package jvcl.operation.exec;
 
 import jvcl.model.JAsset;
 import jvcl.model.JFileExtension;
+import jvcl.model.JTrackId;
+import jvcl.model.info.JTrackType;
 import jvcl.model.operation.JSingleOperationContext;
-import jvcl.operation.ScaleOperation;
+import jvcl.operation.RemoveTrackOperation;
 import jvcl.service.AssetManager;
 import jvcl.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.javascript.StandardJsEngine;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class ScaleExec extends SingleOrMultiSourceExecBase<ScaleOperation> {
+public class RemoveTrackExec extends SingleOrMultiSourceExecBase<RemoveTrackOperation> {
 
-    public static final String SCALE_TEMPLATE
-            = "{{ffmpeg}} -i {{{source.path}}} -filter_complex \""
-            + "scale={{width}}x{{height}}" +
-            "\" -y {{{output.path}}}";
+    public static final String REMOVE_TRACK_TEMPLATE
+            = "{{{ffmpeg}}} -i {{{source.path}}} "
+            + "-map 0 -map -0:{{trackType}}{{#exists trackNumber}}:{{trackNumber}}{{/exists}} "
+            + "-c copy "
+            + "-y {{{output.path}}}";
 
-    @Override public void operate(ScaleOperation op, Toolbox toolbox, AssetManager assetManager) {
+    @Override public void operate(RemoveTrackOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
         final JAsset source = opCtx.source;
         final JAsset output = opCtx.output;
         final JFileExtension formatType = opCtx.formatType;
 
-        final StandardJsEngine js = toolbox.getJs();
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());
+        ctx.put("source", source);
 
-        if (op.hasFactor()) {
-            final BigDecimal factor = op.getFactor(ctx, js);
-            ctx.put("width", factor.multiply(source.getWidth()).intValue());
-            ctx.put("height", factor.multiply(source.getHeight()).intValue());
-        } else {
-            op.setProportionalWidthAndHeight(ctx, js, source);
-        }
+        final JTrackId trackId = op.getTrackId();
+        final JTrackType trackType = trackId.getType();
+        ctx.put("trackType", trackType.ffmpegType());
+        if (trackId.hasNumber()) ctx.put("trackNumber", trackId.getNumber());
 
         operate(op, toolbox, assetManager, source, output, formatType, ctx);
     }
 
     @Override protected void process(Map<String, Object> ctx,
-                                     ScaleOperation op,
+                                     RemoveTrackOperation op,
                                      JAsset source,
                                      JAsset output,
                                      JAsset subOutput,
                                      Toolbox toolbox,
                                      AssetManager assetManager) {
-
         ctx.put("source", source);
         ctx.put("output", subOutput);
-        final String script = renderScript(toolbox, ctx, SCALE_TEMPLATE);
+        final String script = renderScript(toolbox, ctx, REMOVE_TRACK_TEMPLATE);
 
         log.debug("operate: running script: "+script);
         final String scriptOutput = exec(script, op.isNoExec());
