@@ -63,18 +63,18 @@ if [[ -z "${JVC_JAR}" ]] ; then
 
   # Build and install utility libraries
   pushd "${JVC_DIR}"/utils/cobbzilla-parent || die "Error changing directories to ${JVC_DIR}/utils/cobbzilla-parent"
+  if [[ -z "$(find . -type f)" ]] ; then
+    cd ../.. && \
+      ./bin/use_https_submodules && \
+      git submodule update --init --recursive && \
+      cd - \
+    || die "Error updating git submodule"
+  fi
   mvn install || die "Error installing cobbzilla-parent"
   popd || die "popd error (pwd=$(pwd))"
 
   pushd "${JVC_DIR}"/utils/cobbzilla-utils || die "Error changing directories to ${JVC_DIR}/utils/cobbzilla-utils"
   if [[ -z "$(find target -type f -name "*.jar")" ]] ; then
-    if [[ -z "$(find . -type f)" ]] ; then
-      cd ../.. && \
-        ./bin/use_https_submodules && \
-        git submodule update --init --recursive && \
-        cd - \
-      || die "Error updating git submodule"
-    fi
     mvn -DskipTests=true clean install || die "Error building cobbzilla-utils library"
   fi
   popd || die "popd error (pwd=$(pwd))"
