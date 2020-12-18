@@ -1,3 +1,6 @@
 [submodule "utils/cobbzilla-utils"]
 	path = utils/cobbzilla-utils
 	url = git@git.bubblev.org:bubblev/cobbzilla-utils.git
+[submodule "utils/cobbzilla-parent"]
+	path = utils/cobbzilla-parent
+	url = git@git.bubblev.org:bubblev/cobbzilla-parent.git

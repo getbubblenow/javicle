@@ -61,24 +61,28 @@ if [[ -z "${JVC_JAR}" ]] ; then
     die "Maven not installed (mvn command not found on PATH), cannot build JVC jar"
   fi
 
-  # Build and install utility library
+  # Build and install utility libraries
+  pushd "${JVC_DIR}"/utils/cobbzilla-parent || die "Error changing directories to ${JVC_DIR}/utils/cobbzilla-parent"
+  mvn install || die "Error installing cobbzilla-parent"
+  popd || die "popd error (pwd=$(pwd))"
+
   pushd "${JVC_DIR}"/utils/cobbzilla-utils || die "Error changing directories to ${JVC_DIR}/utils/cobbzilla-utils"
   if [[ -z "$(find target -type f -name "*.jar")" ]] ; then
     if [[ -z "$(find . -type f)" ]] ; then
       cd ../.. && \
-        ./bin/use_https_submodule && \
+        ./bin/use_https_submodules && \
         git submodule update --init --recursive && \
         cd - \
       || die "Error updating git submodule"
     fi
     mvn -DskipTests=true clean install || die "Error building cobbzilla-utils library"
-    popd || die "popd error"
   fi
+  popd || die "popd error (pwd=$(pwd))"
 
   # Build jvc uberjar
   pushd "${JVC_DIR}" || die "Error changing directories to ${JVC_DIR}"
   mvn -DskipTests=true -Puberjar clean package || die "Error building JVC jar"
-  popd || die "popd error"
+  popd || die "popd error (pwd=$(pwd))"
 
   JVC_JAR="$(find "${JVC_DIR}"/target -type f -name "jvc-*-prod.jar" | head -1)"
   if [[ -z "${JVC_JAR}" ]] ; then
