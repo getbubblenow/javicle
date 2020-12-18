@@ -63,8 +63,17 @@ if [[ -z "${JVC_JAR}" ]] ; then
 
   # Build and install utility library
   pushd "${JVC_DIR}"/utils/cobbzilla-utils || die "Error changing directories to ${JVC_DIR}/utils/cobbzilla-utils"
-  mvn -DskipTests=true clean install || die "Error building cobbzilla-utils library"
-  popd || die "popd error"
+  if [[ -z "$(find target -type f -name "*.jar")" ]] ; then
+    if [[ -z "$(find . -type f)" ]] ; then
+      cd ../.. && \
+        ./bin/use_https_submodule && \
+        git submodule update --init --recursive && \
+        cd - \
+      || die "Error updating git submodule"
+    fi
+    mvn -DskipTests=true clean install || die "Error building cobbzilla-utils library"
+    popd || die "popd error"
+  fi
 
   # Build jvc uberjar
   pushd "${JVC_DIR}" || die "Error changing directories to ${JVC_DIR}"
