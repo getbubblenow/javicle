@@ -55,9 +55,7 @@ and then run it like this:
 jvc my-spec.jvc
 ```
 Yes, the JVC is longer, but I think many would agree it is easier to read
-and maintain.
-
-As you can see above, JVC can also `validate` your operations to ensure that
+and maintain. It can also include validations (as shown above) to ensure
 the output assets are what you expect them to be.
 
 **As the number of media assets and operations grows, hand-crafted shell
