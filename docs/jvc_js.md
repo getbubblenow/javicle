@@ -47,7 +47,10 @@ What variables are available in the JS context? And what properties do they have
 Assets can be defined in the JVC's `assets` array, or as the output of an
 operation.
 
-Assets are referenced by their asset name. Assets have some useful properties:
+Assets are referenced by their asset name. Learn more about
+[Asset References](asset_refs.md).
+
+In a JVC JavaScript context, assets are JS objects with some useful properties:
 
 #### `duration`
 Duration in seconds of the asset (audio or video).
