@@ -8,7 +8,6 @@ import jvc.service.Toolbox;
 import org.cobbzilla.util.main.BaseMain;
 
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
-import static org.cobbzilla.util.json.JsonUtil.json;
 
 public class Jvc extends BaseMain<JvcOptions> {
 
@@ -36,7 +35,6 @@ public class Jvc extends BaseMain<JvcOptions> {
 
         final int opCount = spec.getOperations().length;
         err(">>> jvc: completed " + opCount + " operation"+(opCount>1?"s":""));
-        out(json(assetManager.getAssets()));
     }
 
 }
