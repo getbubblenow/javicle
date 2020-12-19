@@ -16,6 +16,8 @@ public class JAssetJs {
     public Double duration;
     public Integer width;
     public Integer height;
+    public Double aspectRatio;
+    public Integer samplingRate;
     public JTrackJs[] tracks = EMPTY_TRACKS;
     public JTrackJs[] videoTracks = EMPTY_TRACKS;
     public JTrackJs[] audioTracks = EMPTY_TRACKS;
@@ -30,6 +32,9 @@ public class JAssetJs {
 
         final BigDecimal h = asset.height();
         this.height = h == null ? null : h.intValue();
+
+        this.aspectRatio = asset.aspectRatio() == null ? Double.NaN : asset.aspectRatio().doubleValue();
+        this.samplingRate = asset.hasSamplingRate() ? asset.samplingRate().intValue() : 0;
 
         if (asset.hasInfo()) {
             final JMediaInfo info = asset.getInfo();

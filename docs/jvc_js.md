@@ -61,6 +61,12 @@ Resolution width in pixes (video or image).
 #### `height`
 Resolution height in pixes (video or image).
 
+#### `aspectRatio`
+Ratio of width / height (video or image).
+
+#### `samplingRate`
+Sampling rate in Hz (audio).
+
 #### `tracks`
 An array of the tracks in a video. Only includes audio and video tracks.
 
