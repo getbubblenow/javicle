@@ -2,7 +2,8 @@ package jvc.operation.exec;
 
 import jvc.model.JAsset;
 import jvc.model.JFileExtension;
-import jvc.model.operation.JOperation;
+import jvc.model.operation.JSingleOperationContext;
+import jvc.model.operation.JSingleSourceOperation;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,19 @@ import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.io.FileUtil.*;
 
 @Slf4j
-public abstract class SingleOrMultiSourceExecBase<OP extends JOperation> extends ExecBase<OP> {
+public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperation> extends ExecBase<OP> {
+
+    @Override public void operate(OP op, Toolbox toolbox, AssetManager assetManager) {
+        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
+        final JAsset source = opCtx.source;
+        final JAsset output = opCtx.output;
+        final JFileExtension formatType = opCtx.formatType;
+        final Map<String, Object> ctx = initialContext(toolbox, source);
+        addCommandContext(op, opCtx, ctx);
+        operate(op, toolbox, assetManager, source, output, formatType, ctx);
+    }
+
+    protected void addCommandContext(OP op, JSingleOperationContext opCtx, Map<String, Object> ctx) {}
 
     protected void operate(OP op, Toolbox toolbox, AssetManager assetManager, JAsset source, JAsset output, JFileExtension formatType, Map<String, Object> ctx) {
         if (source.hasList()) {

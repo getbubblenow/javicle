@@ -3,6 +3,7 @@ package jvc.model.operation;
 import jvc.model.JAsset;
 import jvc.model.JFileExtension;
 import jvc.service.AssetManager;
+import jvc.service.Toolbox;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +18,7 @@ public abstract class JMultiSourceOperation extends JOperation {
 
     @Getter @Setter private String[] sources;
 
-    public JMultiOperationContext getMultiInputContext(AssetManager assetManager) {
+    public JMultiOperationContext getMultiInputContext(AssetManager assetManager, Toolbox toolbox) {
         // validate sources
         final List<JAsset> sources = flattenAssetList(assetManager.resolve(getSources()));
         if (empty(sources)) die("operate: no sources");
@@ -31,6 +32,6 @@ public abstract class JMultiSourceOperation extends JOperation {
         // set the path, check if output asset already exists
         final JFileExtension formatType = output.getFormat().getFileExtension();
 
-        return new JMultiOperationContext(sources, output, formatType);
+        return new JMultiOperationContext(sources, output, formatType, assetManager, toolbox);
     }
 }

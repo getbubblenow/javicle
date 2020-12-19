@@ -12,7 +12,6 @@ import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.math.BigDecimal.ONE;
@@ -42,7 +41,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
 
     @Override public void operate(KenBurnsOperation op, Toolbox toolbox, AssetManager assetManager) {
 
-        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
+        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
         final JAsset source = opCtx.source;
         final JAsset output = opCtx.output;
         final JFileExtension formatType = opCtx.formatType;
@@ -53,9 +52,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
         output.setPath(abs(path));
 
         final StandardJsEngine js = toolbox.getJs();
-        final Map<String, Object> ctx = new HashMap<>();
-        ctx.put("ffmpeg", toolbox.getFfmpeg());
-        ctx.put("source", source);
+        final Map<String, Object> ctx = initialContext(toolbox, source);
         ctx.put("output", output);
         ctx.put("width", op.getWidth(ctx, js));
         ctx.put("height", op.getHeight(ctx, js));

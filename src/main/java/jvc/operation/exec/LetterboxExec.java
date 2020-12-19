@@ -1,15 +1,10 @@
 package jvc.operation.exec;
 
-import jvc.model.JAsset;
-import jvc.model.JFileExtension;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.operation.LetterboxOperation;
-import jvc.service.AssetManager;
-import jvc.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.javascript.StandardJsEngine;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
@@ -32,21 +27,13 @@ public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperatio
 
     @Override protected String getProcessTemplate() { return LETTERBOX_TEMPLATE; }
 
-    @Override public void operate(LetterboxOperation op, Toolbox toolbox, AssetManager assetManager) {
-
-        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
-        final JAsset source = opCtx.source;
-        final JAsset output = opCtx.output;
-        final JFileExtension formatType = opCtx.formatType;
-
-        final StandardJsEngine js = toolbox.getJs();
-        final Map<String, Object> ctx = new HashMap<>();
-        ctx.put("ffmpeg", toolbox.getFfmpeg());
-        ctx.put("source", source);
-
+    @Override protected void addCommandContext(LetterboxOperation op,
+                                               JSingleOperationContext opCtx,
+                                               Map<String, Object> ctx) {
         if (!op.hasWidth() || !op.hasHeight()) {
             die("operate: both width and height must be set");
         }
+        final StandardJsEngine js = opCtx.toolbox.getJs();
         ctx.put("width", op.getWidth(ctx, js).intValue());
         ctx.put("height", op.getHeight(ctx, js).intValue());
 
@@ -55,8 +42,5 @@ public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperatio
         } else {
             ctx.put("color", DEFAULT_LETTERBOX_COLOR);
         }
-
-        operate(op, toolbox, assetManager, source, output, formatType, ctx);
     }
-
 }

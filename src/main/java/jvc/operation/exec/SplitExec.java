@@ -11,7 +11,6 @@ import org.cobbzilla.util.javascript.JsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
@@ -26,15 +25,13 @@ public class SplitExec extends ExecBase<SplitOperation> {
 
     @Override public void operate(SplitOperation op, Toolbox toolbox, AssetManager assetManager) {
 
-        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
+        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
         final JAsset source = opCtx.source;
         final JAsset output = opCtx.output;
         final JFileExtension formatType = opCtx.formatType;
 
         final JsEngine js = toolbox.getJs();
-        final Map<String, Object> ctx = new HashMap<>();
-        ctx.put("ffmpeg", toolbox.getFfmpeg());
-        ctx.put("source", source);
+        final Map<String, Object> ctx = initialContext(toolbox, source);
 
         assetManager.addOperationArrayAsset(output);
         final BigDecimal incr = op.getIntervalIncr(ctx, js);

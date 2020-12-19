@@ -5,6 +5,7 @@ import jvc.model.JFileExtension;
 import jvc.model.JFormat;
 import jvc.model.info.JTrackType;
 import jvc.service.AssetManager;
+import jvc.service.Toolbox;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ public class JSingleSourceOperation extends JOperation {
 
     protected JTrackType outputMediaType() { return video; }
 
-    public JSingleOperationContext getSingleInputContext(AssetManager assetManager) {
+    public JSingleOperationContext getSingleInputContext(AssetManager assetManager, Toolbox toolbox) {
         final JAsset source = assetManager.resolve(getSource());
         final JAsset output = json2asset(getCreates());
         output.mergeFormat(source.getFormat());
@@ -35,7 +36,7 @@ public class JSingleSourceOperation extends JOperation {
         }
         final JFileExtension formatType = getFileExtension(source, output);
 
-        return new JSingleOperationContext(source, output, formatType);
+        return new JSingleOperationContext(source, output, formatType, assetManager, toolbox);
     }
 
     protected JFileExtension getFileExtension(JAsset source, JAsset output) {

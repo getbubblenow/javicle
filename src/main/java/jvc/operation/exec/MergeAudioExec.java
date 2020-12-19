@@ -35,30 +35,18 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
 
     @Override protected String getProcessTemplate() { return MERGE_AUDIO_TEMPLATE; }
 
-    @Override public void operate(MergeAudioOperation op, Toolbox toolbox, AssetManager assetManager) {
-        final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager);
-        final JAsset source = opCtx.source;
-        final JAsset output = opCtx.output;
-        final JFileExtension formatType = opCtx.formatType;
-
-        final JAsset audio = assetManager.resolve(op.getInsert());
-
-        final StandardJsEngine js = toolbox.getJs();
-        final Map<String, Object> ctx = new HashMap<>();
-        ctx.put("ffmpeg", toolbox.getFfmpeg());
-        ctx.put("source", source);
-        ctx.put("audio", audio);
-
+    @Override
+    protected void addCommandContext(MergeAudioOperation op, JSingleOperationContext opCtx, Map<String, Object> ctx) {
+        final JAsset audio = opCtx.assetManager.resolve(op.getInsert());
+        final StandardJsEngine js = opCtx.toolbox.getJs();
         final BigDecimal insertAt = op.getAt(ctx, js);
         ctx.put("start", insertAt);
 
         if (insertAt.compareTo(ZERO) > 0) {
-            final JAsset silence = createSilence(op, toolbox, assetManager, insertAt, audio);
-            final JAsset padded = padWithSilence(op, toolbox, assetManager, audio, silence);
+            final JAsset silence = createSilence(op, opCtx.toolbox, opCtx.assetManager, insertAt, audio);
+            final JAsset padded = padWithSilence(op, opCtx.toolbox, opCtx.assetManager, audio, silence);
             ctx.put("audio", padded);
         }
-
-        operate(op, toolbox, assetManager, source, output, formatType, ctx);
     }
 
     protected JAsset padWithSilence(MergeAudioOperation op,

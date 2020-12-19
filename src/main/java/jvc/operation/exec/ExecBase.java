@@ -42,6 +42,13 @@ public abstract class ExecBase<OP extends JOperation> {
         }
     }
 
+    protected Map<String, Object> initialContext(Toolbox toolbox, JAsset source) {
+        final Map<String, Object> ctx = new HashMap<>();
+        ctx.put("ffmpeg", toolbox.getFfmpeg());
+        ctx.put("source", source);
+        return ctx;
+    }
+
     public String exec(String script, boolean noExec) {
         if (noExec) {
             System.out.println(script);

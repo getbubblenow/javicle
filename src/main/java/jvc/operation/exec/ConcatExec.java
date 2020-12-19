@@ -33,7 +33,7 @@ public class ConcatExec extends ExecBase<ConcatOperation> {
 
     @Override public void operate(ConcatOperation op, Toolbox toolbox, AssetManager assetManager) {
 
-        final JMultiOperationContext opCtx = op.getMultiInputContext(assetManager);
+        final JMultiOperationContext opCtx = op.getMultiInputContext(assetManager, toolbox);
         final List<JAsset> sources = opCtx.sources;
         final JAsset output = opCtx.output;
         final JFileExtension formatType = opCtx.formatType;

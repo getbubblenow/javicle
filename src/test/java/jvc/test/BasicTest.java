@@ -31,6 +31,7 @@ public class BasicTest {
     @Test public void testRemoveTrack () { runSpec("tests/test_remove_track.jvc"); }
     @Test public void testMergeAudio  () { runSpec("tests/test_merge_audio.jvc"); }
     @Test public void testAddSilence  () { runSpec("tests/test_add_silence.jvc"); }
+    @Test public void testAdjustSpeed () { runSpec("tests/test_adjust_speed.jvc"); }
 
     private void runSpec(String specPath) {
         try {

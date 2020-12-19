@@ -198,6 +198,16 @@ support a `comment` field, which can be used as well.
       "source": "v2",                  // main video asset
       "channelLayout": "stereo",       // optional channel layout, usually 'mono' or 'stereo'. Default is 'stereo'
       "samplingRate": 48000            // optional sampling rate, in Hz. default is 48000
+    },
+
+    // adjust-speed example
+    {
+        "operation": "adjust-speed",     // name of the operation
+        "creates": "quickened",          // output asset name
+        "source": "v2",                  // main video asset
+        "factor": "4",                   // factor=1 is no change, factor>1 is faster, factor<1 is slower
+        "audio": "silent"                // audio: silent (default), unchanged, match
+                                         // if audio is match, then factor must be between 0.5 and 100
     }
   ]
 }

@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Adjust the speed of a video, optionally adjusting the audio as well.
+#
+# Usage:
+#
+#    jspeed in-file out-file speed-factor [audio-speed]
+#
+# in-file       : input video file
+# out-file      : write output file here
+# speed-factor  : factor=1 is unchanged, factor>1 is faster, factor<1 is slower
+# audio-speed   : can be: silent (default), unchanged, or match
+#
+# Note: if audio-speed is match, then speed-factor must be between 0.5 and 100
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvc_common
+
+IN_FILE="${1?no video-file provided}"
+OUT_FILE="${2?no out-file provided}"
+SPEED_FACTOR="${3?no speed-factor provided}"
+AUDIO_SPEED="${4}"
+
+echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"adjust-speed\",
+      \"creates\": {
+        \"name\": \"speed_adjusted\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"source\": \"input\",
+      \"factor\": \"${SPEED_FACTOR}\"$(if [[ -n "${AUDIO_SPEED}" ]] ; then echo ",
+      \"audio\": \"${AUDIO_SPEED}\"" ; fi)
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvc ${JVC_OPTIONS}
