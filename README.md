@@ -118,8 +118,7 @@ Transform a still image into video via a zoom-pan (aka Ken Burns) effect.
 
 ### [letterbox](src/test/resources/tests/test_letterbox.jvc)
 Resize a video, maintaining the aspect ratio and adding letterboxes on
-the sides or top/bottom. Handy for embedding mobile videos into other screen
-formats.
+the sides or top/bottom.
 
 ### [merge-audio](src/test/resources/tests/test_merge_audio.jvc)
 Merge an audio asset into the audio track of a video asset.
