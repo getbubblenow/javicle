@@ -43,7 +43,10 @@ With JVC, you'd write this spec file and save it to a file
       "creates": "src_split_files",
       "source": "src",
       "interval": "60",
-      "validate": [{ "comment": "expected 12 files", "test": "output.length === 12" }]
+      "validate": [{
+        "comment": "expect 5 output files",
+        "test": "output.assets.length === 5"
+      }]
   }]
 }
 ```
