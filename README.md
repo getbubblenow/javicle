@@ -117,9 +117,9 @@ Concatenate audio/video assets together into one asset.
 Transform a still image into video via a zoom-pan (aka Ken Burns) effect.
 
 ### [letterbox](src/test/resources/tests/test_letterbox.jvc)
-Transform a video from one size to another size, maintaining the aspect ratio
-of the video and adding letterboxes on the sides or top/bottom.
-Handy for embedding mobile videos into other screen formats.
+Resize a video, maintaining the aspect ratio and adding letterboxes on
+the sides or top/bottom. Handy for embedding mobile videos into other screen
+formats.
 
 ### [merge-audio](src/test/resources/tests/test_merge_audio.jvc)
 Merge an audio asset into the audio track of a video asset.
