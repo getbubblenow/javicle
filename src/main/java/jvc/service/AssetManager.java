@@ -129,8 +129,8 @@ public class AssetManager {
             } else {
                 // single element
                 final int index = parseIndexExpression(indexExpr, list, JIndexType.single);
-                if (index < 0 || index >= list.length) return die("parseIndexExpression("+indexExpr+"): index out of range: "+index);
-                return list[index];
+                if (Math.abs(index) >= list.length) return die("parseIndexExpression("+indexExpr+"): index out of range: "+index);
+                return index < 0 ? list[list.length + index] : list[index];
             }
 
         } else {
