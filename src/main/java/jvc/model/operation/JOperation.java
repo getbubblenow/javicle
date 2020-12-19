@@ -32,6 +32,7 @@ public abstract class JOperation {
 
     @Getter @Setter private String operation;
     @Getter @Setter private JsonNode creates;
+    @Getter @Setter private JValidation[] validate;
     @Getter @Setter private boolean noExec = false;
 
     @Getter @Setter private String comment;

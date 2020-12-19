@@ -42,7 +42,8 @@ With JVC, you'd write this spec file and save it to a file
       "operation": "split",
       "creates": "src_split_files",
       "source": "src",
-      "interval": "60"
+      "interval": "60",
+      "validate": [{ "comment": "expected 12 files", "test": "output.length === 12" }]
   }]
 }
 ```
@@ -52,6 +53,9 @@ jvc my-spec.jvc
 ```
 Yes, the JVC is longer, but I think many would agree it is easier to read
 and maintain.
+
+As you can see above, JVC can also `validate` your operations to ensure that
+the output assets are what you expect them to be.
 
 **As the number of media assets and operations grows, hand-crafted shell
 scripts with magical ffmpeg incantations become ever more inscrutable.**
@@ -142,6 +146,13 @@ Trim audio/video; crop a section of an asset, becomes a new asset.
 ## Complex Example
 Here is a [long, complex example](docs/complex_example.md) that uses
 every operation.
+
+## JVC JavaScript Expressions
+There are actually two DSLs in JVC. One is the JSON format for JVC files,
+which tells jvc where the assets are and what to do with them.
+
+The second DSL is not really a full DSL, it's more a JavaScript context
+in which you can evaluate expressions.
 
 ## What's with the name?
 A cross between a javelin and an icicle? JSON and a miracle?

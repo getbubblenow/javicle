@@ -32,14 +32,32 @@ Assets expose properties that can be referenced in operations. The properties cu
 * `height`: width of the video in pixels (video and image assets only)
 
 ## Operations
-Operations are transformations to perform on the inputs.
+Operations represent transformations to perform on the inputs, and validations
+to ensure correctness.
+
+### Operation Assets
+An operation requires one or more input assets. These assets are referenced
+using the `source` (or for `concat`, `sources`) parameter.
 
 An operation can produce one or more new assets, which can then be referenced in
 later operations.
 
-Most of the operation settings can be JavaScript expressions, for example:
+Learn more about [Asset References](asset_refs.md).
+
+### Operation Configuration
+Many of the operation settings can be JavaScript expressions, for example:
 
     "start": "someAsset.duration - 10"
 
 The above would set the `start` value to ten seconds before the end of `someAsset`.
 
+Learn more about [JavaScript expressions in JVC](jvc_js.md).
+
+### Operation Validation
+An operation may define validations to perform by defining a `validation` array.
+
+Each object in the array has properties `comment` (to describe the test) and
+`test` which is a JavaScript expression. If it evaluates to `true` then the
+test passes. If `false`, the test fails and the `comment` is printed.
+
+Learn more about [JavaScript expressions in JVC](jvc_js.md).
