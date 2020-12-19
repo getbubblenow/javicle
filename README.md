@@ -148,12 +148,10 @@ Trim audio/video; crop a section of an asset, becomes a new asset.
 Here is a [long, complex example](docs/complex_example.md) that uses
 every operation.
 
-## JVC JavaScript Expressions
-There are actually two DSLs in JVC. One is the JSON format for JVC files,
-which tells jvc where the assets are and what to do with them.
-
-The second DSL is not really a full DSL, it's more a JavaScript context
-in which you can evaluate expressions.
+## JavaScript Expressions
+Within a JVC spec file, operation parameters and validations can
+be [JavaScript expressions](docs/jvc_js.md), opening up some interesting
+capabilities. 
 
 ## What's with the name?
 A cross between a javelin and an icicle? JSON and a miracle?
