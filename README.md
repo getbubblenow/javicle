@@ -108,7 +108,7 @@ Add a silent audio track to a video asset.
 
 ### [adjust-speed](src/test/resources/tests/test_adjust_speed.jvc)
 Speed up or slow down a video asset. Sound can be silenced, played at
-regular speed, or sped up along with the video.
+regular speed, or sped up/slowed down to match the video.
 
 ### [concat](src/test/resources/tests/test_concat.jvc)
 Concatenate audio/video assets together into one asset.
