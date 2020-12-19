@@ -5,6 +5,7 @@ import jvc.model.operation.JOperation;
 import jvc.model.operation.JValidationResult;
 import jvc.operation.exec.ExecBase;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.javascript.JsEngine;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class JvcEngine {
 
     private final Toolbox toolbox;
@@ -38,7 +40,12 @@ public class JvcEngine {
                 .setExecIndex(completed.size())
                 .setNoExec(noExec)
                 .getExec();
+
         final Map<String, Object> ctx = exec.operate(op, toolbox, assetManager);
+        if (ctx == null) {
+            log.debug("runOp("+op.getOperation()+"): noop");
+            return;
+        }
 
         if (op.hasValidate()) {
             final JsEngine js = toolbox.getJs();

@@ -48,22 +48,21 @@ public class SplitExec extends ExecBase<SplitOperation> {
                     if (output.destIsDirectory()) {
                         outfile = sliceFile(output, formatType, i, incr);
                     } else {
-                        die("dest exists and is not a directory: "+output.getDest());
-                        return null;
+                        return die("dest exists and is not a directory: "+output.getDest());
                     }
                 }
             } else {
                 outfile = assetManager.assetPath(op, source, formatType, new Object[]{i, incr});
             }
 
+            final JAsset slice = new JAsset(output, outfile);
             if (outfile.exists()) {
                 log.info("operate: outfile exists, not re-creating: "+abs(outfile));
+                assetManager.addOperationAssetSlice(output, slice);
                 continue;
             } else {
                 mkdirOrDie(outfile.getParentFile());
             }
-            final JAsset slice = new JAsset(output);
-            slice.setPath(abs(outfile));
             slice.setName(source.getName()+"_"+i+"_"+incr);
 
             ctx.put("output", slice);
@@ -76,7 +75,9 @@ public class SplitExec extends ExecBase<SplitOperation> {
             log.debug("operate: command output: "+scriptOutput);
             assetManager.addOperationAssetSlice(output, slice);
         }
+
         log.info("operate: completed");
+        ctx.put("output", output);
         return ctx;
     }
 

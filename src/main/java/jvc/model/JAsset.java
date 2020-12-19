@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import jvc.model.info.JMediaInfo;
 import jvc.model.info.JTrack;
 import jvc.model.info.JTrackType;
+import jvc.model.js.JAssetJs;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.*;
@@ -44,8 +45,11 @@ public class JAsset implements JsObjectView {
 
     public JAsset(JAsset other) { copy(this, other, null, COPY_EXCLUDE_FIELDS); }
 
+    public JAsset(JAsset other, File file) { this(other); setPath(abs(file)); }
+
     @Getter @Setter private String name;
     @Getter @Setter private String path;
+
     public boolean hasPath() { return !empty(path); }
 
     // an asset can specify where its file should live
@@ -114,7 +118,7 @@ public class JAsset implements JsObjectView {
         setFormat(info.getFormat());
         return this;
     }
-    public boolean hasInfo() { return info != null; }
+    public boolean hasInfo() { return info != null && !info.emptyMedia(); }
 
     @Getter @Setter private String comment;
     public boolean hasComment () { return !empty(comment); }
@@ -285,19 +289,4 @@ public class JAsset implements JsObjectView {
 
     @Override public Object toJs() { return new JAssetJs(this); }
 
-    public static class JAssetJs {
-        public Double duration;
-        public Integer width;
-        public Integer height;
-        public JAssetJs (JAsset asset) {
-            final BigDecimal d = asset.duration();
-            this.duration = d == null ? null : d.doubleValue();
-
-            final BigDecimal w = asset.width();
-            this.width = w == null ? null : w.intValue();
-
-            final BigDecimal h = asset.height();
-            this.height = h == null ? null : h.intValue();
-        }
-    }
 }

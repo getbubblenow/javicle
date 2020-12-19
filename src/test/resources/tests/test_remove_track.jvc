@@ -14,19 +14,37 @@
       "creates": "v2",
       "source": "vid2",
       "start": "0",
-      "end": "20"
+      "end": "20",
+      "validate": [{
+        "comment": "expect output to be about 20 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 20, 0.1)"
+      }]
     },
     {
       "operation": "remove-track",     // name of the operation
       "creates": "vid2_video_only",    // name of the output asset
       "source": "v2",                  // main video asset
-      "track": "audio"                 // remove all audio tracks
+      "track": "audio",                // remove all audio tracks
+      "validate": [{
+        "comment": "expect only one track",
+        "test": "output.tracks.length === 1"
+      }, {
+        "comment": "expect only track to be video",
+        "test": "output.videoTracks.length === 1"
+      }]
     },
     {
       "operation": "remove-track",     // name of the operation
       "creates": "vid2_audio_only",    // name of the output asset
       "source": "v2",                  // main video asset
-      "track": "video"                 // remove all video tracks
+      "track": "video",                // remove all video tracks
+      "validate": [{
+        "comment": "expect only one track",
+        "test": "output.tracks.length === 1"
+      }, {
+        "comment": "expect only track to be audio",
+        "test": "output.audioTracks.length === 1"
+      }]
     },
     {
       "operation": "remove-track",     // name of the operation
@@ -36,7 +54,17 @@
         // only remove the first audio track
         "type": "audio",               // track type to remove
         "number": "0"                  // track number to remove
-      }
+      },
+      "validate": [{
+        "comment": "expect one less track",
+        "test": "output.tracks.length === source.tracks.length - 1"
+      }, {
+        "comment": "expect one less audio track",
+        "test": "output.audioTracks.length === source.audioTracks.length - 1"
+      }, {
+        "comment": "expect video tracks unchanged",
+        "test": "output.videoTracks.length === source.videoTracks.length"
+      }]
     }
   ]
 }

@@ -20,7 +20,11 @@
       "creates": "v1",
       "source": "vid1",
       "start": "0",
-      "end": "60"
+      "end": "60",
+      "validate": [{
+        "comment": "expect output to be about 60 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 60, 0.1)"
+      }]
     },
     {
       // overlay video is 10 seconds long
@@ -28,7 +32,11 @@
       "creates": "v2",
       "source": "vid2",
       "start": "10",
-      "end": "20"
+      "end": "20",
+      "validate": [{
+        "comment": "expect output to be about 10 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 10, 0.1)"
+      }]
     },
     {
       "operation": "overlay",          // name of the operation
@@ -49,7 +57,10 @@
         "height": "source.height",     // how tall the overlay will be, in pixels. default is the full overlay height, or maintain aspect ratio if width was set
         "x": "source.width / 2",       // horizontal overlay position on main video. default is 0
         "y": "source.height / 2"       // vertical overlay position on main video. default is 0
-      }
+      },
+      "validate": [
+        // todo: how to validate overlay was added?
+      ]
     }
   ]
 }

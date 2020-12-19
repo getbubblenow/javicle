@@ -43,7 +43,8 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
                     outfile = new File(output.destDirectory(), basename(appendToFileNameBeforeExt(asset.getPath(), "_"+op.shortString())));
                     if (outfile.exists()) {
                         log.info("operate: dest exists: "+abs(outfile));
-                        return ctx;
+                        assetManager.addOperationAssetSlice(output, subOutput.setPath(abs(outfile)));
+                        continue;
                     }
                 } else {
                     outfile = defaultOutfile;
@@ -60,6 +61,7 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
             process(ctx, op, source, output, output, toolbox, assetManager);
             assetManager.addOperationAsset(output);
         }
+        ctx.put("output", output);
         return ctx;
     }
 

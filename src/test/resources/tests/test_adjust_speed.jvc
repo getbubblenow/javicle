@@ -14,15 +14,23 @@
       "creates": "v2",
       "source": "vid2",
       "start": "10",
-      "end": "30"
+      "end": "30",
+      "validate": [{
+        "comment": "expect output to be about 20 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 20, 0.1)"
+      }]
     },
     {
       "operation": "adjust-speed",     // name of the operation
       "creates": "quickened",          // output asset name
       "source": "v2",                  // main video asset
       "factor": "4",                   // factor=1 is no change, factor>1 is faster, factor<1 is slower
-      "audio": "silent"                // audio: silent (default), unchanged, match
+      "audio": "silent",               // audio: silent (default), unchanged, match
                                        // if audio is match, then factor must be between 0.5 and 100
+      "validate": [{
+        "comment": "expect output to be about 5 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 5, 0.1)"
+      }]
     }
   ]
 }

@@ -12,7 +12,17 @@
       },
       "source": "vid1_splits",       // trim these source assets
       "start": "1",                  // cropped region starts here, default is zero
-      "end": "6"                     // cropped region ends here, default is end of video
+      "end": "6",                    // cropped region ends here, default is end of video
+      "validate": [{
+        "comment": "expect output contain 4 assets",
+        "test": "output.assets.length === 4"
+      }, {
+        "comment": "expect first asset to be about 5 seconds long",
+        "test": "is_within(output.assets[0].duration, 5, 0.1)"
+      }, {
+        "comment": "expect last asset to be about 5 seconds long",
+        "test": "is_within(output.assets[output.assets.length-1].duration, 5, 0.1)"
+      }]
     }
   ]
 }

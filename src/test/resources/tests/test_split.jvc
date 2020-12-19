@@ -1,6 +1,6 @@
 {
   "assets": [
-    // these are US government videos not covered by copyright
+    // these are US government videos not covered by copyright. resolution is 320x240
     {
       "name": "vid1",
       "path": "https://archive.org/download/gov.archives.arc.1257628/gov.archives.arc.1257628_512kb.mp4",
@@ -17,7 +17,17 @@
       "source": "vid1",              // split this source asset
       "interval": "10",              // split every ten seconds
       "start": "65",                 // start one minute and five seconds into the video
-      "end": "100"                   // end 100 seconds into the video
+      "end": "100",                  // end 100 seconds into the video
+      "validate": [{
+        "comment": "expect output contain 4 assets",
+        "test": "output.assets.length === 4"
+      }, {
+        "comment": "expect first asset to be about 10 seconds long",
+        "test": "is_within(output.assets[0].duration, 10, 0.1)"
+      }, {
+        "comment": "expect last asset to be about 10 seconds long",
+        "test": "is_within(output.assets[output.assets.length-1].duration, 10, 0.1)"
+      }]
     }
   ]
 }

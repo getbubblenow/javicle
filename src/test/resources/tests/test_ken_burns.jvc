@@ -19,7 +19,14 @@
       "x": "source.width * 0.6",       // pan to this x-position
       "y": "source.height * 0.4",      // pan to this y-position
       "width": "1024",                 // width of output video
-      "height": "768"                  // height of output video
+      "height": "768",                 // height of output video
+      "validate": [{
+        "comment": "expect output to be about 5 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 5, 0.1)"
+      }, {
+        "comment": "expect output resolution of 1024x768",
+        "test": "output.width === 1024 && output.height === 768"
+      }]
     }
   ]
 }

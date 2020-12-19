@@ -1,6 +1,6 @@
 {
   "assets": [
-    // wildcard matches multiple files, vid1_splits becomes a "list" asset
+    // wildcard matches multiple files, vid1_splits becomes a "list" asset. resolution is 320x240
     { "name": "vid1_splits", "path": "src/test/resources/outputs/vid1_splits_*.mp4" }
   ],
   "operations": [
@@ -10,7 +10,17 @@
       "source": "vid1_splits[2]",      // box this source asset
       "width": "source.width * 2",     // width of output asset. if omitted and height is present, width will be proportional
       "height": "source.height",       // height of output asset. if omitted and width is present, height will be proportional
-      "color": "AliceBlue"             // letterbox padding color
+      "color": "AliceBlue",            // letterbox padding color
+      "validate": [{
+        "comment": "expect output resolution with double source width",
+        "test": "output.width === 2 * source.width"
+      }, {
+        "comment": "expect output resolution with same height as source",
+        "test": "output.height === source.height"
+      }, {
+        "comment": "expect output resolution of 640x240",
+        "test": "output.width === 640 && output.height === 240"
+      }]
     },
     {
       "operation": "letterbox",        // name of the operation
@@ -18,7 +28,17 @@
       "source": "vid1_splits[2]",      // box this source assets
       "width": "source.width",         // width of output asset. if omitted and height is present, width will be proportional
       "height": "source.height * 2",   // height of output asset. if omitted and width is present, height will be proportional
-      "color": "DarkCyan"              // letterbox padding color
+      "color": "DarkCyan",             // letterbox padding color
+      "validate": [{
+        "comment": "expect output resolution with double source height",
+        "test": "output.height === 2 * source.height"
+      }, {
+        "comment": "expect output resolution with same width as source",
+        "test": "output.width === source.width"
+      }, {
+        "comment": "expect output resolution of 320x480",
+        "test": "output.width === 320 && output.height === 480"
+      }]
     }
   ]
 }

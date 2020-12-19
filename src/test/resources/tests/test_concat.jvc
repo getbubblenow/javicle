@@ -10,12 +10,20 @@
       "creates": {
         "name": "combined_vid1",          // name of the output asset
         "dest": "src/test/resources/outputs/combined1.mp4" // asset will be written to this file
-      }
+      },
+      "validate": [{
+        "comment": "expect output to be about 40 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 40, 0.1)"
+      }]
     },
     {
       "operation": "concat",              // name of the operation
       "sources": ["vid1_splits[1..2]"],   // concatentate these sources -- the 2nd and 3rd files only
-      "creates": "combined_vid2"          // name of the output asset, will be written to scratch directory
+      "creates": "combined_vid2",         // name of the output asset, will be written to scratch directory
+      "validate": [{
+        "comment": "expect output to be about 20 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 20, 0.1)"
+      }]
     }
   ]
 }

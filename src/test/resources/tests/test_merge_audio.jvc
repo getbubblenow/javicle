@@ -20,14 +20,21 @@
       "creates": "v2",
       "source": "vid2",
       "start": "10",
-      "end": "30"
+      "end": "30",
+      "validate": [{
+        "comment": "expect output to be about 20 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 20, 0.1)"
+      }]
     },
     {
       "operation": "merge-audio",      // name of the operation
       "creates": "with_roar",          // output asset name
       "source": "v2",                  // main video asset
       "insert": "bull-roar",           // audio asset to insert
-      "at": "5"                        // when (on the video timeline) to start playing the audio. default is 0 (beginning)
+      "at": "5",                       // when (on the video timeline) to start playing the audio. default is 0 (beginning)
+      "validate": [
+        // todo: how to validate audio was inserted?
+      ]
     }
   ]
 }

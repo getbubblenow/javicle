@@ -22,7 +22,7 @@ public class JMediaInfo {
     }
 
     @Getter @Setter private JMedia media;
-    private boolean emptyMedia() { return media == null || empty(media.getTrack()); }
+    public boolean emptyMedia() { return media == null || empty(media.getTrack()); }
 
     private final AtomicReference<JFormat> formatRef = new AtomicReference<>();
 
