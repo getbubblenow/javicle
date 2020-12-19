@@ -14,7 +14,11 @@
       "creates": "v2",
       "source": "vid2",
       "start": "10",
-      "end": "30"
+      "end": "30",
+      "validate": [{
+        "comment": "expect output to be about 20 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 20, 0.1)"
+      }]
     },
     // create 20 seconds of silent audio, combine with input video, produce silent video output.
     {
@@ -22,7 +26,11 @@
       "creates": "v2_silent",          // output asset name
       "source": "v2",                  // main video asset
       "channelLayout": "stereo",       // optional channel layout, usually 'mono' or 'stereo'. Default is 'stereo'
-      "samplingRate": 48000            // optional sampling rate, in Hz. default is 48000
+      "samplingRate": 48000,           // optional sampling rate, in Hz. default is 48000
+      "validate": [{
+        "comment": "expect output to be about 20 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 20, 0.1)"
+      }]
     }
   ]
 }

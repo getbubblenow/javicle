@@ -17,19 +17,19 @@ import static org.cobbzilla.util.io.FileUtil.*;
 @Slf4j
 public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperation> extends ExecBase<OP> {
 
-    @Override public void operate(OP op, Toolbox toolbox, AssetManager assetManager) {
+    @Override public Map<String, Object> operate(OP op, Toolbox toolbox, AssetManager assetManager) {
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
         final JAsset source = opCtx.source;
         final JAsset output = opCtx.output;
         final JFileExtension formatType = opCtx.formatType;
         final Map<String, Object> ctx = initialContext(toolbox, source);
         addCommandContext(op, opCtx, ctx);
-        operate(op, toolbox, assetManager, source, output, formatType, ctx);
+        return operate(op, toolbox, assetManager, source, output, formatType, ctx);
     }
 
     protected void addCommandContext(OP op, JSingleOperationContext opCtx, Map<String, Object> ctx) {}
 
-    protected void operate(OP op, Toolbox toolbox, AssetManager assetManager, JAsset source, JAsset output, JFileExtension formatType, Map<String, Object> ctx) {
+    protected Map<String, Object> operate(OP op, Toolbox toolbox, AssetManager assetManager, JAsset source, JAsset output, JFileExtension formatType, Map<String, Object> ctx) {
         if (source.hasList()) {
             if (output.hasDest()) {
                 if (!output.destIsDirectory()) die("operate: dest is not a directory: "+output.getDest());
@@ -43,7 +43,7 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
                     outfile = new File(output.destDirectory(), basename(appendToFileNameBeforeExt(asset.getPath(), "_"+op.shortString())));
                     if (outfile.exists()) {
                         log.info("operate: dest exists: "+abs(outfile));
-                        return;
+                        return ctx;
                     }
                 } else {
                     outfile = defaultOutfile;
@@ -55,11 +55,12 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
         } else {
             final File defaultOutfile = assetManager.assetPath(op, source, formatType);
             final File path = resolveOutputPath(output, defaultOutfile);
-            if (path == null) return;
+            if (path == null) return null;
             output.setPath(abs(path));
             process(ctx, op, source, output, output, toolbox, assetManager);
             assetManager.addOperationAsset(output);
         }
+        return ctx;
     }
 
     protected abstract String getProcessTemplate();

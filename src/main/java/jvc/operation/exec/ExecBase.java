@@ -21,7 +21,7 @@ import static org.cobbzilla.util.system.CommandShell.execScript;
 @Slf4j
 public abstract class ExecBase<OP extends JOperation> {
 
-    public abstract void operate(OP operation, Toolbox toolbox, AssetManager assetManager);
+    public abstract Map<String, Object> operate(OP operation, Toolbox toolbox, AssetManager assetManager);
 
     protected String renderScript(Toolbox toolbox, Map<String, Object> ctx, String template) {
         return HandlebarsUtil.apply(toolbox.getHandlebars(), template, ctx);

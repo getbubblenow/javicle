@@ -23,7 +23,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
     public static final String SPLIT_TEMPLATE
             = "{{ffmpeg}} -i {{{source.path}}} -ss {{startSeconds}} -t {{interval}} -y {{{output.path}}}";
 
-    @Override public void operate(SplitOperation op, Toolbox toolbox, AssetManager assetManager) {
+    @Override public Map<String, Object> operate(SplitOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
         final JAsset source = opCtx.source;
@@ -49,7 +49,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
                         outfile = sliceFile(output, formatType, i, incr);
                     } else {
                         die("dest exists and is not a directory: "+output.getDest());
-                        return;
+                        return null;
                     }
                 }
             } else {
@@ -77,6 +77,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
             assetManager.addOperationAssetSlice(output, slice);
         }
         log.info("operate: completed");
+        return ctx;
     }
 
     private File sliceFile(JAsset output, JFileExtension formatType, BigDecimal i, BigDecimal incr) {

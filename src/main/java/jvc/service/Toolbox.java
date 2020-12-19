@@ -39,13 +39,22 @@ public class Toolbox {
 
     @Getter(lazy=true) private final Handlebars handlebars = initHandlebars();
 
-    @Getter(lazy=true) private final StandardJsEngine js = new StandardJsEngine();
+    @Getter(lazy=true) private final JsEngine js = new StandardJsEngine();
 
     public static String eval(String val, Map<String, Object> ctx, JsEngine js) {
         final Map<String, Object> jsCtx = Toolbox.jsContext(ctx);
         try {
             final Object result = js.evaluate(val, jsCtx);
             return result == null ? null : result.toString();
+        } catch (Exception e) {
+            return die("eval: error evaluating: '"+val+"': "+shortError(e));
+        }
+    }
+
+    public static boolean evalBoolean(String val, Map<String, Object> ctx, JsEngine js) {
+        final Map<String, Object> jsCtx = Toolbox.jsContext(ctx);
+        try {
+            return js.evaluateBoolean(val, jsCtx);
         } catch (Exception e) {
             return die("eval: error evaluating: '"+val+"': "+shortError(e));
         }

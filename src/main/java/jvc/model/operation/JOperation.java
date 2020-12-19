@@ -1,5 +1,6 @@
 package jvc.model.operation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import jvc.model.JAsset;
@@ -32,11 +33,16 @@ public abstract class JOperation {
 
     @Getter @Setter private String operation;
     @Getter @Setter private JsonNode creates;
-    @Getter @Setter private JValidation[] validate;
     @Getter @Setter private boolean noExec = false;
+
+    @Getter @Setter private JValidation[] validate;
+    public boolean hasValidate() { return !empty(validate); }
 
     @Getter @Setter private String comment;
     public boolean hasComment () { return !empty(comment); }
+
+    @JsonIgnore @Getter @Setter private Integer execIndex;
+    public String execIndex() { return execIndex != null ? ""+execIndex : "(null)"; }
 
     public String hash(JAsset[] sources) { return hash(sources, null); }
 

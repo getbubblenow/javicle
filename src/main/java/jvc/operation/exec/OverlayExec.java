@@ -7,7 +7,7 @@ import jvc.operation.OverlayOperation;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.javascript.StandardJsEngine;
+import org.cobbzilla.util.javascript.JsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -24,7 +24,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
             + "[0:v][1v] overlay={{{overlayFilterConfig}}} "
             + "\" -y {{{output.path}}}";
 
-    @Override public void operate(OverlayOperation op, Toolbox toolbox, AssetManager assetManager) {
+    @Override public Map<String, Object> operate(OverlayOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
         final JAsset source = opCtx.source;
@@ -36,10 +36,10 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
 
         final File defaultOutfile = assetManager.assetPath(op, source, formatType);
         final File path = resolveOutputPath(output, defaultOutfile);
-        if (path == null) return;
+        if (path == null) return null;
         output.setPath(abs(path));
 
-        final StandardJsEngine js = toolbox.getJs();
+        final JsEngine js = toolbox.getJs();
         final Map<String, Object> ctx = initialContext(toolbox, source);
         ctx.put("overlay", overlaySource);
 
@@ -58,6 +58,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
         assetManager.addOperationAsset(output);
+        return ctx;
     }
 
     private String buildOverlayFilter(OverlayOperation op,
@@ -65,7 +66,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
                                       JAsset overlaySource,
                                       OverlayOperation.OverlayConfig overlay,
                                       Map<String, Object> ctx,
-                                      StandardJsEngine js) {
+                                      JsEngine js) {
         final StringBuilder b = new StringBuilder();
         final BigDecimal startTime = overlay.getStartTime(ctx, js);
         final BigDecimal endTime = overlay.hasEndTime() ? overlay.getEndTime(ctx, js) : overlaySource.duration();

@@ -9,7 +9,7 @@ import jvc.service.Toolbox;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.cobbzilla.util.io.TempDir;
-import org.cobbzilla.util.javascript.StandardJsEngine;
+import org.cobbzilla.util.javascript.JsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -38,7 +38,7 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
     @Override
     protected void addCommandContext(MergeAudioOperation op, JSingleOperationContext opCtx, Map<String, Object> ctx) {
         final JAsset audio = opCtx.assetManager.resolve(op.getInsert());
-        final StandardJsEngine js = opCtx.toolbox.getJs();
+        final JsEngine js = opCtx.toolbox.getJs();
         final BigDecimal insertAt = op.getAt(ctx, js);
         ctx.put("start", insertAt);
 

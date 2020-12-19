@@ -3,7 +3,7 @@ package jvc.operation.exec;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.operation.LetterboxOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.javascript.StandardJsEngine;
+import org.cobbzilla.util.javascript.JsEngine;
 
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class LetterboxExec extends SingleOrMultiSourceExecBase<LetterboxOperatio
         if (!op.hasWidth() || !op.hasHeight()) {
             die("operate: both width and height must be set");
         }
-        final StandardJsEngine js = opCtx.toolbox.getJs();
+        final JsEngine js = opCtx.toolbox.getJs();
         ctx.put("width", op.getWidth(ctx, js).intValue());
         ctx.put("height", op.getHeight(ctx, js).intValue());
 

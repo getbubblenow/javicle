@@ -8,7 +8,7 @@ import jvc.operation.KenBurnsOperation;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.javascript.StandardJsEngine;
+import org.cobbzilla.util.javascript.JsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -39,7 +39,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
             + "s={{width}}x{{height}}"
             + "\" -y {{{output.path}}}";
 
-    @Override public void operate(KenBurnsOperation op, Toolbox toolbox, AssetManager assetManager) {
+    @Override public Map<String, Object> operate(KenBurnsOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
         final JAsset source = opCtx.source;
@@ -48,10 +48,10 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
 
         final File defaultOutfile = assetManager.assetPath(op, source, formatType);
         final File path = resolveOutputPath(output, defaultOutfile);
-        if (path == null) return;
+        if (path == null) return null;
         output.setPath(abs(path));
 
-        final StandardJsEngine js = toolbox.getJs();
+        final JsEngine js = toolbox.getJs();
         final Map<String, Object> ctx = initialContext(toolbox, source);
         ctx.put("output", output);
         ctx.put("width", op.getWidth(ctx, js));
@@ -96,6 +96,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
         final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
         assetManager.addOperationAsset(output);
+        return ctx;
     }
 
 }

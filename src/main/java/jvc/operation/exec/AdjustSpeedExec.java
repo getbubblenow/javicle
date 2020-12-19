@@ -3,7 +3,7 @@ package jvc.operation.exec;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.operation.AdjustSpeedOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.javascript.StandardJsEngine;
+import org.cobbzilla.util.javascript.JsEngine;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class AdjustSpeedExec extends SingleOrMultiSourceExecBase<AdjustSpeedOper
     @Override protected void addCommandContext(AdjustSpeedOperation op,
                                                JSingleOperationContext opCtx,
                                                Map<String, Object> ctx) {
-        final StandardJsEngine js = opCtx.toolbox.getJs();
+        final JsEngine js = opCtx.toolbox.getJs();
         final BigDecimal factor = op.getFactor(ctx, js);
 
         ctx.put(op.getAudio().name(), true);

@@ -4,6 +4,7 @@ import jvc.model.JAsset;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.operation.ScaleOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.cobbzilla.util.javascript.JsEngine;
 import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.math.BigDecimal;
@@ -22,7 +23,7 @@ public class ScaleExec extends SingleOrMultiSourceExecBase<ScaleOperation> {
     @Override protected void addCommandContext(ScaleOperation op,
                                                JSingleOperationContext opCtx,
                                                Map<String, Object> ctx) {
-        final StandardJsEngine js = opCtx.toolbox.getJs();
+        final JsEngine js = opCtx.toolbox.getJs();
         final JAsset source = opCtx.source;
         if (op.hasFactor()) {
             final BigDecimal factor = op.getFactor(ctx, js);

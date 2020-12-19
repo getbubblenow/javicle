@@ -5,7 +5,7 @@ import jvc.operation.TrimOperation;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.javascript.StandardJsEngine;
+import org.cobbzilla.util.javascript.JsEngine;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class TrimExec extends SingleOrMultiSourceExecBase<TrimOperation> {
                                      JAsset subOutput,
                                      Toolbox toolbox,
                                      AssetManager assetManager) {
-        final StandardJsEngine js = toolbox.getJs();
+        final JsEngine js = toolbox.getJs();
         final BigDecimal startTime = op.getStartTime(ctx, js);
         ctx.put("startSeconds", startTime);
         if (op.hasEndTime()) ctx.put("interval", op.getEndTime(ctx, js).subtract(startTime));

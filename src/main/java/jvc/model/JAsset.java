@@ -286,12 +286,12 @@ public class JAsset implements JsObjectView {
     @Override public Object toJs() { return new JAssetJs(this); }
 
     public static class JAssetJs {
-        public Integer duration;
+        public Double duration;
         public Integer width;
         public Integer height;
         public JAssetJs (JAsset asset) {
             final BigDecimal d = asset.duration();
-            this.duration = d == null ? null : d.intValue();
+            this.duration = d == null ? null : d.doubleValue();
 
             final BigDecimal w = asset.width();
             this.width = w == null ? null : w.intValue();

@@ -31,7 +31,7 @@ public class ConcatExec extends ExecBase<ConcatOperation> {
             // output combined result
             + "-map \"[v]\" -map \"[a]\" -y {{{output.path}}}";
 
-    @Override public void operate(ConcatOperation op, Toolbox toolbox, AssetManager assetManager) {
+    @Override public Map<String, Object> operate(ConcatOperation op, Toolbox toolbox, AssetManager assetManager) {
 
         final JMultiOperationContext opCtx = op.getMultiInputContext(assetManager, toolbox);
         final List<JAsset> sources = opCtx.sources;
@@ -40,7 +40,7 @@ public class ConcatExec extends ExecBase<ConcatOperation> {
 
         final File defaultOutfile = assetManager.assetPath(op, sources, formatType);
         final File path = resolveOutputPath(output, defaultOutfile);
-        if (path == null) return;
+        if (path == null) return null;
         output.setPath(abs(path));
 
         final Map<String, Object> ctx = new HashMap<>();
@@ -53,6 +53,7 @@ public class ConcatExec extends ExecBase<ConcatOperation> {
         final String scriptOutput = exec(script, op.isNoExec());
         log.debug("operate: command output: "+scriptOutput);
         assetManager.addOperationAsset(output);
+        return ctx;
     }
 
 }

@@ -2,10 +2,14 @@ package jvc.main;
 
 
 import jvc.model.JSpec;
+import jvc.model.operation.JValidationResult;
 import jvc.service.AssetManager;
+import jvc.service.JOperationValidationFailure;
 import jvc.service.JvcEngine;
 import jvc.service.Toolbox;
 import org.cobbzilla.util.main.BaseMain;
+
+import java.util.List;
 
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 
@@ -31,10 +35,23 @@ public class Jvc extends BaseMain<JvcOptions> {
         final AssetManager assetManager = new AssetManager(toolbox, getOptions().scratchDir());
         final JvcEngine opEngine = new JvcEngine(toolbox, assetManager, noExec);
 
-        opEngine.runSpec(spec);
+        try {
+            opEngine.runSpec(spec);
+            printCompleted(opEngine);
 
-        final int opCount = spec.getOperations().length;
-        err(">>> jvc: completed " + opCount + " operation"+(opCount>1?"s":""));
+        } catch (JOperationValidationFailure e) {
+            printCompleted(opEngine);
+            final List<JValidationResult> results = e.getResults();
+            err(">>> jvc: operation (index="+e.getOperation().execIndex()+") failed: ");
+            for (JValidationResult r : results) {
+                err(r.toString());
+            }
+        }
+    }
+
+    private void printCompleted(JvcEngine opEngine) {
+        final int opCount = opEngine.getCompleted().size();
+        err(">>> jvc: completed " + opCount + " operation" + (opCount > 1 ? "s" : ""));
     }
 
 }

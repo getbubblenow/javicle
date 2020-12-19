@@ -2,7 +2,6 @@ package jvc.operation;
 
 import jvc.model.JAsset;
 import org.cobbzilla.util.javascript.JsEngine;
-import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -23,7 +22,7 @@ public interface HasWidthAndHeight {
     default BigDecimal getHeight(Map<String, Object> ctx, JsEngine js) { return evalBig(getHeight(), ctx, js); }
 
     default void setProportionalWidthAndHeight(Map<String, Object> ctx,
-                                               StandardJsEngine js,
+                                               JsEngine js,
                                                JAsset asset) {
         if (hasWidth()) {
             final BigDecimal width = getWidth(ctx, js);
