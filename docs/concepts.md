@@ -32,9 +32,9 @@ Assets expose properties that can be referenced in operations. The properties cu
 * `height`: width of the video in pixels (video and image assets only)
 * `aspectRatio`: ratio of width / height (video and image assets only)
 * `samplingRate`: sampling rate in Hz (audio assets only)
-* `tracks`: array of tracks. only includes audio and video tracks (video only)
-* `audioTracks`: array of audio tracks (video only)
-* `videoTracks`: array of video tracks (video only)
+* `tracks`: array of tracks. only includes audio and video tracks (video assets only)
+* `audioTracks`: array of audio tracks (video assets only)
+* `videoTracks`: array of video tracks (video assets only)
 * `assets`: for a list asset, these are the nested sub-assets
 
 ## Operations
