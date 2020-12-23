@@ -10,7 +10,11 @@ import static jvc.service.Toolbox.divideBig;
 import static jvc.service.Toolbox.evalBig;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 
+// todo: add support for default height/width. implement defaults in subclasses.
 public interface HasWidthAndHeight {
+
+    String DEFAULT_WIDTH = "source.width";
+    String DEFAULT_HEIGHT = "source.height";
 
     String getWidth ();
     default boolean hasWidth () { return !empty(getWidth()); }
@@ -18,8 +22,11 @@ public interface HasWidthAndHeight {
     String getHeight ();
     default boolean hasHeight () { return !empty(getHeight()); }
 
-    default BigDecimal getWidth(Map<String, Object> ctx, JsEngine js) { return evalBig(getWidth(), ctx, js); }
-    default BigDecimal getHeight(Map<String, Object> ctx, JsEngine js) { return evalBig(getHeight(), ctx, js); }
+    default BigDecimal defaultWidth(Map<String, Object> ctx, JsEngine js) { return evalBig(DEFAULT_WIDTH, ctx, js); }
+    default BigDecimal defaultHeight(Map<String, Object> ctx, JsEngine js) { return evalBig(DEFAULT_HEIGHT, ctx, js); }
+
+    default BigDecimal getWidth(Map<String, Object> ctx, JsEngine js) { return evalBig(getWidth(), ctx, js, defaultWidth(ctx, js)); }
+    default BigDecimal getHeight(Map<String, Object> ctx, JsEngine js) { return evalBig(getHeight(), ctx, js, defaultHeight(ctx, js)); }
 
     default void setProportionalWidthAndHeight(Map<String, Object> ctx,
                                                JsEngine js,

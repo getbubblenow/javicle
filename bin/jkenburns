@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# Apply zoom-pan effect to a still image to create a video
+#
+# Usage:
+#
+#    jkenburns in-file out-file duration [zoom] [x] [y] [start] [end] [fps] [width] [height]
+#
+# in-file  : file to trim
+# out-file : write scaled file here
+# duration : how long the output video will be
+# zoom     : zoom factor, default is 1 (no zoom)
+# x        : zoom focus X point, default is center
+# y        : zoom focus Y point, default is center
+# start    : when to start zooming, default is beginning of video
+# end      : when to end zooming, default is end of video
+# fps      : frame per second for output video, default is 25
+# width    : output width, default is in-file width
+# height   : output height, default is in-file height
+#
+SCRIPT="${0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
+. "${SCRIPT_DIR}"/jvc_common
+
+IN_FILE="${1?no in-file provided}"
+OUT_FILE="${2?no out-file provided}"
+DURATION="${3:?no duration provided}"
+ZOOM="${4}"
+X_POS="${5}"
+Y_POS="${6}"
+T_START="${7}"
+T_END="${8}"
+FRAMES_PER_SEC="${9}"
+WIDTH="${10}"
+HEIGHT="${11}"
+
+echo "
+{
+  \"assets\": [
+    { \"name\": \"input\", \"path\": \"${IN_FILE}\" }
+  ],
+  \"operations\": [
+    {
+      \"operation\": \"ken-burns\",
+      \"creates\": {
+        \"name\": \"zoompan\",
+        \"dest\": \"${OUT_FILE}\"
+      },
+      \"source\": \"input\",
+      \"duration: \"${DURATION}\"$(if [[ -n "${ZOOM}" ]] ; then echo ",
+      \"zoom\": \"${ZOOM}\""; fi)$(if [[ -n "${X_POS}" ]] ; then echo ",
+      \"x\": \"${X_POS}\""; fi)$(if [[ -n "${Y_POS}" ]] ; then echo ",
+      \"y\": \"${Y_POS}\""; fi)$(if [[ -n "${T_START}" ]] ; then echo ",
+      \"start\": \"${T_START}\""; fi)$(if [[ -n "${T_END}" ]] ; then echo ",
+      \"end\": \"${T_END}\""; fi)$(if [[ -n "${FRAMES_PER_SEC}" ]] ; then echo ",
+      \"fps\": \"${FRAMES_PER_SEC}\""; fi)$(if [[ -n "${WIDTH}" ]] ; then echo ",
+      \"width\": \"${WIDTH}\""; fi)$(if [[ -n "${HEIGHT}" ]] ; then echo ",
+      \"height\": \"${HEIGHT}\""; fi)
+    }
+  ]
+}
+" | "${SCRIPT_DIR}"/jvc ${JVC_OPTIONS}

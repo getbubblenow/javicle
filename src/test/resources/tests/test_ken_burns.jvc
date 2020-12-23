@@ -16,8 +16,8 @@
       "duration": "5",                 // how long the resulting video will be
       "start": "0",                    // when to start zooming, default is 0
       "end": "duration",               // when to end zooming, default is duration
-      "x": "source.width * 0.6",       // pan to this x-position
-      "y": "source.height * 0.4",      // pan to this y-position
+      "x": "source.width * 0.6",       // pan to this x-position, default is center
+      "y": "source.height * 0.4",      // pan to this y-position, default is center
       "width": "1024",                 // width of output video
       "height": "768",                 // height of output video
       "validate": [{

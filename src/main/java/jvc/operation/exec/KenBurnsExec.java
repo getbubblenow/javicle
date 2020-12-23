@@ -18,7 +18,10 @@ import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ZERO;
 import static jvc.service.Toolbox.TWO;
 import static jvc.service.Toolbox.divideBig;
+import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.io.FileUtil.abs;
+import static org.cobbzilla.util.json.JsonUtil.COMPACT_MAPPER;
+import static org.cobbzilla.util.json.JsonUtil.json;
 
 @Slf4j
 public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
@@ -59,6 +62,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
         ctx.put("upscale", op.getUpscale(ctx, js));
 
         final BigDecimal fps = op.getFps(ctx, js);
+        if (!op.hasDuration()) return die("operate: no duration defined: "+json(op, COMPACT_MAPPER));
         final BigDecimal duration = op.getDuration(ctx, js);
         ctx.put("duration", duration);
 
@@ -80,8 +84,8 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
 
         final BigDecimal midX = divideBig(source.getWidth(), TWO);
         final BigDecimal midY = divideBig(source.getHeight(), TWO);
-        final BigDecimal destX = op.hasX() ? op.getX(ctx, js) : midX;
-        final BigDecimal destY = op.hasY() ? op.getY(ctx, js) : midY;
+        final BigDecimal destX = op.getX(ctx, js);
+        final BigDecimal destY = op.getY(ctx, js);
         final BigDecimal deltaX = divideBig(destX.subtract(midX), totalFrames);
         final BigDecimal deltaY = divideBig(destY.subtract(midY), totalFrames);
 

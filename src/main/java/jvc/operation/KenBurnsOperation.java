@@ -8,6 +8,7 @@ import org.cobbzilla.util.javascript.JsEngine;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static java.math.BigDecimal.ONE;
 import static jvc.service.Toolbox.evalBig;
 import static org.cobbzilla.util.daemon.ZillaRuntime.big;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
@@ -18,12 +19,16 @@ public class KenBurnsOperation extends JSingleSourceOperation
     public static final BigDecimal DEFAULT_FPS = big(25);
     public static final BigDecimal DEFAULT_UPSCALE = big(8);
 
+    public static final String DEFAULT_X = "source.width / 2";
+    public static final String DEFAULT_Y = "source.height / 2";
+
     @Getter @Setter private String zoom;
     public BigDecimal getZoom(Map<String, Object> ctx, JsEngine js) {
-        return evalBig(zoom, ctx, js);
+        return evalBig(zoom, ctx, js, ONE);
     }
 
     @Getter @Setter private String duration;
+    public boolean hasDuration () { return !empty(duration); }
     public BigDecimal getDuration(Map<String, Object> ctx, JsEngine js) {
         return evalBig(duration, ctx, js);
     }
@@ -32,12 +37,16 @@ public class KenBurnsOperation extends JSingleSourceOperation
     @Getter @Setter private String end;
 
     @Getter @Setter private String x;
-    public boolean hasX () { return !empty(x); }
-    public BigDecimal getX(Map<String, Object> ctx, JsEngine js) { return evalBig(x, ctx, js); }
+    public BigDecimal getX(Map<String, Object> ctx, JsEngine js) {
+        final BigDecimal defaultX = evalBig(DEFAULT_X, ctx, js);
+        return evalBig(x, ctx, js, defaultX);
+    }
 
     @Getter @Setter private String y;
-    public boolean hasY () { return !empty(y); }
-    public BigDecimal getY(Map<String, Object> ctx, JsEngine js) { return evalBig(y, ctx, js); }
+    public BigDecimal getY(Map<String, Object> ctx, JsEngine js) {
+        final BigDecimal defaultY = evalBig(DEFAULT_Y, ctx, js);
+        return evalBig(y, ctx, js, defaultY);
+    }
 
     @Getter @Setter private String width;
     @Getter @Setter private String height;

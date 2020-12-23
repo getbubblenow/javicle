@@ -137,11 +137,11 @@ support a `comment` field, which can be used as well.
       "duration": "5.5",               // how long the resulting video will be
       "start": "0",                    // when to start zooming, default is 0
       "end": "duration",               // when to end zooming, default is duration
-      "x": "source.width * 0.6",       // pan to this x-position
-      "y": "source.height * 0.4",      // pan to this y-position
+      "x": "source.width * 0.6",       // pan to this x-position, default is center (no horizontal pan)
+      "y": "source.height * 0.4",      // pan to this y-position, default is center (no vertical pan)
       "upscale": "8",                  // upscale factor. upscaling the image results in a smoother pan, but a longer encode, default is 8
-      "width": "1024",                 // width of output video
-      "height": "768"                  // height of output video
+      "width": "1024",                 // width of output video, default is source width
+      "height": "768"                  // height of output video, default is source height
     },
 
     // letterbox example

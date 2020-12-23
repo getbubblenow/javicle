@@ -19,8 +19,8 @@ For example, to extract the first 5 seconds of a video:
 jtrim /tmp/input-file.mp4 /tmp/output-5s.mp4 0 5
 ```
 
-There is a command-line tool for every operation except for `overlay` and
-`ken-burns`, which are more complex. Pull requests welcome.
+There is a command-line tool for every operation except for `overlay`,
+which is more complex. Pull requests welcome.
 
 ## Help
 All commands accept a `-h` / `--help` option, this will print information about
