@@ -90,6 +90,11 @@ goes to new files.
 # Requirements
  * Java 11
  * Maven 3
+ * ffmpeg
+ * mediainfo
+
+These programs should executable (given your `PATH`): `javac`, `java`, `mvn`,
+`ffmpeg`, and `mediainfo`
 
 The first time you run `jvc`, it will automatically build the JVC jar file
 from sources, using maven and javac. This takes a little time but only needs
