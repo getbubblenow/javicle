@@ -17,7 +17,6 @@ public class TrimExec extends SingleOrMultiSourceExecBase<TrimOperation> {
             = "{{ffmpeg}} -i {{{source.path}}} "
             + "-ss {{startSeconds}} "
             + "{{#exists interval}}-t {{interval}} {{/exists}}"
-            + "{{#if source.hasAudio}}-c:a copy {{/if}}"
             + "-y {{{output.path}}}";
 
     @Override protected String getProcessTemplate() { return TRIM_TEMPLATE; }
