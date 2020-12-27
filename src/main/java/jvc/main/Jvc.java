@@ -51,7 +51,7 @@ public class Jvc extends BaseMain<JvcOptions> {
 
     private void printCompleted(JvcEngine opEngine) {
         final int opCount = opEngine.getCompleted().size();
-        err(">>> jvc: completed " + opCount + " operation" + (opCount > 1 ? "s" : ""));
+        err(">>> jvc: completed " + opCount + " operation" + (opCount != 1 ? "s" : ""));
     }
 
 }
