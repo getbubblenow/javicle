@@ -4,14 +4,14 @@
 #
 # Usage:
 #
-#    jvc [-t temp-dir] [-n] spec-file
+#    jvc [-t temp-dir] [-n|--no-exec] spec-file
 #
 #  spec-file       : the JVC to run. If omitted, read a spec from stdin
 #
 #  -t temp-dir     : where to write generated assets. If omitted, jvc will
 #                    create a new temporary directory
 #
-#  -n              : print commands that would have been run, but don't
+#  -n or --no-exec : print commands that would have been run, but don't
 #                    actually run anything
 #
 # Note: If the JVC jar does not exist, it will be built from source.
@@ -27,4 +27,4 @@ if [[ -n "${JVC_DEBUG}" ]] ; then
   DEBUG="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"
 fi
 
-java -cp "${JVC_JAR}" ${DEBUG} jvc.main.Jvc "${@}"
+java -cp "${JVC_JAR}" ${DEBUG} jvc.main.Jvc ${_JVC_NO_EXEC} "${@}"

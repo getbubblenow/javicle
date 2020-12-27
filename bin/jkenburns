@@ -4,19 +4,20 @@
 #
 # Usage:
 #
-#    jkenburns in-file out-file duration [zoom] [x] [y] [start] [end] [fps] [width] [height]
+#    jkenburns [-n|--no-exec] in-file out-file duration [zoom] [x] [y] [start] [end] [fps] [width] [height]
 #
-# in-file  : file to trim
-# out-file : write scaled file here
-# duration : how long the output video will be
-# zoom     : zoom factor, default is 1 (no zoom)
-# x        : zoom focus X point, default is center
-# y        : zoom focus Y point, default is center
-# start    : when to start zooming, default is beginning of video
-# end      : when to end zooming, default is end of video
-# fps      : frame per second for output video, default is 25
-# width    : output width, default is in-file width
-# height   : output height, default is in-file height
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# in-file         : file to trim
+# out-file        : write scaled file here
+# duration        : how long the output video will be
+# zoom            : zoom factor, default is 1 (no zoom)
+# x               : zoom focus X point, default is center
+# y               : zoom focus Y point, default is center
+# start           : when to start zooming, default is beginning of video
+# end             : when to end zooming, default is end of video
+# fps             : frame per second for output video, default is 25
+# width           : output width, default is in-file width
+# height          : output height, default is in-file height
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"

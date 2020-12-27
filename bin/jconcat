@@ -4,10 +4,11 @@
 #
 # Usage:
 #
-#    jconcat out-file in-file-1 [in-file-2 ...]
+#    jconcat [-n|--no-exec] out-file in-file-1 [in-file-2 ...]
 #
-# out-file  : output file
-# in-file-N : input files
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# out-file        : output file
+# in-file-N       : input files
 #
 # BEWARE SHELL WILDCARDS!
 # Shell wildcards will match files in non-deterministic order, meaning that

@@ -4,15 +4,16 @@
 #
 # Usage:
 #
-#    jscale in-file out-file factor
+#    jscale [-n|--no-exec] in-file out-file factor
 # or
-#    jscale in-file out-file width height
+#    jscale [-n|--no-exec] in-file out-file width height
 #
-# in-file  : file to trim
-# out-file : write scaled file here
-# factor   : scale factor
-# width    : output width
-# height   : output height
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# in-file         : file to trim
+# out-file        : write scaled file here
+# factor          : scale factor
+# width           : output width
+# height          : output height
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"

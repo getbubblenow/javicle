@@ -4,12 +4,13 @@
 #
 # Usage:
 #
-#    jspeed in-file out-file speed-factor [audio-speed]
+#    jspeed [-n|--no-exec] in-file out-file speed-factor [audio-speed]
 #
-# in-file       : input video file
-# out-file      : write output file here
-# speed-factor  : factor=1 is unchanged, factor>1 is faster, factor<1 is slower
-# audio-speed   : can be: silent (default), unchanged, or match
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# in-file         : input video file
+# out-file        : write output file here
+# speed-factor    : factor=1 is unchanged, factor>1 is faster, factor<1 is slower
+# audio-speed     : can be: silent (default), unchanged, or match
 #
 # Note: if audio-speed is match, then speed-factor must be between 0.5 and 100
 #

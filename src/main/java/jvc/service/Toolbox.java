@@ -14,11 +14,13 @@ import org.cobbzilla.util.javascript.StandardJsEngine;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.math.RoundingMode.HALF_EVEN;
+import static jvc.model.JsObjectView.isJsObjectCollection;
 import static org.cobbzilla.util.daemon.ZillaRuntime.*;
 import static org.cobbzilla.util.io.FileUtil.*;
 import static org.cobbzilla.util.json.JsonUtil.*;
@@ -74,6 +76,10 @@ public class Toolbox {
             final Object value = entry.getValue();
             if (value instanceof JsObjectView) {
                 jsCtx.put(entry.getKey(), ((JsObjectView) value).toJs());
+
+            } else if (isJsObjectCollection(value)) {
+                jsCtx.put(entry.getKey(), JsObjectView.toJs((Collection) value));
+
             } else {
                 jsCtx.put(entry.getKey(), value);
             }

@@ -3,6 +3,7 @@ package jvc.model.js;
 import jvc.model.JAsset;
 import jvc.model.info.JMediaInfo;
 import jvc.model.info.JTrack;
+import lombok.Getter;
 import org.cobbzilla.util.collection.ArrayUtil;
 
 import java.math.BigDecimal;
@@ -14,20 +15,23 @@ public class JAssetJs {
 
     public static final JAssetJs[] EMPTY_ASSETS = new JAssetJs[0];
 
-    public final Double duration;
-    public final Integer width;
-    public final Integer height;
-    public final Double aspectRatio;
-    public final Integer samplingRate;
-    public JTrackJs[] allTracks = EMPTY_TRACKS;
-    public JTrackJs[] tracks = EMPTY_TRACKS;
-    public JTrackJs[] videoTracks = EMPTY_TRACKS;
-    public JTrackJs[] audioTracks = EMPTY_TRACKS;
-    public JAssetJs[] assets = EMPTY_ASSETS;
-    public final boolean hasAudio;
-    public final boolean hasVideo;
+    @Getter public final String path;
+    @Getter public final Double duration;
+    @Getter public final Integer width;
+    @Getter public final Integer height;
+    @Getter public final Double aspectRatio;
+    @Getter public final Integer samplingRate;
+    @Getter public JTrackJs[] allTracks = EMPTY_TRACKS;
+    @Getter public JTrackJs[] tracks = EMPTY_TRACKS;
+    @Getter public JTrackJs[] videoTracks = EMPTY_TRACKS;
+    @Getter public JTrackJs[] audioTracks = EMPTY_TRACKS;
+    @Getter public JAssetJs[] assets = EMPTY_ASSETS;
+    @Getter public final boolean hasAudio;
+    @Getter public final boolean hasVideo;
 
     public JAssetJs(JAsset asset) {
+        this.path = asset.getPath();
+
         final BigDecimal d = asset.duration();
         this.duration = d == null ? null : d.doubleValue();
 

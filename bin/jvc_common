@@ -31,14 +31,20 @@ function handle_help_request() {
       echo "# Environment Variables
 #
 #     JVC_SCRATCH_DIR  : Use this as the scratch directory
-#                         Default is to create a new temp directory
+#                        Default is to create a new temp directory
 #
 #     JVC_NO_EXEC      : If set to anything, print the commands that would
-#                         have run but do not execute anything
+#                        have run but do not execute anything
 #
 "
     fi
     exit 1
+  fi
+}
+
+function handle_jvc_noexec() {
+  if [[ -n "${1}" && ("${1}" == "-n" || "${1}" == "--no-exec" ) ]] ; then
+    echo -n "--no-exec"
   fi
 }
 
@@ -90,17 +96,23 @@ if [[ -z "${JVC_JAR}" ]] ; then
   fi
 fi
 
-SCRATCH_DIR=""
-NO_EXEC=""
-if [[ -z "${JVC_SKIP_ENV_VAR_HELP}" ]] ; then
-  if [[ -n "${JVC_SCRATCH_DIR}" ]] ; then
-    SCRATCH_DIR="--temp-dir ${JVC_SCRATCH_DIR}"
-  fi
+handle_help_request "${0}" "${1}"
 
-  if [[ -n "${JVC_NO_EXEC}" ]] ; then
+SCRATCH_DIR=""
+if [[ -n "${JVC_SCRATCH_DIR}" ]] ; then
+  SCRATCH_DIR="--temp-dir ${JVC_SCRATCH_DIR}"
+fi
+
+NO_EXEC=""
+if [[ -n "${JVC_NO_EXEC}" ]] ; then
+  NO_EXEC="--no-exec"
+fi
+
+_JVC_NO_EXEC="$(handle_jvc_noexec "${1}")"
+if [[ -n "${_JVC_NO_EXEC}" ]] ; then
+  if [[ -z "${NO_EXEC}" ]] ; then
     NO_EXEC="--no-exec"
   fi
+  shift
 fi
 JVC_OPTIONS="${SCRATCH_DIR} ${NO_EXEC}"
-
-handle_help_request "${0}" "${1}"

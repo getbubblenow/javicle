@@ -4,12 +4,13 @@
 #
 # Usage:
 #
-#    jaddsilence in-file out-file [channel-mode] [sampling-rate]
+#    jaddsilence [-n|--no-exec] in-file out-file [channel-mode] [sampling-rate]
 #
-# in-file       : input video file
-# out-file      : write output file here
-# channel-mode  : channel layout, usually 'mono' or 'stereo'. Default is stereo
-# sampling-rate : sampling rate, in Hz. Default is 48000
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# in-file         : input video file
+# out-file        : write output file here
+# channel-mode    : channel layout, usually 'mono' or 'stereo'. Default is stereo
+# sampling-rate   : sampling rate, in Hz. Default is 48000
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"

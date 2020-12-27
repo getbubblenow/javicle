@@ -4,13 +4,14 @@
 #
 # Usage:
 #
-#    jsplit in-file out-dir interval [start] [end]
+#    jsplit [-n|--no-exec] in-file out-dir interval [start] [end]
 #
-# in-file  : file to trim
-# out-dir  : write split files to this directory (will be created if it does not exist)
-# interval : time duration of output files, in seconds
-# start    : when to start splitting the in-file. default is 0 (start)
-# end      : when to stop splitting the in-file. default is to continue until end of file is reached
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# in-file         : file to trim
+# out-dir         : write split files to this directory (will be created if it does not exist)
+# interval        : time duration of output files, in seconds
+# start           : when to start splitting the in-file. default is 0 (start)
+# end             : when to stop splitting the in-file. default is to continue until end of file is reached
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"

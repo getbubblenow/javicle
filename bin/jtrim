@@ -4,12 +4,13 @@
 #
 # Usage:
 #
-#    jtrim in-file out-file [start] [end]
+#    jtrim [-n|--no-exec] in-file out-file [start] [end]
 #
-# in-file  : file to trim
-# out-file : write trimmed file here
-# start    : seconds to trim from the beginning. if omitted, default value is start of the file
-# end      : retain the file until this number of seconds. if omitted, default is to end of file
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# in-file         : file to trim
+# out-file        : write trimmed file here
+# start           : seconds to trim from the beginning. if omitted, default value is start of the file
+# end             : retain the file until this number of seconds. if omitted, default is to end of file
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"

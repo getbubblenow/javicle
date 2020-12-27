@@ -14,10 +14,11 @@ import java.util.Map;
 public class TrimExec extends SingleOrMultiSourceExecBase<TrimOperation> {
 
     public static final String TRIM_TEMPLATE
-            = "{{ffmpeg}} -i {{{source.path}}} " +
-            "-ss {{startSeconds}} " +
-            "{{#exists interval}}-t {{interval}} {{/exists}}" +
-            "-y {{{output.path}}}";
+            = "{{ffmpeg}} -i {{{source.path}}} "
+            + "-ss {{startSeconds}} "
+            + "{{#exists interval}}-t {{interval}} {{/exists}}"
+            + "{{#if source.hasAudio}}-c:a copy {{/if}}"
+            + "-y {{{output.path}}}";
 
     @Override protected String getProcessTemplate() { return TRIM_TEMPLATE; }
 

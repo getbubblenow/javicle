@@ -4,13 +4,14 @@
 #
 # Usage:
 #
-#    jrmtrack in-file out-file track-type [track-number]
+#    jrmtrack [-n|--no-exec] in-file out-file track-type [track-number]
 #
-# in-file      : file to trim
-# out-file     : write output file here
-# track-type   : the track type to remove. Usually 'audio' or 'video'
-# track-number : the track number to remove. If omitted, all tracks whose
-#                type matches `track-type` will be removed
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# in-file         : file to trim
+# out-file        : write output file here
+# track-type      : the track type to remove. Usually 'audio' or 'video'
+# track-number    : the track number to remove. If omitted, all tracks whose
+#                   type matches `track-type` will be removed
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"

@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import static jvc.service.Toolbox.jsContext;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.io.FileUtil.abs;
 import static org.cobbzilla.util.io.FileUtil.basename;
@@ -24,7 +25,7 @@ public abstract class ExecBase<OP extends JOperation> {
     public abstract Map<String, Object> operate(OP operation, Toolbox toolbox, AssetManager assetManager);
 
     protected String renderScript(Toolbox toolbox, Map<String, Object> ctx, String template) {
-        return HandlebarsUtil.apply(toolbox.getHandlebars(), template, ctx);
+        return HandlebarsUtil.apply(toolbox.getHandlebars(), template, jsContext(ctx));
     }
 
     protected File resolveOutputPath(JAsset output, File defaultOutfile) {

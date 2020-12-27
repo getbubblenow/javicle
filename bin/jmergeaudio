@@ -4,13 +4,14 @@
 #
 # Usage:
 #
-#    jmergeaudio video-file audio-file out-file [at]
+#    jmergeaudio [-n|--no-exec] video-file audio-file out-file [at]
 #
-# video-file  : input video file
-# audio-file  : audio file to insert into video
-# out-file    : write output file here
-# at          : when (on the video timeline) to start playing the audio
-#               If omitted, audio will start when video starts
+# -n or --no-exec : if set, do not execute ffmpeg but print what would have run
+# video-file      : input video file
+# audio-file      : audio file to insert into video
+# out-file        : write output file here
+# at              : when (on the video timeline) to start playing the audio
+#                   If omitted, audio will start when video starts
 #
 SCRIPT="${0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT}")" && pwd)"
