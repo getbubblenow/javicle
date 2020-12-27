@@ -82,9 +82,13 @@ public class JMediaInfo {
                     .setWidth(image.width());
 
         } else {
-            return die("initFormat: no media tracks could be found in file");
+            return die("initFormat: no media tracks could be found in file: "+ref());
         }
         return format;
+    }
+
+    public String ref() {
+        return emptyMedia() ? "(null media)" : empty(getMedia().getRef()) ? "(null ref)" : getMedia().getRef();
     }
 
     public BigDecimal duration() {
