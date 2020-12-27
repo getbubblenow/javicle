@@ -47,7 +47,7 @@ echo "
         \"dest\": \"${OUT_FILE}\"
       },
       \"source\": \"input\",
-      \"duration: \"${DURATION}\"$(if [[ -n "${ZOOM}" ]] ; then echo ",
+      \"duration\": \"${DURATION}\"$(if [[ -n "${ZOOM}" ]] ; then echo ",
       \"zoom\": \"${ZOOM}\""; fi)$(if [[ -n "${X_POS}" ]] ; then echo ",
       \"x\": \"${X_POS}\""; fi)$(if [[ -n "${Y_POS}" ]] ; then echo ",
       \"y\": \"${Y_POS}\""; fi)$(if [[ -n "${T_START}" ]] ; then echo ",
