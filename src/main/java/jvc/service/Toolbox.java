@@ -63,7 +63,12 @@ public class Toolbox {
     }
 
     public static BigDecimal evalBig(String val, Map<String, Object> ctx, JsEngine js) {
-        return big(eval(val, ctx, js));
+        final String resolved = eval(val, ctx, js);
+        try {
+            return empty(resolved) ? die("evalBig: error resolving value: '"+val+"'") : big(resolved);
+        } catch (NumberFormatException nfe) {
+            return evalBig(resolved, ctx, js);
+        }
     }
 
     public static BigDecimal evalBig(String val, Map<String, Object> ctx, JsEngine js, BigDecimal defaultValue) {

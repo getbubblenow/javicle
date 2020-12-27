@@ -1,7 +1,7 @@
 {
   "vars": [
     {"name": "out_width", "value": "1024"},
-    {"name": "out_height", "value": "768"}
+    {"name": "out_height", "value": "source.height / 2"}
   ],
   "assets": [
     // wildcard matches multiple files, vid1_splits becomes a "list" asset. resolution is 320x240
@@ -17,8 +17,8 @@
       "height": "out_height",          // height of scaled asset. if omitted and width is present, height will be proportional
                                        // here we reference the `out_height` variable defined above in the `vars` array
       "validate": [{
-        "comment": "expect output resolution of 1024x768",
-        "test": "output.width === 1024 && output.height === 768"
+        "comment": "expect output resolution of 1024x(source.height/2)",
+        "test": "output.width === 1024 && output.height === source.height/2"
       }]
     },
     {
