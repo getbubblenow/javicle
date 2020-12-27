@@ -8,21 +8,24 @@ import org.cobbzilla.util.collection.ArrayUtil;
 import java.math.BigDecimal;
 
 import static jvc.model.js.JTrackJs.EMPTY_TRACKS;
+import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 
 public class JAssetJs {
 
     public static final JAssetJs[] EMPTY_ASSETS = new JAssetJs[0];
 
-    public Double duration;
-    public Integer width;
-    public Integer height;
-    public Double aspectRatio;
-    public Integer samplingRate;
+    public final Double duration;
+    public final Integer width;
+    public final Integer height;
+    public final Double aspectRatio;
+    public final Integer samplingRate;
     public JTrackJs[] allTracks = EMPTY_TRACKS;
     public JTrackJs[] tracks = EMPTY_TRACKS;
     public JTrackJs[] videoTracks = EMPTY_TRACKS;
     public JTrackJs[] audioTracks = EMPTY_TRACKS;
     public JAssetJs[] assets = EMPTY_ASSETS;
+    public final boolean hasAudio;
+    public final boolean hasVideo;
 
     public JAssetJs(JAsset asset) {
         final BigDecimal d = asset.duration();
@@ -65,5 +68,8 @@ public class JAssetJs {
                 this.assets[i] = new JAssetJs(list[i]);
             }
         }
+
+        hasAudio = !empty(audioTracks);
+        hasVideo = !empty(videoTracks);
     }
 }

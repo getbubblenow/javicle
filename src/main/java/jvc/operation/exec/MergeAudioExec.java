@@ -27,10 +27,15 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
             = "cd {{{tempDir}}} && {{{ffmpeg}}} -f concat -i {{{playlist.path}}} -codec copy -y {{{padded}}}";
 
     public static final String MERGE_AUDIO_TEMPLATE
-            = "{{{ffmpeg}}} -i {{{source.path}}} -i {{audio.path}} -filter_complex \""
-            + "[0:a][1:a] amix=inputs=2 [merged]"
-            + "\" "
-            + "-map 0:v -map \"[merged]\" -c:v copy "
+            = "{{{ffmpeg}}} -i {{{source.path}}} -i {{audio.path}} "
+            + "{{#if source.hasAudio}}"
+              + "-filter_complex \""
+              + "[0:a][1:a] amix=inputs=2 [merged]"
+              + "\" "
+              + "-map 0:v -map \"[merged]\" -c:v copy "
+            + "{{else}}"
+              + "-map 0:v -map 1:a -c:v copy -c:a copy "
+            + "{{/if}}"
             + "-y {{{output.path}}}";
 
     @Override protected String getProcessTemplate() { return MERGE_AUDIO_TEMPLATE; }
@@ -46,6 +51,8 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
             final JAsset silence = createSilence(op, opCtx.toolbox, opCtx.assetManager, insertAt, audio);
             final JAsset padded = padWithSilence(op, opCtx.toolbox, opCtx.assetManager, audio, silence);
             ctx.put("audio", padded);
+        } else {
+            ctx.put("audio", audio);
         }
     }
 

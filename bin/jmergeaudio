@@ -35,7 +35,7 @@ echo "
         \"dest\": \"${OUT_FILE}\"
       },
       \"source\": \"video_file\",
-      \"audio\": \"audio_file\"$(if [[ -n "${T_START}" ]] ; then echo ",
+      \"insert\": \"audio_file\"$(if [[ -n "${T_START}" ]] ; then echo ",
       \"at\": \"${T_START}\""; fi)
     }
   ]

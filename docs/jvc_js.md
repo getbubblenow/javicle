@@ -79,6 +79,12 @@ An array of the audio tracks in a video.
 #### `videoTracks`
 An array of the video tracks in a video.
 
+#### `hasAudio`
+A boolean, true if the asset has any audio tracks, false otherwise
+
+#### `hasVideo`
+A boolean, true if the asset has any video tracks, false otherwise
+
 #### `assets`
 If an asset is a list asset, this is an array of the sub-assets. Each sub-asset
 has the same properties described above.
