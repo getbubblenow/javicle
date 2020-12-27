@@ -19,7 +19,10 @@ import static org.cobbzilla.util.io.FileUtil.abs;
 public class OverlayExec extends ExecBase<OverlayOperation> {
 
     public static final String OVERLAY_TEMPLATE
-            = "ffmpeg -i {{{source.path}}} -i {{{overlay.path}}} -filter_complex \""
+            = "ffmpeg -i {{{source.path}}} -i {{{overlay.path}}} "
+            + "{{#if hasMainStart}}-ss {{mainStart}} {{/if}}"
+            + "{{#if hasMainEnd}}-t {{mainDuration}} {{/if}}"
+            + "-filter_complex \""
             + "[1:v] setpts=PTS-STARTPTS+(1/TB){{#exists width}}, scale={{width}}x{{height}}{{/exists}} [1v]; "
             + "[0:v][1v] overlay={{{overlayFilterConfig}}} "
             + "\" -y {{{output.path}}}";
@@ -43,8 +46,16 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         final Map<String, Object> ctx = initialContext(toolbox, source, getVars());
         ctx.put("overlay", overlaySource);
 
-        ctx.put("mainStart", op.getStartTime(ctx, js));
-        ctx.put("mainEnd", op.getEndTime(ctx, js));
+        final BigDecimal mainStart = op.getStartTime(ctx, js);
+        ctx.put("mainStart", mainStart);
+        ctx.put("hasMainStart", op.hasStartTime());
+
+        final BigDecimal mainEnd = op.getEndTime(ctx, js);
+        ctx.put("mainEnd", mainEnd);
+        ctx.put("hasMainEnd", op.hasEndTime());
+        if (op.hasEndTime()) {
+            ctx.put("mainDuration", mainEnd.subtract(mainStart).doubleValue());
+        }
 
         final String overlayFilter = buildOverlayFilter(op, source, overlaySource, overlay, ctx, js);
         ctx.put("overlayFilterConfig", overlayFilter);
