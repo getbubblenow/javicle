@@ -9,6 +9,7 @@
   ],
   "operations": [
     {
+      "comment": "full example - all operation params are specified",
       "operation": "ken-burns",        // name of the operation
       "creates": "ken1",               // asset it creates
       "source": "javelin.jpg",         // source image
@@ -26,6 +27,17 @@
       }, {
         "comment": "expect output resolution of 1024x768",
         "test": "output.width === 1024 && output.height === 768"
+      }]
+    },
+    {
+      "comment": "minimal example - only duration is specified",
+      "operation": "ken-burns",
+      "creates": "ken2",
+      "source": "javelin.jpg",
+      "duration": "5",
+      "validate": [{
+        "comment": "expect output to be about 5 seconds long, give or take 0.1 seconds",
+        "test": "is_within(output.duration, 5, 0.1)"
       }]
     }
   ]

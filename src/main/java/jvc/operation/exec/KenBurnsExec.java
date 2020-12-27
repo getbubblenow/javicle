@@ -30,11 +30,13 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
             = "{{{ffmpeg}}} -i {{{source.path}}} -filter_complex \""
             + "scale={{expr width '*' upscale}}x{{expr height '*' upscale}}, "
             + "zoompan="
-            + "z='{{#exists startFrame}}"
-              + "if(between(in,{{startFrame}},{{endFrame}}),min(zoom+{{zoomIncrementFactor}},{{zoom}}),{{zoom}})"
-            + "{{else}}"
-              + "z='min(zoom+{{zoomIncrementFactor}},{{zoom}})':"
-            + "{{/exists}}':"
+            + "{{#if hasZoom}}"
+              + "z='{{#exists startFrame}}"
+                + "if(between(in,{{startFrame}},{{endFrame}}),min(zoom+{{zoomIncrementFactor}},{{zoom}}),{{zoom}})"
+              + "{{else}}"
+                + "z='min(zoom+{{zoomIncrementFactor}},{{zoom}})':"
+              + "{{/exists}}':"
+            + "{{/if}}"
             + "d={{totalFrames}}:"
             + "fps={{fps}}:"
             + "x='if(gte(zoom,{{zoom}}),x,x{{deltaXSign}}{{deltaX}}/a)':"
@@ -75,12 +77,13 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
 
         final BigDecimal zoom = op.getZoom(ctx, js);
         final BigDecimal totalFrames = duration.multiply(fps);
-        final BigDecimal zoomIncrementFactor = divideBig(zoom.subtract(ONE), totalFrames);
+        final BigDecimal zoomIncrementFactor = zoom.equals(ONE) ? ZERO : divideBig(zoom.subtract(ONE), totalFrames);
 
         ctx.put("zoom", zoom);
         ctx.put("fps", fps.intValue());
         ctx.put("totalFrames", totalFrames.intValue());
         ctx.put("zoomIncrementFactor", zoomIncrementFactor);
+        ctx.put("hasZoom", !zoomIncrementFactor.equals(ZERO));
 
         final BigDecimal midX = divideBig(source.getWidth(), TWO);
         final BigDecimal midY = divideBig(source.getHeight(), TWO);
