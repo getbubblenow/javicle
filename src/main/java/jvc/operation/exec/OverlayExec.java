@@ -84,7 +84,8 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         b.append("enable=between(t\\,").append(startTime).append("\\,").append(endTime).append(")");
 
         if (overlay.hasX() && overlay.hasY()) {
-            b.append(":x=").append(overlay.getX(ctx, js)).append(":y=").append(overlay.getY(ctx, js));
+            b.append(":x=").append(overlay.getX(ctx, js).intValue())
+             .append(":y=").append(overlay.getY(ctx, js).intValue());
         }
 
         return b.toString();
