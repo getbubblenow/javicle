@@ -40,7 +40,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         output.setPath(abs(path));
 
         final JsEngine js = toolbox.getJs();
-        final Map<String, Object> ctx = initialContext(toolbox, source);
+        final Map<String, Object> ctx = initialContext(toolbox, source, getVars());
         ctx.put("overlay", overlaySource);
 
         ctx.put("mainStart", op.getStartTime(ctx, js));

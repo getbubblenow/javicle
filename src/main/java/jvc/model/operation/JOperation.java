@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import jvc.model.JAsset;
+import jvc.model.JSpec;
 import jvc.operation.exec.ExecBase;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,9 +51,11 @@ public abstract class JOperation {
         return hashOf(operation, json(this), sources, args);
     }
 
-    private static final Map<Class<? extends JOperation>, ExecBase<?>> execMap = new HashMap<>();
-    public <OP extends JOperation> ExecBase<OP> getExec() {
-        return (ExecBase<OP>) execMap.computeIfAbsent(getClass(), c -> instantiate(getOperationExecClass(getClass())));
+    private static final Map<String, ExecBase<?>> execMap = new HashMap<>();
+    public <OP extends JOperation> ExecBase<OP> getExec(JSpec spec) {
+        final String cacheKey = hashOf(getClass().getName(), spec.getVars());
+        return (ExecBase<OP>) execMap.computeIfAbsent(cacheKey,
+                c -> ((ExecBase<?>) instantiate(getOperationExecClass(getClass()))).setSpec(spec));
     }
 
     public String shortString() { return safeShellArg(operation+"_"+sha256_hex(json(this))); }

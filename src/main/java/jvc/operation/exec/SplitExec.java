@@ -31,7 +31,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
         final JStreamType streamType = opCtx.streamType;
 
         final JsEngine js = toolbox.getJs();
-        final Map<String, Object> ctx = initialContext(toolbox, source);
+        final Map<String, Object> ctx = initialContext(toolbox, source, getVars());
 
         assetManager.addOperationArrayAsset(output);
         final BigDecimal incr = op.getIntervalIncr(ctx, js);

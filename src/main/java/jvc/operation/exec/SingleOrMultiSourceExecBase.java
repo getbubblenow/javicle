@@ -22,7 +22,7 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
         final JAsset source = opCtx.source;
         final JAsset output = opCtx.output;
         final JStreamType streamType = opCtx.streamType;
-        final Map<String, Object> ctx = initialContext(toolbox, source);
+        final Map<String, Object> ctx = initialContext(toolbox, source, getVars());
         addCommandContext(op, opCtx, ctx);
         return operate(op, toolbox, assetManager, source, output, streamType, ctx);
     }

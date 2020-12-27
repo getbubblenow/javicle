@@ -1,4 +1,8 @@
 {
+  "vars": [
+    {"name": "out_width", "value": "1024"},
+    {"name": "out_height", "value": "768"}
+  ],
   "assets": [
     // wildcard matches multiple files, vid1_splits becomes a "list" asset. resolution is 320x240
     { "name": "vid1_splits", "path": "src/test/resources/outputs/vid1_splits_*.mp4" }
@@ -8,8 +12,10 @@
       "operation": "scale",            // name of the operation
       "creates": "scaled_test1",       // output asset name
       "source": "vid1_splits[3]",      // scale this source asset
-      "width": "1024",                 // width of scaled asset. if omitted and height is present, width will be proportional
-      "height": "768",                 // height of scaled asset. if omitted and width is present, height will be proportional
+      "width": "out_width",            // width of scaled asset. if omitted and height is present, width will be proportional
+                                       // here we reference the `out_width` variable defined above in the `vars` array
+      "height": "out_height",          // height of scaled asset. if omitted and width is present, height will be proportional
+                                       // here we reference the `out_height` variable defined above in the `vars` array
       "validate": [{
         "comment": "expect output resolution of 1024x768",
         "test": "output.width === 1024 && output.height === 768"

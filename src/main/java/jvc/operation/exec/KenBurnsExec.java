@@ -57,7 +57,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
         output.setPath(abs(path));
 
         final JsEngine js = toolbox.getJs();
-        final Map<String, Object> ctx = initialContext(toolbox, source);
+        final Map<String, Object> ctx = initialContext(toolbox, source, getVars());
         ctx.put("output", output);
         ctx.put("width", op.getWidth(ctx, js));
         ctx.put("height", op.getHeight(ctx, js));

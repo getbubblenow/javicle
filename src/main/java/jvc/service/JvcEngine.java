@@ -31,15 +31,15 @@ public class JvcEngine {
 
     public void runSpec(JSpec spec) {
         Arrays.stream(spec.getAssets()).forEach(assetManager::defineAsset);
-        Arrays.stream(spec.getOperations()).forEach(this::runOp);
+        Arrays.stream(spec.getOperations()).forEach(op -> runOp(spec, op));
     }
 
-    private void runOp(JOperation op) {
+    private void runOp(JSpec spec, JOperation op) {
 
         final ExecBase<JOperation> exec = op
                 .setExecIndex(completed.size())
                 .setNoExec(noExec)
-                .getExec();
+                .getExec(spec);
 
         final Map<String, Object> ctx = exec.operate(op, toolbox, assetManager);
         if (ctx == null) {

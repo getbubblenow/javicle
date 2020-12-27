@@ -1,5 +1,6 @@
 package jvc.operation.exec;
 
+import jvc.model.JSpec;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.operation.AdjustSpeedOperation;
 import lombok.extern.slf4j.Slf4j;
