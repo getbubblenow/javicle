@@ -1,7 +1,7 @@
 package jvc.model.operation;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.NoArgsConstructor;
@@ -15,10 +15,10 @@ public class JMultiOperationContext extends JOperationContextBase {
 
     public JMultiOperationContext(List<JAsset> sources,
                                   JAsset output,
-                                  JFileExtension formatType,
+                                  JStreamType streamType,
                                   AssetManager assetManager,
                                   Toolbox toolbox) {
-        super(output, formatType, assetManager, toolbox);
+        super(output, streamType, assetManager, toolbox);
         this.sources = sources;
     }
 }

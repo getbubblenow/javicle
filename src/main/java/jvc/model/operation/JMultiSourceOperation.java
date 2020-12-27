@@ -1,7 +1,7 @@
 package jvc.model.operation;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.Getter;
@@ -30,8 +30,8 @@ public abstract class JMultiSourceOperation extends JOperation {
         output.mergeFormat(sources.get(0).getFormat());
 
         // set the path, check if output asset already exists
-        final JFileExtension formatType = output.getFormat().getFileExtension();
+        final JStreamType streamType = output.getFormat().getStreamType();
 
-        return new JMultiOperationContext(sources, output, formatType, assetManager, toolbox);
+        return new JMultiOperationContext(sources, output, streamType, assetManager, toolbox);
     }
 }

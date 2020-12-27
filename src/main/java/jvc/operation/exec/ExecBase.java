@@ -1,7 +1,7 @@
 package jvc.operation.exec;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.operation.JOperation;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
@@ -79,8 +79,8 @@ public abstract class ExecBase<OP extends JOperation> {
         if (!asset.hasChannelLayout()) return die("createSilence: no channel layout could be determined: "+asset);
         ctx.put("channelLayout", asset.channelLayout());
 
-        final JFileExtension ext = asset.audioExtension();
-        final File silenceFile = assetManager.assetPath(op, asset, ext, new Object[]{duration});
+        final JStreamType streamType = asset.audioExtension();
+        final File silenceFile = assetManager.assetPath(op, asset, streamType, new Object[]{duration});
         final JAsset silence = new JAsset().setPath(abs(silenceFile));
         ctx.put("silence", silence);
 

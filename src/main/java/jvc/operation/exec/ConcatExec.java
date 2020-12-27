@@ -1,7 +1,7 @@
 package jvc.operation.exec;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.operation.JMultiOperationContext;
 import jvc.operation.ConcatOperation;
 import jvc.service.AssetManager;
@@ -36,9 +36,9 @@ public class ConcatExec extends ExecBase<ConcatOperation> {
         final JMultiOperationContext opCtx = op.getMultiInputContext(assetManager, toolbox);
         final List<JAsset> sources = opCtx.sources;
         final JAsset output = opCtx.output;
-        final JFileExtension formatType = opCtx.formatType;
+        final JStreamType streamType = opCtx.streamType;
 
-        final File defaultOutfile = assetManager.assetPath(op, sources, formatType);
+        final File defaultOutfile = assetManager.assetPath(op, sources, streamType);
         final File path = resolveOutputPath(output, defaultOutfile);
         if (path == null) return null;
         output.setPath(abs(path));

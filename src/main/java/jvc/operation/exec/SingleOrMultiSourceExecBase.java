@@ -1,7 +1,7 @@
 package jvc.operation.exec;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.model.operation.JSingleSourceOperation;
 import jvc.service.AssetManager;
@@ -21,15 +21,21 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
         final JAsset source = opCtx.source;
         final JAsset output = opCtx.output;
-        final JFileExtension formatType = opCtx.formatType;
+        final JStreamType streamType = opCtx.streamType;
         final Map<String, Object> ctx = initialContext(toolbox, source);
         addCommandContext(op, opCtx, ctx);
-        return operate(op, toolbox, assetManager, source, output, formatType, ctx);
+        return operate(op, toolbox, assetManager, source, output, streamType, ctx);
     }
 
     protected void addCommandContext(OP op, JSingleOperationContext opCtx, Map<String, Object> ctx) {}
 
-    protected Map<String, Object> operate(OP op, Toolbox toolbox, AssetManager assetManager, JAsset source, JAsset output, JFileExtension formatType, Map<String, Object> ctx) {
+    protected Map<String, Object> operate(OP op,
+                                          Toolbox toolbox,
+                                          AssetManager assetManager,
+                                          JAsset source,
+                                          JAsset output,
+                                          JStreamType streamType,
+                                          Map<String, Object> ctx) {
         if (source.hasList()) {
             if (output.hasDest()) {
                 if (!output.destIsDirectory()) die("operate: dest is not a directory: "+output.getDest());
@@ -37,7 +43,7 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
             assetManager.addOperationArrayAsset(output);
             for (JAsset asset : source.getList()) {
                 final JAsset subOutput = new JAsset(output);
-                final File defaultOutfile = assetManager.assetPath(op, asset, formatType);
+                final File defaultOutfile = assetManager.assetPath(op, asset, streamType);
                 final File outfile;
                 if (output.hasDest()) {
                     outfile = new File(output.destDirectory(), basename(appendToFileNameBeforeExt(asset.getPath(), "_"+op.shortString())));
@@ -54,7 +60,7 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
                 assetManager.addOperationAssetSlice(output, subOutput);
             }
         } else {
-            final File defaultOutfile = assetManager.assetPath(op, source, formatType);
+            final File defaultOutfile = assetManager.assetPath(op, source, streamType);
             final File path = resolveOutputPath(output, defaultOutfile);
             if (path == null) return null;
             output.setPath(abs(path));

@@ -68,7 +68,10 @@ Ratio of width / height (video or image).
 Sampling rate in Hz (audio).
 
 #### `tracks`
-An array of the tracks in a video. Only includes audio and video tracks.
+An array of the A/V tracks in a video. Only includes audio and video tracks.
+
+#### `allTracks`
+An array of **all** the tracks in a video. Includes subtitles/data/other tracks.
 
 #### `audioTracks`
 An array of the audio tracks in a video.

@@ -1,7 +1,7 @@
 package jvc.model.operation;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.AllArgsConstructor;
@@ -14,10 +14,10 @@ public class JSingleOperationContext extends JOperationContextBase {
 
     public JSingleOperationContext(JAsset source,
                                    JAsset output,
-                                   JFileExtension formatType,
+                                   JStreamType streamType,
                                    AssetManager assetManager,
                                    Toolbox toolbox) {
-        super(output, formatType, assetManager, toolbox);
+        super(output, streamType, assetManager, toolbox);
         this.source = source;
     }
 

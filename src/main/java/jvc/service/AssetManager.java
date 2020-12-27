@@ -1,7 +1,7 @@
 package jvc.service;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.operation.JOperation;
 import lombok.Getter;
 import org.cobbzilla.util.handlebars.HandlebarsUtil;
@@ -34,27 +34,27 @@ public class AssetManager {
 
     public File sourcePath(String name) { return new File(scratchDir, OUTFILE_PREFIX + "source." + name); }
 
-    public File assetPath(JOperation op, JAsset source, JFileExtension formatType) {
-        return assetPath(op, source, formatType, null);
+    public File assetPath(JOperation op, JAsset source, JStreamType streamType) {
+        return assetPath(op, source, streamType, null);
     }
 
-    public File assetPath(JOperation op, JAsset source, JFileExtension formatType, Object[] args) {
-        return assetPath(op, new JAsset[]{source}, formatType, args);
+    public File assetPath(JOperation op, JAsset source, JStreamType streamType, Object[] args) {
+        return assetPath(op, new JAsset[]{source}, streamType, args);
     }
 
-    public File assetPath(JOperation op, JAsset[] sources, JFileExtension formatType) {
-        return assetPath(op, sources, formatType, null);
+    public File assetPath(JOperation op, JAsset[] sources, JStreamType streamType) {
+        return assetPath(op, sources, streamType, null);
     }
 
-    public File assetPath(JOperation op, List<JAsset> sources, JFileExtension formatType) {
-        return assetPath(op, sources.toArray(JAsset[]::new), formatType, null);
+    public File assetPath(JOperation op, List<JAsset> sources, JStreamType streamType) {
+        return assetPath(op, sources.toArray(JAsset[]::new), streamType, null);
     }
 
-    public File assetPath(JOperation op, JAsset[] sources, JFileExtension formatType, Object[] args) {
+    public File assetPath(JOperation op, JAsset[] sources, JStreamType streamType, Object[] args) {
         return new File(scratchDir, OUTFILE_PREFIX
                 + op.hash(sources, args)
                 + (!empty(args) ? "_" + args[0] + (args.length > 1 ? "_" + args[1] : "") : "")
-                + formatType.ext());
+                + streamType.ext());
     }
 
     public Map<String, JAsset> getAssets () {

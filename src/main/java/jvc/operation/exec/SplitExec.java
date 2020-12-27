@@ -1,7 +1,7 @@
 package jvc.operation.exec;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.operation.SplitOperation;
 import jvc.service.AssetManager;
@@ -28,7 +28,7 @@ public class SplitExec extends ExecBase<SplitOperation> {
         final JSingleOperationContext opCtx = op.getSingleInputContext(assetManager, toolbox);
         final JAsset source = opCtx.source;
         final JAsset output = opCtx.output;
-        final JFileExtension formatType = opCtx.formatType;
+        final JStreamType streamType = opCtx.streamType;
 
         final JsEngine js = toolbox.getJs();
         final Map<String, Object> ctx = initialContext(toolbox, source);
@@ -43,16 +43,16 @@ public class SplitExec extends ExecBase<SplitOperation> {
             final File outfile;
             if (output.hasDest()) {
                 if (!output.destExists()) {
-                    outfile = sliceFile(output, formatType, i, incr);
+                    outfile = sliceFile(output, streamType, i, incr);
                 } else {
                     if (output.destIsDirectory()) {
-                        outfile = sliceFile(output, formatType, i, incr);
+                        outfile = sliceFile(output, streamType, i, incr);
                     } else {
                         return die("dest exists and is not a directory: "+output.getDest());
                     }
                 }
             } else {
-                outfile = assetManager.assetPath(op, source, formatType, new Object[]{i, incr});
+                outfile = assetManager.assetPath(op, source, streamType, new Object[]{i, incr});
             }
 
             final JAsset slice = new JAsset(output, outfile);
@@ -81,8 +81,8 @@ public class SplitExec extends ExecBase<SplitOperation> {
         return ctx;
     }
 
-    private File sliceFile(JAsset output, JFileExtension formatType, BigDecimal i, BigDecimal incr) {
-        return new File(output.destDirectory(), output.getName() + "_" + i + "_" + incr + formatType.ext());
+    private File sliceFile(JAsset output, JStreamType streamType, BigDecimal i, BigDecimal incr) {
+        return new File(output.destDirectory(), output.getName() + "_" + i + "_" + incr + streamType.ext());
     }
 
 }

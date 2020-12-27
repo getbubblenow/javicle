@@ -3,7 +3,7 @@ package jvc.operation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.JFormat;
 import jvc.model.JTrackId;
 import jvc.model.info.JMediaInfo;
@@ -28,25 +28,25 @@ public class RemoveTrackOperation extends JSingleSourceOperation {
         return trackId;
     }
 
-    @Override protected JFileExtension getFileExtension(JAsset source, JAsset output) {
+    @Override protected JStreamType getStreamType(JAsset source, JAsset output) {
 
         final JTrackId trackId = getTrackId();
         final JTrackType trackType = trackId.getType();
 
         // if we are removing all video tracks, the output will be an audio asset
         final int trackCount = source.numTracks(trackType);
-        if (trackCount == 0) return die("getFileExtension: no tracks of type "+ trackType +" found in source: "+source);
+        if (trackCount == 0) return die("getStreamType: no tracks of type "+ trackType +" found in source: "+source);
 
         if (wouldRemoveAllVideoTracks(trackId, trackCount)) {
             // find the format of the first audio track
             final JTrack audio = source.firstTrack(JTrackType.audio);
-            if (audio == null) return die("getFileExtension: no audio tracks found!");
-            final JFileExtension ext = JFileExtension.fromTrack(audio);
-            source.setInfo(new JMediaInfo(source.getInfo(), new JFormat().setFileExtension(ext)));
-            return ext;
+            if (audio == null) return die("getStreamType: no audio tracks found!");
+            final JStreamType streamType = JStreamType.fromTrack(audio);
+            source.setInfo(new JMediaInfo(source.getInfo(), new JFormat().setStreamType(streamType)));
+            return streamType;
         }
 
-        return super.getFileExtension(source, output);
+        return super.getStreamType(source, output);
     }
 
     private boolean wouldRemoveAllVideoTracks(JTrackId trackId, int trackCount) {

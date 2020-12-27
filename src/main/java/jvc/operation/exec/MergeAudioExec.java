@@ -1,7 +1,7 @@
 package jvc.operation.exec;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.operation.MergeAudioOperation;
 import jvc.service.AssetManager;
@@ -57,8 +57,8 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());
 
-        final JFileExtension ext = audio.getFormat().getFileExtension();
-        final JAsset padded = new JAsset().setPath(abs(assetManager.assetPath(op, audio, ext)));
+        final JStreamType streamType = audio.getFormat().getStreamType();
+        final JAsset padded = new JAsset().setPath(abs(assetManager.assetPath(op, audio, streamType)));
         final String paddedName = basename(padded.getPath());
         ctx.put("padded", paddedName);
 

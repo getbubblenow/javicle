@@ -18,6 +18,7 @@ public class JAssetJs {
     public Integer height;
     public Double aspectRatio;
     public Integer samplingRate;
+    public JTrackJs[] allTracks = EMPTY_TRACKS;
     public JTrackJs[] tracks = EMPTY_TRACKS;
     public JTrackJs[] videoTracks = EMPTY_TRACKS;
     public JTrackJs[] audioTracks = EMPTY_TRACKS;
@@ -40,9 +41,11 @@ public class JAssetJs {
             final JMediaInfo info = asset.getInfo();
             for (JTrack track : info.getMedia().getTrack()) {
 
+                final JTrackJs trackJs = new JTrackJs(track.type().name());
+                allTracks = ArrayUtil.append(allTracks, trackJs);
+
                 if (!track.audioOrVideo()) continue;
 
-                final JTrackJs trackJs = new JTrackJs(track.type().name());
                 tracks = ArrayUtil.append(tracks, trackJs);
                 switch (track.type()) {
                     case audio:

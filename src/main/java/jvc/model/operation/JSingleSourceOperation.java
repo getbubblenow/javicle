@@ -1,7 +1,7 @@
 package jvc.model.operation;
 
 import jvc.model.JAsset;
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.JFormat;
 import jvc.model.info.JTrackType;
 import jvc.service.AssetManager;
@@ -27,20 +27,20 @@ public class JSingleSourceOperation extends JOperation {
         // ensure output is in the correct format
         final JFormat format = output.getFormat();
         final JTrackType type = outputMediaType();
-        if (!format.hasFileExtension() || format.getFileExtension().mediaType() != type) {
-            final JFileExtension ext = type.ext();
-            if (ext == null) {
+        if (!format.hasFileExtension() || format.getStreamType().mediaType() != type) {
+            final JStreamType streamType = type.streamType();
+            if (streamType == null) {
                 return die("getSingleInputContext: no file extension found for output media type: " + type);
             }
-            format.setFileExtension(ext);
+            format.setStreamType(streamType);
         }
-        final JFileExtension formatType = getFileExtension(source, output);
+        final JStreamType streamType = getStreamType(source, output);
 
-        return new JSingleOperationContext(source, output, formatType, assetManager, toolbox);
+        return new JSingleOperationContext(source, output, streamType, assetManager, toolbox);
     }
 
-    protected JFileExtension getFileExtension(JAsset source, JAsset output) {
-        return output.getFormat().getFileExtension();
+    protected JStreamType getStreamType(JAsset source, JAsset output) {
+        return output.getFormat().getStreamType();
     }
 
 }

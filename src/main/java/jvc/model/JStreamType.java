@@ -10,10 +10,11 @@ import static jvc.model.info.JTrackType.*;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 
 @AllArgsConstructor @Slf4j
-public enum JFileExtension {
+public enum JStreamType {
 
     avc        (".mp4",  video),
     mp4        (".mp4",  video),
+    hevc       (".mp4",  video),
     mkv        (".mkv",  video),
     mp3        (".mp3",  audio),
     mpeg_audio (".mp3",  audio),
@@ -26,7 +27,7 @@ public enum JFileExtension {
     dat        (".dat",  data),
     txt        (".txt",  data);
 
-    @JsonCreator public static JFileExtension fromString(String v) { return valueOf(v.toLowerCase()); }
+    @JsonCreator public static JStreamType fromString(String v) { return valueOf(v.toLowerCase()); }
 
     public static boolean isValid(String v) {
         try { fromString(v); return true; } catch (Exception ignored) {}
@@ -39,7 +40,7 @@ public enum JFileExtension {
     private final JTrackType mediaType;
     public JTrackType mediaType() { return mediaType; }
 
-    public static JFileExtension fromTrack(JTrack track) {
+    public static JStreamType fromTrack(JTrack track) {
         if (track.hasFileExtension()) {
             try {
                 return fromString(track.getFileExtension());

@@ -1,6 +1,6 @@
 package jvc.model.info;
 
-import jvc.model.JFileExtension;
+import jvc.model.JStreamType;
 import jvc.model.JFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -65,19 +65,19 @@ public class JMediaInfo {
 
         final JFormat format = new JFormat();
         if (video != null) {
-            format.setFileExtension(video.hasFormat()
-                    ? JFileExtension.fromTrack(video)
-                    : JFileExtension.fromString(general.getFileExtension()))
+            format.setStreamType(video.hasFormat()
+                    ? JStreamType.fromTrack(video)
+                    : JStreamType.fromString(general.getFileExtension()))
                     .setHeight(video.height())
                     .setWidth(video.width());
 
         } else if (audio != null) {
-            format.setFileExtension(audio.hasFormat()
-                    ? JFileExtension.fromTrack(audio)
-                    : JFileExtension.fromString(general.getFileExtension()));
+            format.setStreamType(audio.hasFormat()
+                    ? JStreamType.fromTrack(audio)
+                    : JStreamType.fromString(general.getFileExtension()));
 
         } else if (image != null) {
-            format.setFileExtension(JFileExtension.fromString(general.getFileExtension()))
+            format.setStreamType(JStreamType.fromString(general.getFileExtension()))
                     .setHeight(image.height())
                     .setWidth(image.width());
 
@@ -120,9 +120,9 @@ public class JMediaInfo {
         return null;
     }
 
-    public JFileExtension audioExtension() {
+    public JStreamType audioExtension() {
         final JTrack audio = firstTrack(JTrackType.audio);
-        return audio == null ? null : JFileExtension.fromTrack(audio);
+        return audio == null ? null : JStreamType.fromTrack(audio);
     }
 
     public BigDecimal width() {

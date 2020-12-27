@@ -16,15 +16,15 @@ public class JFormat {
     @Getter @Setter private Integer width;
     public boolean hasWidth () { return width != null; }
 
-    @Getter @Setter private JFileExtension fileExtension;
-    public boolean hasFileExtension() { return fileExtension != null; }
+    @Getter @Setter private JStreamType streamType;
+    public boolean hasFileExtension() { return streamType != null; }
 
     public JFormat(JFormat format) { copy(this, format); }
 
     public void merge(JFormat other) {
         if (!hasHeight()) setHeight(other.getHeight());
         if (!hasWidth()) setWidth(other.getWidth());
-        if (!hasFileExtension()) setFileExtension(other.getFileExtension());
+        if (!hasFileExtension()) setStreamType(other.getStreamType());
     }
 
 }
