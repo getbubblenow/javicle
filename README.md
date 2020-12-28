@@ -87,6 +87,9 @@ formats, filter syntax errors, or whatever.
 In any case, JVC should never overwrite your source files, since all output
 goes to new files.
 
+I'm also fairly confident that the underlying `ffmpeg` commands are far from
+optimized, and could use some scrutiny by eyes more expert than mine.
+
 # Requirements
  * Java 11
  * Maven 3
