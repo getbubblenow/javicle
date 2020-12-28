@@ -1,46 +1,38 @@
 package jvc.operation.exec;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jvc.model.JAsset;
 import jvc.model.JStreamType;
+import jvc.model.operation.JOperation;
 import jvc.model.operation.JSingleOperationContext;
+import jvc.operation.ConcatOperation;
 import jvc.operation.MergeAudioOperation;
 import jvc.service.AssetManager;
 import jvc.service.Toolbox;
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
-import org.cobbzilla.util.io.TempDir;
 import org.cobbzilla.util.javascript.JsEngine;
 
-import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.math.BigDecimal.ZERO;
-import static org.cobbzilla.util.daemon.ZillaRuntime.die;
-import static org.cobbzilla.util.io.FileUtil.*;
+import static org.cobbzilla.util.io.FileUtil.abs;
+import static org.cobbzilla.util.json.JsonUtil.json;
 
 @Slf4j
 public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperation> {
 
-    public static final String PAD_WITH_SILENCE_TEMPLATE
-            = "cd {{{tempDir}}} && {{{ffmpeg}}} -f concat -i {{{playlist.path}}} -codec copy -y {{{padded}}}";
-
     public static final String MERGE_AUDIO_TEMPLATE
             = "{{{ffmpeg}}} -i {{{source.path}}} -itsoffset {{start}} -i {{audio.path}} "
-            // if source has no audio, define a null audio input source
-            + "{{#unless source.hasAudio}}"
-              + "-i anullsrc=channel_layout={{audio.channelLayout}}:sample_rate={{audio.samplingRate}} "
-            + "{{/unless}}"
 
             + "-filter_complex \""
             + "{{#if source.hasAudio}}"
               // source has audio -- mix with insertion
-              + "[0:a][1:a] amix=inputs=2 [merged]"
+              + "[0:a][1:{{audio.audioTrack}}] amix=inputs=2 [merged]"
             + "{{else}}"
               // source has no audio -- mix null source with insertion
-              + "[1:a] aresample=ocl={{audio.channelLayout}}:osr={{audio.samplingRate}} [1a]; "
-              + "[2:a][1a] amix=inputs=2 [merged]"
+              + "anullsrc=channel_layout={{audio.channelLayout}}:sample_rate={{audio.samplingRate}}:duration={{source.duration}} [silence]; "
+              + "[silence][1:{{audio.audioTrack}}] amix=inputs=2 [merged]"
             + "{{/if}}"
             + "\" "
             + "-map 0:v -map \"[merged]\" -c:v copy "
@@ -70,47 +62,24 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
                                     AssetManager assetManager,
                                     JAsset audio,
                                     JAsset silence) {
-        final Map<String, Object> ctx = new HashMap<>();
-        ctx.put("ffmpeg", toolbox.getFfmpeg());
-
         final JStreamType streamType = audio.audioExtension();
-        final JAsset padded = new JAsset().setPath(abs(assetManager.assetPath(op, audio, streamType)));
-        final String paddedName = basename(padded.getPath());
-        ctx.put("padded", paddedName);
+        final JAsset padded = new JAsset()
+                .setPath(abs(assetManager.assetPath(op, audio, streamType)));
 
-        // create a temp dir for concat, it really likes to have everything in the same directory
-        @Cleanup("delete") final TempDir tempDir = new TempDir(assetManager.getScratchDir());
-        ctx.put("tempDir", abs(tempDir));
-
-        final String silenceName = basename(silence.getPath());
-        final String audioName = basename(audio.getPath());
-
-        // write playlist
-        final File playlistFile = new File(tempDir, "playlist.txt");
-        toFileOrDie(playlistFile, "file "+ silenceName +"\nfile "+ audioName);
-
-        // copy audio and silence assets to temp dir
-        copyFile(new File(silence.getPath()), new File(tempDir, silenceName));
-        copyFile(new File(audio.getPath()), new File(tempDir, audioName));
-
-        final JAsset playlist = new JAsset().setPath(abs(playlistFile));
-        ctx.put("playlist", playlist);
-
-        final String script = renderScript(toolbox, ctx, PAD_WITH_SILENCE_TEMPLATE);
-
-        log.debug("padWithSilence: running script: "+script);
-        final String scriptOutput = exec(script, op.isNoExec());
-
-        final File outputFile = new File(tempDir, paddedName);
-        if (!outputFile.exists()) return die("padWithSilence: output file not found: "+abs(outputFile));
-        copyFile(outputFile, new File(abs(padded.getPath())));
-
-        log.debug("padWithSilence: command output: "+scriptOutput);
+        final JOperation concat = new ConcatOperation()
+                .setAudioOnly(true)
+                .setSources(new String[]{silence.getName(), audio.getName()})
+                .setCreates(json(json(padded), JsonNode.class))
+                .setOperation("concat")
+                .setExecIndex(op.getExecIndex())
+                .setNoExec(op.isNoExec());
+        final Map<String, Object> concatCtx
+                = concat.getExec(getSpec()).operate(concat, toolbox, assetManager);
 
         // initialize metadata
-        padded.init(assetManager, toolbox);
+        final JAsset result = assetManager.resolve(padded.getName());
 
-        return padded;
+        return result;
     }
 
 }

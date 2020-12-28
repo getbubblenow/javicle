@@ -6,6 +6,7 @@ import jvc.service.AssetManager;
 import jvc.service.Toolbox;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import static jvc.model.JAsset.json2asset;
 import static org.cobbzilla.util.daemon.ZillaRuntime.die;
 import static org.cobbzilla.util.daemon.ZillaRuntime.empty;
 
+@Accessors(chain=true)
 public abstract class JMultiSourceOperation extends JOperation {
 
     @Getter @Setter private String[] sources;

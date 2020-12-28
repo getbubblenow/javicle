@@ -52,7 +52,7 @@ public class KenBurnsExec extends ExecBase<KenBurnsOperation> {
         final JStreamType streamType = opCtx.streamType;
 
         final File defaultOutfile = assetManager.assetPath(op, source, streamType);
-        final File path = resolveOutputPath(output, defaultOutfile);
+        final File path = resolveOutputPath(assetManager, output, defaultOutfile);
         if (path == null) return null;
         output.setPath(abs(path));
 

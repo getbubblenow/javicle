@@ -42,10 +42,11 @@ public abstract class ExecBase<OP extends JOperation> {
         return HandlebarsUtil.apply(toolbox.getHandlebars(), template, jsContext(ctx));
     }
 
-    protected File resolveOutputPath(JAsset output, File defaultOutfile) {
+    protected File resolveOutputPath(AssetManager assetManager, JAsset output, File defaultOutfile) {
         if (output.hasDest()) {
             if (output.destExists() && !output.destIsDirectory()) {
                 log.info("resolveOutputPath: dest exists: " + output.getDest());
+                assetManager.addOperationAsset(output.setPath(output.getDest()));
                 return null;
             } else if (output.destIsDirectory()) {
                 return new File(output.destDirectory(), basename(abs(defaultOutfile)));
@@ -115,6 +116,7 @@ public abstract class ExecBase<OP extends JOperation> {
         final String scriptOutput = exec(script, op.isNoExec());
         log.debug("createSilence: command output: "+scriptOutput);
 
+        assetManager.addOperationAsset(silence);
         return silence;
     }
 

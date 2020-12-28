@@ -2,6 +2,7 @@ package jvc.operation.exec;
 
 import jvc.model.JAsset;
 import jvc.model.JStreamType;
+import jvc.model.js.JAssetJs;
 import jvc.model.operation.JSingleOperationContext;
 import jvc.operation.OverlayOperation;
 import jvc.service.AssetManager;
@@ -29,21 +30,31 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
             + "[1:v] setpts=PTS-STARTPTS"
             + "{{#exists width}}, scale={{width}}x{{height}}{{/exists}}"
             + " [1v]; "
-            + "[0:v][1v] overlay={{{overlayFilterConfig}}} [v]; "
+            + "[0:v][1v] overlay={{{overlayFilterConfig}}} [v] "
 
-            + "{{#if source.hasAudio}}"
-              // source has audio -- mix with overlay
-              + "[1:a] setpts=PTS-STARTPTS{{#if hasOverlayStart}}-({{overlayStart}}/TB){{/if}} [1a]; "
-              + "[0:a][1a] amix=inputs=2 [merged]"
-            + "{{else}}"
-              // source has no audio -- mix null source with overlay
-              + "anullsrc=channel_layout={{overlay.channelLayout}}:sample_rate={{overlay.samplingRate}}:duration={{source.duration}} [silence]; "
-              // + "[1:a] setpts=PTS-STARTPTS{{#if hasOverlayStart}}-({{overlayStart}}/TB){{/if}} [1a]; "
-              + "[silence][1:a] amix=inputs=2 [merged]"
+            + "{{#if hasAudio}}"
+              + "{{#if source.hasAudio}}"
+                + "{{#if overlay.hasAudio}}"
+                  // source and overlay both audio -- mix them
+                  + "; [1:a] setpts=PTS-STARTPTS{{#if hasOverlayStart}}-({{overlayStart}}/TB){{/if}} [1a] "
+                  + "; [0:a][1a] amix=inputs=2 [merged]"
+                + "{{else}}"
+                  // source has audio but overlay has none, use source audio
+                  + "; anullsrc=channel_layout={{source.channelLayout}}:sample_rate={{source.samplingRate}}:duration={{source.duration}} [silence] "
+                  + "; [silence][0:a] amix=inputs=2 [merged]"
+                + "{{/if}}"
+              + "{{else}}"
+                + "{{#if overlay.hasAudio}}"
+                  // source has no audio -- mix null source with overlay
+                  + "; anullsrc=channel_layout={{overlay.channelLayout}}:sample_rate={{overlay.samplingRate}}:duration={{source.duration}} [silence] "
+                  + "; [silence][1:a] amix=inputs=2 [merged]"
+                + "{{/if}}"
+              + "{{/if}}"
             + "{{/if}}"
 
             + "\" "
-            + "-map \"[v]\" -map \"[merged]\" "
+            + "-map \"[v]\" "
+            + "{{#if hasAudio}} -map \"[merged]\"{{else}}-an{{/if}} "
             + " -y {{{output.path}}}";
 
     @Override public Map<String, Object> operate(OverlayOperation op, Toolbox toolbox, AssetManager assetManager) {
@@ -57,7 +68,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         final JAsset overlaySource = assetManager.resolve(overlay.getSource());
 
         final File defaultOutfile = assetManager.assetPath(op, source, streamType);
-        final File path = resolveOutputPath(output, defaultOutfile);
+        final File path = resolveOutputPath(assetManager, output, defaultOutfile);
         if (path == null) return null;
         output.setPath(abs(path));
 
@@ -103,6 +114,7 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         ctx.put("overlayStart", startTime.doubleValue());
         ctx.put("hasOverlayStart", !startTime.equals(ZERO));
         ctx.put("overlayEnd", endTime.doubleValue());
+        ctx.put("hasAudio", ((JAssetJs) source.toJs()).hasAudio || ((JAssetJs) overlaySource.toJs()).hasAudio);
         b.append("enable=between(t\\,")
                 .append(startTime.doubleValue())
                 .append("\\,")

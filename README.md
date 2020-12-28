@@ -90,7 +90,7 @@ goes to new files.
 # Requirements
  * Java 11
  * Maven 3
- * ffmpeg
+ * ffmpeg (`HEAD` is required for `overlay` and `merge-audio` operations)
  * mediainfo
 
 These programs should executable (given your `PATH`): `javac`, `java`, `mvn`,

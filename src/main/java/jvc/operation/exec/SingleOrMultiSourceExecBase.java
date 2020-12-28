@@ -61,7 +61,7 @@ public abstract class SingleOrMultiSourceExecBase<OP extends JSingleSourceOperat
             }
         } else {
             final File defaultOutfile = assetManager.assetPath(op, source, streamType);
-            final File path = resolveOutputPath(output, defaultOutfile);
+            final File path = resolveOutputPath(assetManager, output, defaultOutfile);
             if (path == null) return null;
             output.setPath(abs(path));
             process(ctx, op, source, output, output, toolbox, assetManager);

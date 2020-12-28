@@ -47,7 +47,9 @@ public class JAsset implements JsObjectView {
 
     public JAsset(JAsset other, File file) { this(other); setPath(abs(file)); }
 
-    @Getter @Setter private String name;
+    @Setter private String name;
+    public String getName () { return empty(name) ? basename(path) : name; }
+
     @Getter @Setter private String path;
 
     public boolean hasPath() { return !empty(path); }
@@ -159,9 +161,11 @@ public class JAsset implements JsObjectView {
 
     public BigDecimal width() { return hasInfo() ? getInfo().width() : null; }
     @JsonIgnore public BigDecimal getWidth () { return width(); }
+    public boolean hasWidth () { return width() != null; }
 
     public BigDecimal height() { return hasInfo() ? getInfo().height() : null; }
     @JsonIgnore public BigDecimal getHeight () { return height(); }
+    public boolean hasHeight () { return height() != null; }
 
     public int numTracks(JTrackType type) { return hasInfo() ? getInfo().numTracks(type) : 0; }
 

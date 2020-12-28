@@ -82,6 +82,12 @@ An array of the audio tracks in a video.
 #### `videoTracks`
 An array of the video tracks in a video.
 
+#### `audioTrack`
+The track number of the first audio track.
+
+#### `videoTrack`
+The track number of the first video track.
+
 #### `hasAudio`
 A boolean, true if the asset has any audio tracks, false otherwise
 

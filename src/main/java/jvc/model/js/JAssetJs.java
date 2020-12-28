@@ -26,6 +26,10 @@ public class JAssetJs {
     @Getter public JTrackJs[] tracks = EMPTY_TRACKS;
     @Getter public JTrackJs[] videoTracks = EMPTY_TRACKS;
     @Getter public JTrackJs[] audioTracks = EMPTY_TRACKS;
+
+    @Getter public final Integer videoTrack;
+    @Getter public final Integer audioTrack;
+
     @Getter public JAssetJs[] assets = EMPTY_ASSETS;
     @Getter public final boolean hasAudio;
     @Getter public final boolean hasVideo;
@@ -44,10 +48,13 @@ public class JAssetJs {
 
         this.aspectRatio = asset.aspectRatio() == null ? Double.NaN : asset.aspectRatio().doubleValue();
         this.channelLayout = asset.hasChannelLayout() ? asset.channelLayout() : null;
-        this.samplingRate = asset.hasSamplingRate() ? asset.samplingRate().intValue() : 0;
+        this.samplingRate = asset.hasSamplingRate() ? asset.samplingRate().intValue() : null;
 
+        Integer vTrack = null;
+        Integer aTrack = null;
         if (asset.hasInfo()) {
             final JMediaInfo info = asset.getInfo();
+            int trackCount = 0;
             for (JTrack track : info.getMedia().getTrack()) {
 
                 final JTrackJs trackJs = new JTrackJs(track.type().name());
@@ -59,13 +66,18 @@ public class JAssetJs {
                 switch (track.type()) {
                     case audio:
                         audioTracks = ArrayUtil.append(audioTracks, trackJs);
+                        if (aTrack == null) aTrack = trackCount;
                         break;
                     case video:
                         videoTracks = ArrayUtil.append(videoTracks, trackJs);
+                        if (vTrack == null) vTrack = trackCount;
                         break;
                 }
+                trackCount++;
             }
         }
+        this.videoTrack = vTrack;
+        this.audioTrack = aTrack;
 
         if (asset.hasListAssets()) {
             final JAsset[] list = asset.getList();
