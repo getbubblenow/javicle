@@ -78,6 +78,7 @@ public abstract class ExecBase<OP extends JOperation> {
             System.out.println(script);
             return "";
         } else {
+            log.info("exec: "+script);
             return execScript(script);
         }
     }

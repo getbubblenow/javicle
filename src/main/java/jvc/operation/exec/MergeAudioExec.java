@@ -27,21 +27,30 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
             = "cd {{{tempDir}}} && {{{ffmpeg}}} -f concat -i {{{playlist.path}}} -codec copy -y {{{padded}}}";
 
     public static final String MERGE_AUDIO_TEMPLATE
-            = "{{{ffmpeg}}} -i {{{source.path}}} -i {{audio.path}} "
+            = "{{{ffmpeg}}} -i {{{source.path}}} -itsoffset {{start}} -i {{audio.path}} "
+            // if source has no audio, define a null audio input source
+            + "{{#unless source.hasAudio}}"
+              + "-i anullsrc=channel_layout={{audio.channelLayout}}:sample_rate={{audio.samplingRate}} "
+            + "{{/unless}}"
+
+            + "-filter_complex \""
             + "{{#if source.hasAudio}}"
-              + "-filter_complex \""
+              // source has audio -- mix with insertion
               + "[0:a][1:a] amix=inputs=2 [merged]"
-              + "\" "
-              + "-map 0:v -map \"[merged]\" -c:v copy "
             + "{{else}}"
-              + "-map 0:v -map 1:a -c:v copy -c:a copy "
+              // source has no audio -- mix null source with insertion
+              + "[1:a] aresample=ocl={{audio.channelLayout}}:osr={{audio.samplingRate}} [1a]; "
+              + "[2:a][1a] amix=inputs=2 [merged]"
             + "{{/if}}"
+            + "\" "
+            + "-map 0:v -map \"[merged]\" -c:v copy "
             + "-y {{{output.path}}}";
 
     @Override protected String getProcessTemplate() { return MERGE_AUDIO_TEMPLATE; }
 
-    @Override
-    protected void addCommandContext(MergeAudioOperation op, JSingleOperationContext opCtx, Map<String, Object> ctx) {
+    @Override protected void addCommandContext(MergeAudioOperation op,
+                                               JSingleOperationContext opCtx,
+                                               Map<String, Object> ctx) {
         final JAsset audio = opCtx.assetManager.resolve(op.getInsert());
         final JsEngine js = opCtx.toolbox.getJs();
         final BigDecimal insertAt = op.getAt(ctx, js);
@@ -64,7 +73,7 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
         final Map<String, Object> ctx = new HashMap<>();
         ctx.put("ffmpeg", toolbox.getFfmpeg());
 
-        final JStreamType streamType = audio.getFormat().getStreamType();
+        final JStreamType streamType = audio.audioExtension();
         final JAsset padded = new JAsset().setPath(abs(assetManager.assetPath(op, audio, streamType)));
         final String paddedName = basename(padded.getPath());
         ctx.put("padded", paddedName);
@@ -97,6 +106,9 @@ public class MergeAudioExec extends SingleOrMultiSourceExecBase<MergeAudioOperat
         copyFile(outputFile, new File(abs(padded.getPath())));
 
         log.debug("padWithSilence: command output: "+scriptOutput);
+
+        // initialize metadata
+        padded.init(assetManager, toolbox);
 
         return padded;
     }

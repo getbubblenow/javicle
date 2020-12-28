@@ -67,6 +67,9 @@ Ratio of width / height (video or image).
 #### `samplingRate`
 Sampling rate in Hz (audio).
 
+#### `channelLayout`
+Channel layout (audio).
+
 #### `tracks`
 An array of the A/V tracks in a video. Only includes audio and video tracks.
 

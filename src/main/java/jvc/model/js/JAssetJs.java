@@ -20,6 +20,7 @@ public class JAssetJs {
     @Getter public final Integer width;
     @Getter public final Integer height;
     @Getter public final Double aspectRatio;
+    @Getter public final String channelLayout;
     @Getter public final Integer samplingRate;
     @Getter public JTrackJs[] allTracks = EMPTY_TRACKS;
     @Getter public JTrackJs[] tracks = EMPTY_TRACKS;
@@ -42,6 +43,7 @@ public class JAssetJs {
         this.height = h == null ? null : h.intValue();
 
         this.aspectRatio = asset.aspectRatio() == null ? Double.NaN : asset.aspectRatio().doubleValue();
+        this.channelLayout = asset.hasChannelLayout() ? asset.channelLayout() : null;
         this.samplingRate = asset.hasSamplingRate() ? asset.samplingRate().intValue() : 0;
 
         if (asset.hasInfo()) {

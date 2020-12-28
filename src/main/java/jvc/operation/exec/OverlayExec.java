@@ -13,19 +13,38 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static java.math.BigDecimal.ZERO;
 import static org.cobbzilla.util.io.FileUtil.abs;
 
 @Slf4j
 public class OverlayExec extends ExecBase<OverlayOperation> {
 
     public static final String OVERLAY_TEMPLATE
-            = "ffmpeg -i {{{source.path}}} -i {{{overlay.path}}} "
+            = "ffmpeg -i {{{source.path}}} "
             + "{{#if hasMainStart}}-ss {{mainStart}} {{/if}}"
             + "{{#if hasMainEnd}}-t {{mainDuration}} {{/if}}"
+            + "-i {{{overlay.path}}} "
+
             + "-filter_complex \""
-            + "[1:v] setpts=PTS-STARTPTS+(1/TB){{#exists width}}, scale={{width}}x{{height}}{{/exists}} [1v]; "
-            + "[0:v][1v] overlay={{{overlayFilterConfig}}} "
-            + "\" -y {{{output.path}}}";
+            + "[1:v] setpts=PTS-STARTPTS"
+            + "{{#exists width}}, scale={{width}}x{{height}}{{/exists}}"
+            + " [1v]; "
+            + "[0:v][1v] overlay={{{overlayFilterConfig}}} [v]; "
+
+            + "{{#if source.hasAudio}}"
+              // source has audio -- mix with overlay
+              + "[1:a] setpts=PTS-STARTPTS{{#if hasOverlayStart}}-({{overlayStart}}/TB){{/if}} [1a]; "
+              + "[0:a][1a] amix=inputs=2 [merged]"
+            + "{{else}}"
+              // source has no audio -- mix null source with overlay
+              + "anullsrc=channel_layout={{overlay.channelLayout}}:sample_rate={{overlay.samplingRate}}:duration={{source.duration}} [silence]; "
+              // + "[1:a] setpts=PTS-STARTPTS{{#if hasOverlayStart}}-({{overlayStart}}/TB){{/if}} [1a]; "
+              + "[silence][1:a] amix=inputs=2 [merged]"
+            + "{{/if}}"
+
+            + "\" "
+            + "-map \"[v]\" -map \"[merged]\" "
+            + " -y {{{output.path}}}";
 
     @Override public Map<String, Object> operate(OverlayOperation op, Toolbox toolbox, AssetManager assetManager) {
 
@@ -81,7 +100,14 @@ public class OverlayExec extends ExecBase<OverlayOperation> {
         final StringBuilder b = new StringBuilder();
         final BigDecimal startTime = overlay.getStartTime(ctx, js);
         final BigDecimal endTime = overlay.hasEndTime() ? overlay.getEndTime(ctx, js) : overlaySource.duration();
-        b.append("enable=between(t\\,").append(startTime).append("\\,").append(endTime).append(")");
+        ctx.put("overlayStart", startTime.doubleValue());
+        ctx.put("hasOverlayStart", !startTime.equals(ZERO));
+        ctx.put("overlayEnd", endTime.doubleValue());
+        b.append("enable=between(t\\,")
+                .append(startTime.doubleValue())
+                .append("\\,")
+                .append(endTime.doubleValue())
+                .append(")");
 
         if (overlay.hasX() && overlay.hasY()) {
             b.append(":x=").append(overlay.getX(ctx, js).intValue())

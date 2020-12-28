@@ -18,7 +18,7 @@ public enum JStreamType {
     mkv        (".mkv",  video),
     mp3        (".mp3",  audio),
     mpeg_audio (".mp3",  audio),
-    aac        (".aac",  audio),
+    aac        (".m4a",  audio),
     flac       (".flac", audio),
     png        (".png",  image),
     jpg        (".jpg",  image),

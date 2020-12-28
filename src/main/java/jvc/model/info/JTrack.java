@@ -45,7 +45,11 @@ public class JTrack {
 
     public String channelLayout () {
         if (!empty(channelLayout)) {
-            return channelLayout.equals("L R") ? "stereo": channelLayout;
+            return channelLayout.equals("L R")
+                    ? "stereo"
+                    : channelLayout.equals("C")
+                    ? "mono"
+                    : channelLayout;
         }
         if (!empty(channels)) {
             if (isOnlyDigits(channels)) {
